@@ -70,17 +70,19 @@
         app:icon="@drawable/ic_baseline_arrow_forward_24"
         app:iconGravity="end"
         app:layout_constraintEnd_toEndOf="@+id/pin_kodeVerifRegistrasiLogin"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/pin_kodeVerifRegistrasiLogin"
-        app:layout_constraintTop_toBottomOf="@+id/tv_resendCodeLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_resendCodeLogin"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/tv_resendCodeLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/kirim_ulang_kode_verifikasi"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/pin_kodeVerifRegistrasiLogin"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/pin_kodeVerifRegistrasiLogin"
         app:layout_constraintTop_toBottomOf="@+id/pin_kodeVerifRegistrasiLogin" />
 
@@ -104,7 +106,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar4" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar4"
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/imageView7"
@@ -114,5 +117,7 @@
         android:layout_marginTop="12dp"
         android:src="@drawable/ic_baseline_message_24"
         app:layout_constraintStart_toStartOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="@+id/imageView6" />
+        app:layout_constraintTop_toTopOf="@+id/imageView6"
+        android:contentDescription="TODO" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".view.dashboard.HomeFragment">
 
+    <ProgressBar
+        android:id="@+id/progressBar3"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="254dp"
+        android:layout_height="29dp"
+        android:indeterminate="true"
+        android:indeterminateBehavior="cycle"
+        android:indeterminateTint="@color/konvalesen"
+        android:max="@integer/material_motion_duration_short_1"
+        android:progress="@integer/material_motion_duration_short_1"
+        android:progressTint="@color/konvalesen"
+        app:layout_constraintBottom_toBottomOf="@+id/tvNama"
+        app:layout_constraintEnd_toEndOf="@+id/tvPerintahDonor"
+        app:layout_constraintStart_toStartOf="@+id/tvPerintahDonor"
+        app:layout_constraintTop_toTopOf="@+id/tvNama" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
@@ -34,7 +50,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Hi, Muhammad Irvan"
         android:textColor="@color/konvalesen2"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -46,7 +61,7 @@
         android:layout_width="254dp"
         android:layout_height="36dp"
         android:layout_marginBottom="16dp"
-        android:text="Silahkan tekan tombol 'Minta Bantuan' untuk meminta bantuan donor plasma"
+        android:text="@string/silahkan_tekan_tombol_minta_bantuan_untuk_meminta_bantuan_donor_plasma"
         android:textColor="@color/konvalesen2"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintStart_toStartOf="@+id/button" />
@@ -57,10 +72,11 @@
         android:layout_height="67dp"
         android:layout_marginStart="24dp"
         android:layout_marginBottom="80dp"
-        android:text="Minta Bantuan"
+        android:text="@string/minta_bantuan"
         android:textAllCaps="false"
         android:textSize="18sp"
         app:cornerRadius="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TextContrastCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

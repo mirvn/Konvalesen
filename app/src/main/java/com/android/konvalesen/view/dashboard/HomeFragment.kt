@@ -1,5 +1,6 @@
 package com.android.konvalesen.view.dashboard
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -19,12 +20,13 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
@@ -33,7 +35,8 @@ class HomeFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseAuth.currentUser?.phoneNumber?.let { userViewModel.getDataUserFromFirebase(it) }
         userViewModel.getDataUser().observe(viewLifecycleOwner,{
-            binding.tvNama.text = it.nama
+            binding.progressBar3.visibility = View.GONE
+            binding.tvNama.text = "Hai, ${it.nama}"
         })
 
         binding.toolbar2.setOnMenuItemClickListener(object : Toolbar.OnMenuItemClickListener {

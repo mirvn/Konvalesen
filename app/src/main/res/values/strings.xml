@@ -42,4 +42,6 @@
     <string name="ab">AB</string>
     <string name="ab_min">AB-</string>
     <string name="ab_plus">AB+</string>
+    <string name="silahkan_tekan_tombol_minta_bantuan_untuk_meminta_bantuan_donor_plasma">Silahkan tekan tombol \'Minta Bantuan\' untuk meminta bantuan donor plasma</string>
+    <string name="minta_bantuan">Minta Bantuan</string>
 </resources>

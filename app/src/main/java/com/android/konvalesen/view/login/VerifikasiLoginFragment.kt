@@ -2,18 +2,20 @@ package com.android.konvalesen.view.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.android.konvalesen.R
 import com.android.konvalesen.databinding.FragmentVerifikasiLoginBinding
-import com.android.konvalesen.model.User
 import com.android.konvalesen.view.dashboard.HomeActivity
 import com.android.konvalesen.viewmodel.UserViewModel
 import com.google.firebase.FirebaseException
@@ -25,10 +27,11 @@ class VerifikasiLoginFragment : Fragment() {
     private lateinit var binding: FragmentVerifikasiLoginBinding
     private val args: VerifikasiLoginFragmentArgs by navArgs()
     private lateinit var userViewModel: UserViewModel
+
     // [START declare_auth]
     private lateinit var auth: FirebaseAuth
-    // [END declare_auth]
 
+    // [END declare_auth]
     private var storedVerificationId: String? = ""
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
@@ -39,7 +42,7 @@ class VerifikasiLoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentVerifikasiLoginBinding.inflate(inflater,container,false)
+        binding = FragmentVerifikasiLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -47,10 +50,11 @@ class VerifikasiLoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val alertLoading = AlertDialog.Builder(requireContext())
         val alert = alertLoading.apply {
-            setView(com.android.konvalesen.R.layout.layout_loading_otp)
+            setView(R.layout.layout_loading_otp)
             setCancelable(false)
         }.create()
         alert.show()
+
         binding.toolbar4.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
@@ -60,7 +64,6 @@ class VerifikasiLoginFragment : Fragment() {
         // [START initialize_auth]
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
-        // [END initialize_auth]
 
         // Initialize phone auth callbacks
         // [START phone_auth_callbacks]
@@ -77,7 +80,7 @@ class VerifikasiLoginFragment : Fragment() {
                 // get verification code from sms
                 val code = credential.smsCode
                 binding.pinKodeVerifRegistrasiLogin.setText(code)
-                if (binding.pinKodeVerifRegistrasiLogin.text?.isNotEmpty() == true){
+                if (binding.pinKodeVerifRegistrasiLogin.text?.isNotEmpty() == true) {
                     signInWithPhoneAuthCredential(credential)
                 }
             }
@@ -106,29 +109,62 @@ class VerifikasiLoginFragment : Fragment() {
                 // by combining the code with a verification ID.
                 Log.d(TAG, "onCodeSent:$verificationId")
                 alert.cancel()
+                countDown()
                 // Save verification ID and resending token so we can use them later
                 storedVerificationId = verificationId
                 resendToken = token
-                Toast.makeText(requireContext(), "Kode verifikasi telah dikirim", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Kode verifikasi telah dikirim",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-        }
-
-        binding.tvResendCodeLogin.setOnClickListener {
-            resendVerificationCode(args.phoneNumber, resendToken)
         }
 
         binding.btnNextLogin.setOnClickListener {
             val code = binding.pinKodeVerifRegistrasiLogin.text
-            if (code.isNullOrEmpty()){
+            if (code.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "Kode OTP belum dimasukkan", Toast.LENGTH_SHORT)
                     .show()
-            }else verifyPhoneNumberWithCode(storedVerificationId,code.toString())
+            } else verifyPhoneNumberWithCode(storedVerificationId, code.toString())
+        }
+        //resend otp code
+        binding.tvResendCodeLogin.setOnClickListener {
+            if (binding.tvResendCodeLogin.text == getString(R.string.kirim_ulang_kode_verifikasi)) {
+                resendVerificationCode(args.phoneNumber, resendToken)
+            }
         }
         //Verifikasi nomor
         startPhoneNumberVerification(args.phoneNumber)
     }
 
-    private fun  startPhoneNumberVerification(phoneNumber: String) {
+    private fun countDown() {
+        object : CountDownTimer(60000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                binding.tvResendCodeLogin.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.countdown_text
+                    )
+                )
+                binding.tvResendCodeLogin.text =
+                    "${getString(R.string.kirim_ulang_kode_verifikasi)}: ${millisUntilFinished / 1000}"
+            }
+
+            override fun onFinish() {
+                binding.tvResendCodeLogin.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.black
+                    )
+                )
+                binding.tvResendCodeLogin.text =
+                    getString(R.string.kirim_ulang_kode_verifikasi)
+            }
+        }.start()
+    }
+
+    private fun startPhoneNumberVerification(phoneNumber: String) {
         // [START start_phone_auth]
         //auth = FirebaseAuth.getInstance()
         val options = PhoneAuthOptions.newBuilder(auth)
@@ -177,18 +213,21 @@ class VerifikasiLoginFragment : Fragment() {
                 userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
                     .get(UserViewModel::class.java)
                 userViewModel.getDataUserFromFirebase(args.phoneNumber)
-                userViewModel.getDataUser().observe(viewLifecycleOwner,{
+                userViewModel.getDataUser().observe(viewLifecycleOwner, {
                     if (args.phoneNumber == it.nomor) {
-                        val mIntent = Intent(context,HomeActivity::class.java)
+                        val mIntent = Intent(context, HomeActivity::class.java)
                         startActivity(mIntent)
                         activity?.finish()
-                    }else{
-                        val action = VerifikasiLoginFragmentDirections.actionVerifikasiLoginFragmentToVerifikasiFragment(phoneNumber)
+                    } else {
+                        val action =
+                            VerifikasiLoginFragmentDirections.actionVerifikasiLoginFragmentToVerifikasiFragment(
+                                phoneNumber
+                            )
                         Navigation.findNavController(binding.root).navigate(action)
                     }
                 })
             }
-            .addOnFailureListener { e->
+            .addOnFailureListener { e ->
                 Toast.makeText(requireContext(), "${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
