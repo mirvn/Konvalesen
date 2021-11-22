@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/drawable/background_loading_otp.xml" value="0.2078125" />
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/activity_home.xml" value="0.2" />
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/activity_splash_screen.xml" value="0.22" />
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_home.xml" value="0.17074275362318841" />
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_verifikasi_login.xml" value="0.25" />
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_verifikasi_register.xml" value="0.22" />
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_welcome.xml" value="0.33" />
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/layout_loading_otp.xml" value="0.33" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

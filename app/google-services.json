@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "635373657873",
+    "project_id": "konvalesen",
+    "storage_bucket": "konvalesen.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635373657873:android:8050ed95a37d0d977c36b0",
+        "android_client_info": {
+          "package_name": "com.android.konvalesen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635373657873-3og9ngphh33646q3bh82jd0rva3mod22.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.konvalesen",
+            "certificate_hash": "475bd8c7ec71ec6650ed0f8a2af7b059a8f32280"
+          }
+        },
+        {
+          "client_id": "635373657873-4u6lfn7dl554qu4god3hfsr6angod5ml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNAwz1K5yqkSmbwIo0kSwonHYxJ8Z6Elc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "635373657873-4u6lfn7dl554qu4god3hfsr6angod5ml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

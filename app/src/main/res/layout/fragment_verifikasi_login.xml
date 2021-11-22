@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.login.VerifikasiLoginFragment">
+
+    <TextView
+        android:id="@+id/tv_verifikasiLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/verifikasi_otp"
+        android:textColor="@color/konvalesen"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tv_perintahVerifikasiLogin"
+        app:layout_constraintStart_toStartOf="@+id/tv_perintahVerifikasiLogin"
+        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+
+    <TextView
+        android:id="@+id/tv_perintahVerifikasiLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/silahkan_memasukkan_kode_verifikasi_yang_telah_kami_kirimkan_ke_nomor_anda"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_verifikasiLogin" />
+
+    <com.chaos.view.PinView
+        android:id="@+id/pin_kodeVerifRegistrasiLogin"
+        style="@style/PinWidget.PinView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:cursorVisible="true"
+        android:inputType="text"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:cursorWidth="2dp"
+        app:hideLineWhenFilled="true"
+        app:itemCount="6"
+        app:itemHeight="48dp"
+        app:itemRadius="4dp"
+        app:itemSpacing="3dp"
+        app:itemWidth="48dp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_perintahVerifikasiLogin"
+        app:layout_constraintStart_toStartOf="@+id/tv_perintahVerifikasiLogin"
+        app:layout_constraintTop_toBottomOf="@+id/tv_perintahVerifikasiLogin"
+        app:lineColor="@color/konvalesen"
+        app:lineWidth="2dp"
+        app:viewType="rectangle"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/btn_nextLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/konvalesen"
+        android:elevation="10dp"
+        android:text="@string/verifikasi"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:cornerRadius="10dp"
+        app:icon="@drawable/ic_baseline_arrow_forward_24"
+        app:iconGravity="end"
+        app:layout_constraintEnd_toEndOf="@+id/pin_kodeVerifRegistrasiLogin"
+        app:layout_constraintStart_toStartOf="@+id/pin_kodeVerifRegistrasiLogin"
+        app:layout_constraintTop_toBottomOf="@+id/tv_resendCodeLogin" />
+
+    <TextView
+        android:id="@+id/tv_resendCodeLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/kirim_ulang_kode_verifikasi"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/pin_kodeVerifRegistrasiLogin"
+        app:layout_constraintStart_toStartOf="@+id/pin_kodeVerifRegistrasiLogin"
+        app:layout_constraintTop_toBottomOf="@+id/pin_kodeVerifRegistrasiLogin" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/ic_baseline_phone_android_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar4" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="70dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/ic_baseline_message_24"
+        app:layout_constraintStart_toStartOf="@+id/imageView6"
+        app:layout_constraintTop_toTopOf="@+id/imageView6" />
+</androidx.constraintlayout.widget.ConstraintLayout>

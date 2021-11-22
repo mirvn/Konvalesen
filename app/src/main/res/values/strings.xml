@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Konvalesen</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="konvalesen_adalah_platform_yang_tepat_untuk_saling_membantu_penderita_covid_19_untuk_saling_membantu_donor_plasma_konvalesen">Konvalesen adalah platform yang tepat untuk mempermudah menemukan atau memberikan donor Plasma Konvalesen kepada yang membutuhkan</string>
+    <string name="login">Login</string>
+    <string name="selamat_datang">Selamat Datang</string>
+    <string name="_62">+62</string>
+    <string name="buat_akun">Buat Akun</string>
+    <string name="silahkan_memasukkan_nomor_handphone_anda">Silahkan memasukkan nomor Handphone anda untuk melanjutkan</string>
+    <string name="xxxxxxxxxxx">xxxxxxxxxxx</string>
+    <string name="kirim_ulang_kode_verifikasi">Kirim Ulang Kode Verifikasi</string>
+    <string name="xxxxxx">XXXXXX</string>
+    <string name="ex_muhammad_irvan">ex: Muhammad Irvan</string>
+    <string name="silahkan_memasukkan_kode_verifikasi_yang_telah_kami_kirimkan_ke_nomor_anda">Silahkan memasukkan kode verifikasi yang telah kami kirimkan ke nomor </string>
+    <string name="verifikasi_otp">Verifikasi OTP</string>
+    <string name="nama">Nama</string>
+    <string name="silahkan_memasukkan_nama_anda">Silahkan memasukkan nama anda</string>
+    <string name="verifikasi">Verifikasi</string>
+    <string name="selanjutnya">Selanjutnya</string>
+    <string name="logout">Logout</string>
+    <string name="silahkan_memillih_golongan_darah_anda_jika_ada_orang_lain_yang_membutuhkan_sesuai_dengan_golongan_darah_anda_kami_akan_memberikan_pemberitahuan">Silahkan memillih golongan darah anda. Jika ada orang lain yang membutuhkan sesuai dengan golongan darah anda, kami akan memberikan pemberitahuan</string>
+    <string name="golongan_darah">Golongan Darah</string>
+    <string name="a">A</string>
+    <string name="a_min">A-</string>
+    <string name="a_plus">A+</string>
+    <string name="b">B</string>
+    <string name="b_min">B-</string>
+    <string name="b_plus">B+</string>
+    <string name="o">O</string>
+    <string name="o_min">O-</string>
+    <string name="o_plus">O+</string>
+    <string name="ab">AB</string>
+    <string name="ab_min">AB-</string>
+    <string name="ab_plus">AB+</string>
+</resources>

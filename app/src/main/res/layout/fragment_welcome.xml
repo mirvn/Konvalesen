@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.login.WelcomeFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_nomorPrefix"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="71dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_masukkanNomor4">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_nomorPrefix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="@string/_62"
+                android:textColor="@color/design_default_color_on_secondary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_nomor"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/btn_next4"
+            app:layout_constraintStart_toEndOf="@+id/til_nomorPrefix"
+            app:layout_constraintTop_toBottomOf="@+id/tv_masukkanNomor4">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_nomor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/xxxxxxxxxxx"
+                android:inputType="number"
+                android:textColor="@color/design_default_color_on_secondary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_masukkanNomor4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/silahkan_memasukkan_nomor_handphone_anda"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/textView3"
+            app:layout_constraintStart_toStartOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <Button
+            android:id="@+id/btn_next4"
+            android:layout_width="58dp"
+            android:layout_height="0dp"
+            android:backgroundTint="@color/konvalesen"
+            app:icon="@drawable/ic_baseline_arrow_forward_24"
+            app:layout_constraintBottom_toBottomOf="@+id/til_nomor"
+            app:layout_constraintEnd_toEndOf="@+id/tv_masukkanNomor4"
+            app:layout_constraintTop_toTopOf="@+id/til_nomor"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="307dp"
+            android:layout_height="242dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/plasma"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_konvalesen" />
+
+        <TextView
+            android:id="@+id/tv_selamatDatang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/selamat_datang"
+            android:textAllCaps="false"
+            android:textColor="@color/konvalesen"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="66dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/konvalesen_adalah_platform_yang_tepat_untuk_saling_membantu_penderita_covid_19_untuk_saling_membantu_donor_plasma_konvalesen"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_selamatDatang" />
+
+        <TextView
+            android:id="@+id/tv_konvalesen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="K   NVALESEN"
+            android:textColor="#000000"
+            android:textSize="45sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="54dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="17dp"
+            android:src="@drawable/ic_baseline_bloodtype_24"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_konvalesen"
+            app:layout_constraintStart_toStartOf="@+id/tv_konvalesen"
+            app:layout_constraintTop_toTopOf="@+id/tv_konvalesen" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

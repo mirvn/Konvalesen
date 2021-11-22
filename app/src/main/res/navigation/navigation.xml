@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/welcomeFragment">
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.android.konvalesen.view.login.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome">
+        <action
+            android:id="@+id/action_welcomeFragment_to_verifikasiLoginFragment"
+            app:destination="@id/verifikasiLoginFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/verifikasiFragment"
+        android:name="com.android.konvalesen.view.login.VerifikasiRegisterFragment"
+        android:label="fragment_verifikasi"
+        tools:layout="@layout/fragment_verifikasi_register" >
+        <argument
+            android:name="phoneNumber"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/verifikasiLoginFragment"
+        android:name="com.android.konvalesen.view.login.VerifikasiLoginFragment"
+        android:label="fragment_verifikasi_login"
+        tools:layout="@layout/fragment_verifikasi_login" >
+        <action
+            android:id="@+id/action_verifikasiLoginFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_verifikasiLoginFragment_to_verifikasiFragment"
+            app:destination="@id/verifikasiFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <argument
+            android:name="phoneNumber"
+            app:argType="string" />
+    </fragment>
+</navigation>
