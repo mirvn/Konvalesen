@@ -44,4 +44,7 @@
     <string name="ab_plus">AB+</string>
     <string name="silahkan_tekan_tombol_minta_bantuan_untuk_meminta_bantuan_donor_plasma">Silahkan tekan tombol \'Minta Bantuan\' untuk meminta bantuan donor plasma</string>
     <string name="minta_bantuan">Minta Bantuan</string>
+    <string name="darah_yang_dibutuhkan">Darah yang dibutuhkan</string>
+    <string name="lokasi_rumah_sakit">Lokasi Rumah Sakit</string>
+    <string name="meminta_bantuan_donor">Meminta Bantuan Donor</string>
 </resources>

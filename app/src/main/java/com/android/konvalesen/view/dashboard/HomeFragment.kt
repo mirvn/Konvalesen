@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.android.konvalesen.databinding.FragmentHomeBinding
+import com.android.konvalesen.view.bantuan.BantuanActivity
 import com.android.konvalesen.view.login.MainActivity
 import com.android.konvalesen.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -33,17 +34,27 @@ class HomeFragment : Fragment() {
             .get(UserViewModel::class.java)
         //get data user from firebase
         firebaseAuth = FirebaseAuth.getInstance()
-        firebaseAuth.currentUser?.phoneNumber?.let { userViewModel.getDataUserFromFirebase(it) }
-        userViewModel.getDataUser().observe(viewLifecycleOwner,{
-            binding.progressBar3.visibility = View.GONE
-            binding.tvNama.text = "Hai, ${it.nama}"
-        })
+        getUserData()
 
         binding.toolbar2.setOnMenuItemClickListener(object : Toolbar.OnMenuItemClickListener {
             override fun onMenuItemClick(item: MenuItem?): Boolean {
                 logout()
                 return true
             }
+        })
+
+        binding.btnBantuan.setOnClickListener {
+            val intent = Intent(requireContext(),BantuanActivity::class.java)
+            startActivity(intent)
+        }
+    }
+    private fun getUserData(){
+        firebaseAuth.currentUser?.phoneNumber.let {
+            userViewModel.getDataUserFromFirebase(it.toString())
+        }
+        userViewModel.getDataUser().observe(viewLifecycleOwner,{
+            binding.progressBar3.visibility = View.GONE
+            binding.tvNama.text = "Hai, ${it.nama}"
         })
     }
 

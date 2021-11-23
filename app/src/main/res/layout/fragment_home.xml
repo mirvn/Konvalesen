@@ -54,7 +54,7 @@
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tvPerintahDonor"
-        app:layout_constraintStart_toStartOf="@+id/button" />
+        app:layout_constraintStart_toStartOf="@+id/btn_Bantuan" />
 
     <TextView
         android:id="@+id/tvPerintahDonor"
@@ -63,11 +63,11 @@
         android:layout_marginBottom="16dp"
         android:text="@string/silahkan_tekan_tombol_minta_bantuan_untuk_meminta_bantuan_donor_plasma"
         android:textColor="@color/konvalesen2"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintStart_toStartOf="@+id/button" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_Bantuan"
+        app:layout_constraintStart_toStartOf="@+id/btn_Bantuan" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_Bantuan"
         android:layout_width="189dp"
         android:layout_height="67dp"
         android:layout_marginStart="24dp"

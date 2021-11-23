@@ -7,7 +7,9 @@ plugins {
     id("androidx.navigation.safeargs")
 }
 
-//apply plugin: "androidx.navigation.safeargs.kotlin"
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def MAPS_API_KEY = properties.getProperty('MAPS_API_KEY')
 
 android {
     compileSdkVersion 30
@@ -74,6 +76,11 @@ dependencies {
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:2.3.5")
     //firestore
-    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.4'
-
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
+    //maps KTX library
+    implementation 'com.google.maps.android:maps-ktx:2.3.0'
+    implementation 'com.google.maps.android:maps-utils-ktx:2.3.0'
+    // maps sdk
+    implementation 'com.google.android.gms:play-services-maps:18.0.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 }

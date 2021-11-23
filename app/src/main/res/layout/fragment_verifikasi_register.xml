@@ -12,10 +12,12 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="@color/konvalesen"
         android:text="@string/selanjutnya"
+        app:cornerRadius="10dp"
         app:icon="@drawable/ic_baseline_arrow_forward_24"
-        app:layout_constraintEnd_toEndOf="@+id/btn_golABplus"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_golABplus"
         tools:ignore="TextContrastCheck" />
 
@@ -88,13 +90,14 @@
         android:id="@+id/btn_golA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:backgroundTint="#FFFFFF"
         android:elevation="10dp"
         android:text="@string/a"
         android:textColor="@color/konvalesen"
         app:cornerRadius="100dp"
-        app:layout_constraintStart_toStartOf="@+id/textView8"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
         tools:ignore="TextContrastCheck" />
 
@@ -107,7 +110,7 @@
         android:text="@string/a_min"
         android:textColor="@color/konvalesen"
         app:cornerRadius="100dp"
-        app:layout_constraintStart_toStartOf="@+id/textView8"
+        app:layout_constraintStart_toStartOf="@+id/btn_golA"
         app:layout_constraintTop_toBottomOf="@+id/btn_golA"
         tools:ignore="TextContrastCheck" />
 
@@ -120,7 +123,7 @@
         android:text="@string/a_plus"
         android:textColor="@color/konvalesen"
         app:cornerRadius="100dp"
-        app:layout_constraintStart_toStartOf="@+id/textView8"
+        app:layout_constraintStart_toStartOf="@+id/btn_golAmin"
         app:layout_constraintTop_toBottomOf="@+id/btn_golAmin"
         tools:ignore="TextContrastCheck" />
 
@@ -215,12 +218,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="#FFFFFF"
         android:elevation="10dp"
         android:text="@string/ab"
         android:textColor="@color/konvalesen"
         app:cornerRadius="100dp"
-        app:layout_constraintEnd_toEndOf="@+id/textView8"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
         tools:ignore="TextContrastCheck" />
 

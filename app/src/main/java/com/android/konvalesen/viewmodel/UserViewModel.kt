@@ -17,8 +17,8 @@ class UserViewModel:ViewModel() {
 
     fun createDataUser(data: User, context: Context){
         val db = Firebase.firestore
-        db.collection("users")
-            .add(data)
+        db.collection("users").document(data.id.toString())
+            .set(data)
             .addOnCompleteListener {
                 Log.d(TAG, "createDataUser - user creater: $it")
             }
