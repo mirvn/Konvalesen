@@ -143,7 +143,7 @@ class VerifikasiLoginFragment : Fragment() {
             override fun onTick(millisUntilFinished: Long) {
                 binding.tvResendCodeLogin.setTextColor(
                     ContextCompat.getColor(
-                        requireContext(),
+                        requireActivity(),
                         R.color.countdown_text
                     )
                 )

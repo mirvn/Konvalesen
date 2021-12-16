@@ -42,7 +42,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/ic_baseline_person_24"
         android:elevation="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/tvNama"
+        app:layout_constraintBottom_toTopOf="@+id/progressBar3"
         app:layout_constraintStart_toStartOf="@+id/tvNama" />
 
     <TextView
@@ -60,7 +60,7 @@
         android:id="@+id/tvPerintahDonor"
         android:layout_width="254dp"
         android:layout_height="36dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/silahkan_tekan_tombol_minta_bantuan_untuk_meminta_bantuan_donor_plasma"
         android:textColor="@color/konvalesen2"
         app:layout_constraintBottom_toTopOf="@+id/btn_Bantuan"
@@ -68,15 +68,16 @@
 
     <Button
         android:id="@+id/btn_Bantuan"
-        android:layout_width="189dp"
-        android:layout_height="67dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="80dp"
+        android:layout_width="258dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/minta_bantuan"
         android:textAllCaps="false"
         android:textSize="18sp"
-        app:cornerRadius="50dp"
+        app:cornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="TextContrastCheck" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

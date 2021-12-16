@@ -6,4 +6,12 @@
         android:title="@string/logout"
         android:icon="@drawable/ic_baseline_logout_24"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_pendonoran_saya"
+        android:title="@string/pendonoran_saya"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_bantuan_donor_saya"
+        android:title="@string/bantuan_donor_saya"
+        app:showAsAction="never"/>
 </menu>

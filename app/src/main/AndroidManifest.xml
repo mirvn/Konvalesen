@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.konvalesen">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -9,7 +8,8 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- firebase notification -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <application
         android:allowBackup="true"
@@ -19,9 +19,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Konvalesen"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".view.onReceive.OnReceiveActivity"
+            android:exported="false" />
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="${MAPS_API_KEY"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDNAwz1K5yqkSmbwIo0kSwonHYxJ8Z6Elc" /> <!-- android:value="${MAPS_API_KEY}" /> -->
+        <!-- give service permission to firebase notification -->
+        <service
+            android:name=".helper.FirebaseService"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.gogle.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
 
+        <activity
+            android:name=".view.onRequest.OnRequestActivity"
+            android:exported="false" />
         <activity
             android:name=".view.bantuan.BantuanActivity"
             android:exported="false" />

@@ -47,4 +47,10 @@
     <string name="darah_yang_dibutuhkan">Darah yang dibutuhkan</string>
     <string name="lokasi_rumah_sakit">Lokasi Rumah Sakit</string>
     <string name="meminta_bantuan_donor">Meminta Bantuan Donor</string>
+    <string name="session_encrypted_user">session_user</string>
+    <string name="bantu_donor">Bantu Donor</string>
+    <string name="tab_text_1">Donor Dalam Proses</string>
+    <string name="tab_text_2">History Mendonor</string>
+    <string name="bantuan_donor_saya">Bantuan Donor Saya</string>
+    <string name="pendonoran_saya">Pendonoran saya</string>
 </resources>

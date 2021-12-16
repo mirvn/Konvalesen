@@ -7,15 +7,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.android.konvalesen.model.User
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 
-class UserViewModel:ViewModel() {
+class UserViewModel : ViewModel() {
     private val user = MutableLiveData<User>()
-    companion object{
+    private val allUser = MutableLiveData<ArrayList<User>>()
+
+    companion object {
         val TAG = UserViewModel::class.java.simpleName
     }
 
-    fun createDataUser(data: User, context: Context){
+    fun createDataUser(data: User, context: Context) {
         val db = Firebase.firestore
         db.collection("users").document(data.id.toString())
             .set(data)
@@ -28,9 +31,22 @@ class UserViewModel:ViewModel() {
             }
     }
 
-    fun getDataUserFromFirebase(nomor: String){
+    fun updateDataFCMUser(docId: String, fcmToken: String, context: Context) {
         val db = Firebase.firestore
-        val dataUser= User()
+        db.collection("users").document(docId)
+            .update("fcm_token", fcmToken)
+            .addOnCompleteListener {
+                Log.d(TAG, "updateDataFCMUser: $it")
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "createDataUser: $it")
+                Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    fun getDataUserFromFirebase(nomor: String) {
+        val db = Firebase.firestore
+        val dataUser = User()
         db.collection("users")
             .whereEqualTo("nomor", nomor)
             .get()
@@ -42,14 +58,35 @@ class UserViewModel:ViewModel() {
                     dataUser.nama = document.data["nama"].toString()
                     dataUser.nomor = document.data["nomor"].toString()
                     dataUser.golongan_darah = document.data["golongan_darah"].toString()
+                    dataUser.fcm_token = document.data["fcm_token"].toString()
                 }
                 user.postValue(dataUser)
-                Log.d(TAG, "getDataUserFromFirebase-dataUser: $dataUser")
-                Log.d(TAG, "getDataUserFromFirebase-user: $user")
+                /*Log.d(TAG, "getDataUserFromFirebase-dataUser: $dataUser")
+                Log.d(TAG, "getDataUserFromFirebase-user: $user")*/
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents: ", exception)
             }
     }
+
     fun getDataUser(): MutableLiveData<User> = user
+
+    fun getAllDataUserFromFirebase() {
+        val db = Firebase.firestore
+        val userArray = ArrayList<User>()
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents.toObjects<User>()) {
+                    userArray.add(document)
+                }
+                allUser.postValue(userArray)
+                Log.d(TAG, "getDataUserFromFirebase-userArray:$userArray")
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+    }
+
+    fun getAlldataUser(): MutableLiveData<ArrayList<User>> = allUser
 }

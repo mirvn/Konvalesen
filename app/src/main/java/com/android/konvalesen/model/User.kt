@@ -5,6 +5,7 @@ data class User(
     var nama: String? = null,
     var nomor: String? = null,
     var golongan_darah: String? = null,
-){
+    var fcm_token: String? = null,
+) {
 
 }

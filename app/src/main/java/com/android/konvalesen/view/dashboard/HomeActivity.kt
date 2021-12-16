@@ -17,6 +17,5 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         phoneNumber = bundle.getString("phoneNumber").toString()
-        Log.d(TAG, "onCreate: $phoneNumber")
     }
 }

@@ -1,9 +1,14 @@
 package com.android.konvalesen.model
 
 data class RequestDonor(
-    var id: String? = null,
-    var nama: String? = null,
-    var nomor: String? = null,
-    var golongan_darah: String? = null,
+    var idRequester: String? = null,
+    var namaRequester: String? = null,
+    var nomorRequester: String? = null,
+    var darahRequester: String? = null,
+    var alamatRequester: String? = null,
+    var latRequester: Double? = null,
+    var lngRequester: Double? = null,
+  //  var fcmTokenRequester: String? = null,
+    var status: Int? = null, // 0=onRequest, 1=Success
 ){
 }

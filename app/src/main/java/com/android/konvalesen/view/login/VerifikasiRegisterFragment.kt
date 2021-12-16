@@ -10,10 +10,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.android.konvalesen.R
 import com.android.konvalesen.databinding.FragmentVerifikasiRegisterBinding
+import com.android.konvalesen.helper.SessionUser
 import com.android.konvalesen.model.User
 import com.android.konvalesen.view.dashboard.HomeActivity
 import com.android.konvalesen.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import java.util.*
 
 class VerifikasiRegisterFragment : Fragment() {
@@ -35,6 +37,10 @@ class VerifikasiRegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            val sessionUser = SessionUser(requireContext())
+            sessionUser.setFcmToken(it)
+        }
         userViewModel = ViewModelProvider(this,ViewModelProvider.NewInstanceFactory())
             .get(UserViewModel::class.java)
         setGolonganDarah()
@@ -47,11 +53,13 @@ class VerifikasiRegisterFragment : Fragment() {
     }
 
     private fun createDataUser(){
+        val sessionUser = SessionUser(requireContext())
         val data = User(
             auth.currentUser?.uid,
             binding.edtNama.text.toString(),
             auth.currentUser?.phoneNumber,
-            golDarah
+            golDarah,
+            sessionUser.sharedPreferences.getString("fcmToken","")
         )
         userViewModel.createDataUser(data,requireContext())
     }
