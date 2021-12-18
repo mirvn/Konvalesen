@@ -5,15 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.onRequest.OnRequestActivity">
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentOnRequest"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar7"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/onrequestnavigation" />
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:title="@string/bantuan_donor_saya"
+        app:titleTextColor="@color/konvalesen" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs_onReq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/konvalesen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar7"
+        app:tabIndicatorAnimationMode="elastic"
+        app:tabIndicatorGravity="bottom"
+        app:tabIndicatorColor="@color/white"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="@color/red"
+        app:tabIndicatorHeight="4dp"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pagerOnReq"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabs_onReq" />
 </androidx.constraintlayout.widget.ConstraintLayout>

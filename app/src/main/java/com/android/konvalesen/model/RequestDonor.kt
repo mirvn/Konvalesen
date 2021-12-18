@@ -8,7 +8,8 @@ data class RequestDonor(
     var alamatRequester: String? = null,
     var latRequester: Double? = null,
     var lngRequester: Double? = null,
+    var tanggal: String? = null,
   //  var fcmTokenRequester: String? = null,
-    var status: Int? = null, // 0=onRequest, 1=Success
+    var status: String? = null, // 0=onRequest, 1=Success
 ){
 }

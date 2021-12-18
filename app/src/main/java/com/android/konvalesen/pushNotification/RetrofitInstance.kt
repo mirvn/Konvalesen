@@ -5,7 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitInstance {
-    companion object{
+    /*companion object{
         private val retrofit by lazy {
             Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -16,5 +16,5 @@ class RetrofitInstance {
         val api by lazy {
             retrofit.create(NotificationAPI::class.java)
         }
-    }
+    }*/
 }

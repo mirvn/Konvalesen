@@ -20,12 +20,14 @@ import cz.msebera.android.httpclient.entity.StringEntity
 import org.json.JSONArray
 import org.json.JSONObject
 import android.os.AsyncTask
+import com.android.konvalesen.model.User
 import okhttp3.OkHttpClient
 import java.lang.Exception
 
 
 class RequestViewModel: ViewModel() {
     private val user = MutableLiveData<RequestDonor>()
+    private val userRequester = MutableLiveData<RequestDonor>()
     companion object{
         val TAG = RequestViewModel::class.java.simpleName
     }
@@ -43,8 +45,38 @@ class RequestViewModel: ViewModel() {
             }
     }
 
+    fun setDataReqFromFirebase(nomorRequester: String) {
+        val db = Firebase.firestore
+        val dataRequester= RequestDonor()
+        db.collection("requestDonor")
+            .whereEqualTo("nomorRequester", nomorRequester)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+
+                    dataRequester.idRequester = document.data["idRequester"].toString()
+                    dataRequester.namaRequester = document.data["namaRequester"].toString()
+                    dataRequester.alamatRequester = document.data["alamatRequester"].toString()
+                    dataRequester.nomorRequester = document.data["nomorRequester"].toString()
+                    dataRequester.darahRequester = document.data["darahRequester"].toString()
+                    dataRequester.tanggal = document.data["tanggal"].toString()
+                    dataRequester.latRequester = document.data["latRequester"] as Double?
+                    dataRequester.lngRequester = document.data["lngRequester"] as Double?
+                    dataRequester.status = document.data["status"].toString()
+                }
+                userRequester.postValue(dataRequester)
+                Log.d(TAG, "setDataReqFromFirebase-dataRequester:$dataRequester ")
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+    }
+
+    fun getDataReqFromFirebase(): MutableLiveData<RequestDonor> = userRequester
+
     fun sendNotification(to:String, message:NotificationData,context: Context) {
-        val url = "https://fcm.googleapis.com/fcm/send"
+        val url = Constant.BASE_URL
 
         val notificationParams = JSONObject()
         notificationParams.put("body", message.message)
@@ -59,7 +91,7 @@ class RequestViewModel: ViewModel() {
         val client = AsyncHttpClient()
         client.addHeader("Authorization", "key=${Constant.FCM_SERVER_KEY}")
         //client.addHeader("Content-Type", Constant.CONTENT_TYPE)
-        client.post(null,url,params,"application/json",object :AsyncHttpResponseHandler(){
+        client.post(null,url,params,Constant.CONTENT_TYPE,object :AsyncHttpResponseHandler(){
             override fun onSuccess(
                 statusCode: Int,
                 headers: Array<out Header>?,

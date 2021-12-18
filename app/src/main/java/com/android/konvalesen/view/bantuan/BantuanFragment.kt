@@ -41,6 +41,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -66,7 +67,7 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     companion object{
         private val TAG = BantuanActivity::class.java.simpleName
         private const val LOCATION_REQ_CODE = 1000
-        const val TOPIC = "topics/notifDonor"
+        //const val TOPIC = "topics/notifDonor"
     }
 
     override fun onCreateView(
@@ -97,16 +98,19 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         }
 
         binding.btnNext2.setOnClickListener {
+            val myFormat = "dd/MM/yyyy" // mention the format you need
+            val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
             val nama = sessionUser.sharedPreferences.getString("nama","")
             val dataDonor = RequestDonor(
-                UUID.randomUUID().toString(),
+                auth.currentUser?.uid.toString(),
                 nama,
                 sessionUser.sharedPreferences.getString("nomor",""),
                 golDarah,
                 binding.tvLokasiOnMap.text.toString(),
                 latLng.latitude,
                 latLng.longitude,
-                0
+                sdf.format(System.currentTimeMillis()).toString(),
+                getString(R.string.status_mencari_pendonor)
             )
             userViewModel.getAlldataUser().observe({lifecycle},{
                 allUser.addAll(it)
@@ -128,21 +132,22 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 activity?.startActivity(intent)
             }else {
                 requestViewModel.createNewRequestDonor(dataDonor,requireContext())
-                    for(i in allUserSameBloodTypeExcludeUserFcmToken.indices){
+                    //for(i in allUserSameBloodTypeExcludeUserFcmToken.indices){
                         requestViewModel.sendNotification(
-                            allUserSameBloodTypeExcludeUserFcmToken[i].fcm_token.toString(),
+                            /*allUserSameBloodTypeExcludeUserFcmToken[i].fcm_token.toString()*/
+                            "dqe6sUtxTcKHKL6AzCqAIF:APA91bHwpLxVMDbhXK4SGSWkhjxSf35ysN24Ce-bymjt8mNWNB58TN-vDUIuAaFsTZx9AvQPNVk2pRz1QstY2-nTRYFAzrKMM2BuNgK2spdjtQivg-lPRzqpPsAFOoNT1cewDgRyIt3E",
                             notificationData,
                             requireContext()
                         )
-                        Log.d(TAG, "onViewCreated- allUserSameBloodTypeExcludeUserFcmToken[i].fcm_token: ${allUserSameBloodTypeExcludeUserFcmToken[i].fcm_token.toString()}")
-                    }
+                       // Log.d(TAG, "onViewCreated- allUserSameBloodTypeExcludeUserFcmToken[i].fcm_token: ${allUserSameBloodTypeExcludeUserFcmToken[i].fcm_token.toString()}")
+                   // }
                 val intent = Intent(requireContext(),OnRequestActivity::class.java)
                 activity?.startActivity(intent)
             }
         }
     }
 
-    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+/*    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
         try {
             val response = RetrofitInstance.api.postNotification(notification)
             if (response.isSuccessful){
@@ -151,7 +156,7 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         }catch (e:Exception){
             Log.e(TAG, "pushNotification: ${e}")
         }
-    }
+    }*/
 
     override fun onMapReady(gMap: GoogleMap) {
         mMap = gMap

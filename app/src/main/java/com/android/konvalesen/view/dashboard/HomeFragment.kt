@@ -1,6 +1,7 @@
 package com.android.konvalesen.view.dashboard
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import com.android.konvalesen.view.bantuan.BantuanActivity
 import com.android.konvalesen.view.login.MainActivity
 import com.android.konvalesen.view.onReceive.OnReceiveActivity
 import com.android.konvalesen.view.onRequest.OnRequestActivity
+import com.android.konvalesen.viewmodel.RequestViewModel
 import com.android.konvalesen.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceIdReceiver
@@ -27,6 +29,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var firebaseAuth:FirebaseAuth
     private lateinit var userViewModel: UserViewModel
+    private lateinit var requestViewModel: RequestViewModel
     private lateinit var sessionUser: SessionUser
 
     override fun onCreateView(
@@ -44,6 +47,8 @@ class HomeFragment : Fragment() {
         sessionUser = SessionUser(requireContext())
         userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(UserViewModel::class.java)
+        requestViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+            .get(RequestViewModel::class.java)
         //get data user from firebase
         firebaseAuth = FirebaseAuth.getInstance()
         getUserData()
@@ -66,9 +71,26 @@ class HomeFragment : Fragment() {
             }
             true
         }
+        val nomor = sessionUser.sharedPreferences.getString("nomor","").toString()
+        requestViewModel.setDataReqFromFirebase(nomor)
         binding.btnBantuan.setOnClickListener {
-            val intent = Intent(requireContext(),BantuanActivity::class.java)
-            startActivity(intent)
+            requestViewModel.getDataReqFromFirebase().observe({lifecycle},{dataRequester ->
+                if (dataRequester.nomorRequester != null) {
+                    val alert = AlertDialog.Builder(requireContext())
+                    alert.apply {
+                        setIcon(R.drawable.ic_baseline_warning_24)
+                        setTitle(getString(R.string.watning_bantuan_title))
+                        setMessage(getString(R.string.warning_bantuan))
+                        setCancelable(false)
+                        setPositiveButton("OK"){_,_ ->
+
+                        }
+                    }.create().show()
+                }else{
+                    val intent = Intent(requireContext(),BantuanActivity::class.java)
+                    startActivity(intent)
+                }
+            })
         }
     }
 

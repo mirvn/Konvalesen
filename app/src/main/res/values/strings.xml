@@ -53,4 +53,9 @@
     <string name="tab_text_2">History Mendonor</string>
     <string name="bantuan_donor_saya">Bantuan Donor Saya</string>
     <string name="pendonoran_saya">Pendonoran saya</string>
+    <string name="tab_text_3">History Bantuan Donor</string>
+    <string name="status_mencari_pendonor">Sedang Mencari Pendonor</string>
+    <string name="tidak_ada_data_pengajuan_bantuan_donor">Tidak ada data pengajuan bantuan donor</string>
+    <string name="warning_bantuan">Permintaan bantuan donor plasma anda belum selesai, anda dapat meminta bantuan setelah permintaan sebelumnya diakhiri atau selesai. Anda dapat membuka permintaan bantuan anda di <b>Menu</b> pojok kanan atas -> <b>Bantuan Donor Saya</b></string>
+    <string name="watning_bantuan_title">Permintaan Gagal</string>
 </resources>

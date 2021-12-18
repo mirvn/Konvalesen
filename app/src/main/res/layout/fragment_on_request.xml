@@ -4,31 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.onRequest.OnRequestFragment">
+    tools:context=".view.onRequest.OnGoingRequestFragment">
 
     <Button
         android:id="@+id/btn_akhiriPermintaanDonor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="@color/white"
         android:elevation="10dp"
         android:text="Akhiri Permintaan Bantuan"
         android:textColor="@color/konvalesen"
+        android:visibility="invisible"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
         tools:ignore="TextContrastCheck" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@color/konvalesen2"
+        android:layout_height="230dp"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -42,6 +42,7 @@
             android:elevation="5dp"
             android:enabled="false"
             android:textColor="@color/konvalesen2"
+            android:visibility="invisible"
             app:cornerRadius="100dp"
             app:layout_constraintStart_toStartOf="@+id/tv_darahKebutuhan2"
             app:layout_constraintTop_toBottomOf="@+id/tv_darahKebutuhan2"
@@ -53,18 +54,21 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/darah_yang_dibutuhkan"
-            android:textColor="@color/white"
+            android:textColor="@color/konvalesen2"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/imageView10"
-            app:layout_constraintTop_toTopOf="@+id/imageView10" />
+            android:visibility="invisible"
+            app:layout_constraintStart_toEndOf="@+id/imageView9"
+            app:layout_constraintTop_toTopOf="@+id/imageView9" />
 
         <TextView
             android:id="@+id/tv_lokasiOnMap2"
             android:layout_width="320dp"
             android:layout_height="50dp"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@+id/tv_lokasiPenerima2"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/konvalesen2"
+            android:visibility="invisible"
+            app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toBottomOf="@+id/tv_lokasiPenerima2" />
 
         <TextView
@@ -73,63 +77,99 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/lokasi_rumah_sakit"
-            android:textColor="@color/white"
+            android:textColor="@color/konvalesen2"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/imageView9"
-            app:layout_constraintTop_toTopOf="@+id/imageView9" />
+            android:visibility="invisible"
+            app:layout_constraintStart_toEndOf="@+id/imageView4"
+            app:layout_constraintTop_toTopOf="@+id/imageView4" />
 
         <TextView
             android:id="@+id/tv_mintaBantuan2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/meminta_bantuan_donor"
-            android:textColor="@color/white"
+            android:textColor="@color/konvalesen2"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar3" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:layout_constraintEnd_toEndOf="parent"
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_baseline_share_location_24"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_baseline_arrow_back_24_white"
-            app:titleTextColor="@color/white" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_mintaBantuan2" />
 
         <ImageView
             android:id="@+id/imageView9"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_baseline_share_location_24_white"
-            app:layout_constraintStart_toStartOf="@+id/tv_mintaBantuan2"
-            app:layout_constraintTop_toBottomOf="@+id/tv_mintaBantuan2" />
-
-        <ImageView
-            android:id="@+id/imageView10"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/ic_baseline_bloodtype_24_white"
-            app:layout_constraintStart_toStartOf="@+id/imageView9"
+            android:src="@drawable/ic_baseline_bloodtype_24"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/imageView4"
             app:layout_constraintTop_toBottomOf="@+id/tv_lokasiOnMap2" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/rv_onGoingRequest"
         android:layout_width="0dp"
-        android:layout_height="330dp"
-        android:layout_marginTop="1dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/btn_akhiriPermintaanDonor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_bersediaMendonor"
+        tools:listitem="@layout/item_on_req_penyedia_donor" />
+
+    <TextView
+        android:id="@+id/tv_bersediaMendonor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Bersedia Menjadi Pendonor"
+        android:textColor="@color/konvalesen2"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <TextView
+        android:id="@+id/tv_dataKosong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tidak_ada_data_pengajuan_bantuan_donor"
+        android:textColor="@color/konvalesen2"
+        android:textStyle="bold|italic"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar6"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="254dp"
+        android:layout_height="29dp"
+        android:indeterminate="true"
+        android:indeterminateBehavior="cycle"
+        android:indeterminateTint="@color/konvalesen"
+        android:max="@integer/material_motion_duration_short_1"
+        android:progress="@integer/material_motion_duration_short_1"
+        android:progressTint="@color/konvalesen"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_dataKosong"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_dataKosong" />
 </androidx.constraintlayout.widget.ConstraintLayout>
