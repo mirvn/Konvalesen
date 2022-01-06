@@ -79,25 +79,29 @@ class RequestViewModel: ViewModel() {
         val url = Constant.BASE_URL
 
         val notificationParams = JSONObject()
-        notificationParams.put("body", message.message)
         notificationParams.put("title", message.title)
+        notificationParams.put("body", message.message)
+
         val sendNotification = JSONObject()
         sendNotification.put("to",to)
-        sendNotification.put("data",notificationParams)
+        sendNotification.put("notification",notificationParams)
 
         val params = StringEntity(sendNotification.toString())
         params.setContentType("application/json")
 
+        Log.d(TAG, "sendNotification: $params")
+
         val client = AsyncHttpClient()
-        client.addHeader("Authorization", "key=${Constant.FCM_SERVER_KEY}")
+        client.addHeader("Authorization", "key="+Constant.FCM_SERVER_KEY)
         //client.addHeader("Content-Type", Constant.CONTENT_TYPE)
-        client.post(null,url,params,Constant.CONTENT_TYPE,object :AsyncHttpResponseHandler(){
+        client.post(context,url,params,Constant.CONTENT_TYPE,object :AsyncHttpResponseHandler(){
             override fun onSuccess(
                 statusCode: Int,
                 headers: Array<out Header>?,
                 responseBody: ByteArray?
             ) {
-                Log.d(TAG, "onSuccess: ${responseBody.toString()}")
+                Log.d(TAG, "onSuccessNotification: $responseBody")
+                Toast.makeText(context, "Permintaan Bantuan Berhasil", Toast.LENGTH_SHORT).show()
             }
 
             override fun onFailure(
@@ -106,7 +110,8 @@ class RequestViewModel: ViewModel() {
                 responseBody: ByteArray?,
                 error: Throwable?
             ) {
-                Log.e(TAG, "onFailure: ${error.toString()}", )
+                Log.e(TAG, "onFailureNotification: ${error.toString()}", )
+                Toast.makeText(context, "Permintaan Bantuan Gagal", Toast.LENGTH_SHORT).show()
             }
 
         })

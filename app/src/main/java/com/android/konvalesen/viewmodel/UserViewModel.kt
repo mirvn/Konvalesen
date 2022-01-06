@@ -40,7 +40,7 @@ class UserViewModel : ViewModel() {
             }
             .addOnFailureListener {
                 Log.d(TAG, "createDataUser: $it")
-                Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
             }
     }
 

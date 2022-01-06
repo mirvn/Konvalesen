@@ -58,4 +58,16 @@
     <string name="tidak_ada_data_pengajuan_bantuan_donor">Tidak ada data pengajuan bantuan donor</string>
     <string name="warning_bantuan">Permintaan bantuan donor plasma anda belum selesai, anda dapat meminta bantuan setelah permintaan sebelumnya diakhiri atau selesai. Anda dapat membuka permintaan bantuan anda di <b>Menu</b> pojok kanan atas -> <b>Bantuan Donor Saya</b></string>
     <string name="watning_bantuan_title">Permintaan Gagal</string>
+    <string name="title_activity_on_receive_confirmation">OnReceiveConfirmationActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="bersedia_menjadi_pendonor">Bersedia Menjadi Pendonor</string>
+    <string name="saya_belum_bisa">Saya Belum Bisa</string>
+    <string name="request_denied">Request tidak diijinkan, gagal memuat data</string>
 </resources>

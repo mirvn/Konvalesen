@@ -20,11 +20,14 @@ import com.android.konvalesen.viewmodel.RequestViewModel
 import com.android.konvalesen.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceIdReceiver
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.ktx.messaging
 
 class HomeFragment : Fragment() {
     companion object{
         private val TAG = HomeFragment::class.java.simpleName
+        val TOPIC = "topics/notifDonor"
     }
     private lateinit var binding: FragmentHomeBinding
     private lateinit var firebaseAuth:FirebaseAuth
@@ -52,9 +55,11 @@ class HomeFragment : Fragment() {
         //get data user from firebase
         firebaseAuth = FirebaseAuth.getInstance()
         getUserData()
-        FirebaseMessaging.getInstance().subscribeToTopic(
+        val fcmToken = sessionUser.sharedPreferences.getString("fcmToken","").toString()
+        Firebase.messaging.subscribeToTopic(TOPIC)
+        /*FirebaseMessaging.getInstance().subscribeToTopic(
             sessionUser.sharedPreferences.getString("fcmToken","").toString()
-        ) //subscribe topic notification
+        ) *///subscribe topic notification
         binding.toolbar2.setOnMenuItemClickListener { item ->
             when (item.itemId){
                 R.id.action_logout ->{

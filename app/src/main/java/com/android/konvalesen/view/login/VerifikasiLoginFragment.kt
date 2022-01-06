@@ -27,6 +27,7 @@ class VerifikasiLoginFragment : Fragment() {
     private lateinit var binding: FragmentVerifikasiLoginBinding
     private val args: VerifikasiLoginFragmentArgs by navArgs()
     private lateinit var userViewModel: UserViewModel
+    private lateinit var countDown: CountDownTimer
 
     // [START declare_auth]
     private lateinit var auth: FirebaseAuth
@@ -139,29 +140,29 @@ class VerifikasiLoginFragment : Fragment() {
     }
 
     private fun countDown() {
-        object : CountDownTimer(60000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                binding.tvResendCodeLogin.setTextColor(
-                    ContextCompat.getColor(
-                        requireActivity(),
-                        R.color.countdown_text
-                    )
-                )
-                binding.tvResendCodeLogin.text =
-                    "${getString(R.string.kirim_ulang_kode_verifikasi)}: ${millisUntilFinished / 1000}"
-            }
+       countDown = object : CountDownTimer(60000, 1000) {
+           override fun onTick(millisUntilFinished: Long) {
+/*               binding.tvResendCodeLogin.setTextColor(
+                   ContextCompat.getColor(
+                       activity!!.applicationContext,
+                       R.color.countdown_text
+                   )
+               )*/
+               binding.tvResendCodeLogin.text =
+                   "${getString(R.string.kirim_ulang_kode_verifikasi)}: ${millisUntilFinished / 1000}"
+           }
 
-            override fun onFinish() {
-                binding.tvResendCodeLogin.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
-                    )
-                )
-                binding.tvResendCodeLogin.text =
-                    getString(R.string.kirim_ulang_kode_verifikasi)
-            }
-        }.start()
+           override fun onFinish() {
+               binding.tvResendCodeLogin.setTextColor(
+                   ContextCompat.getColor(
+                       requireContext(),
+                       R.color.black
+                   )
+               )
+               binding.tvResendCodeLogin.text =
+                   getString(R.string.kirim_ulang_kode_verifikasi)
+           }
+       }.start()
     }
 
     private fun startPhoneNumberVerification(phoneNumber: String) {
@@ -207,7 +208,7 @@ class VerifikasiLoginFragment : Fragment() {
             .addOnSuccessListener {
                 //login success
                 val phoneNumber = auth.currentUser?.phoneNumber.toString()
-                Toast.makeText(requireContext(), "Logged in as $phoneNumber", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT)
                     .show()
                 //start fragment Verifikasi register or home
                 userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
@@ -215,6 +216,7 @@ class VerifikasiLoginFragment : Fragment() {
                 userViewModel.getDataUserFromFirebase(args.phoneNumber)
                 userViewModel.getDataUser().observe(viewLifecycleOwner, {
                     if (args.phoneNumber == it.nomor) {
+                        countDown.cancel()
                         val mIntent = Intent(context, HomeActivity::class.java)
                         startActivity(mIntent)
                         activity?.finish()
