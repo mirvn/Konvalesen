@@ -140,7 +140,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/ic_baseline_share_location_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_profileConfirmation" />
@@ -162,7 +162,7 @@
         android:id="@+id/map2"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_height="230dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar3"
@@ -173,30 +173,32 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:background="@drawable/ic_baseline_person_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
         android:id="@+id/tv_namaRequesterBantuan"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="TextView"
+        android:textColor="@color/konvalesen2"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_profileConfirmation"
-        app:layout_constraintTop_toBottomOf="@+id/tv_tgl" />
+        app:layout_constraintTop_toTopOf="@+id/img_profileConfirmation" />
 
     <TextView
         android:id="@+id/tv_jarak"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/tv_namaRequesterBantuan"
-        app:layout_constraintTop_toBottomOf="@+id/tv_namaRequesterBantuan" />
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/tv_tgl"
@@ -205,7 +207,32 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
+        android:textColor="@color/konvalesen2"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map2" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Jarak Lokasi:"
+        android:textColor="@color/konvalesen2"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_namaRequesterBantuan"
+        app:layout_constraintTop_toBottomOf="@+id/tv_namaRequesterBantuan" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Tanggal Request:"
+        android:textColor="@color/konvalesen2"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_tgl"
+        app:layout_constraintEnd_toStartOf="@+id/tv_tgl"
+        app:layout_constraintTop_toTopOf="@+id/tv_tgl" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

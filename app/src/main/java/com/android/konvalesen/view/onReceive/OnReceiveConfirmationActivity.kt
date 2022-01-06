@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.location.GnssAntennaInfo
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -131,6 +132,21 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                             geocoder.getFromLocation(location.latitude, location.longitude, 1)
 
                         lokasiAlamat = addresses[0].locality.toString()
+                        //calculate distance between 2 points
+                        val destinationPoint = Location("destinationPoint")
+                        latLngRequester?.latitude.let {
+                            if (it != null) {
+                                destinationPoint.latitude = it
+                            }
+                        }
+                        latLngRequester?.longitude.let {
+                            if (it != null) {
+                                destinationPoint.longitude = it
+                            }
+                        }
+                        val dist = location.distanceTo(destinationPoint)
+                        Log.d(TAG, "setupMap- Distance2points: $dist")
+                        binding.tvJarak.text = "+-${dist}meter"
                     }
                 }
             })
