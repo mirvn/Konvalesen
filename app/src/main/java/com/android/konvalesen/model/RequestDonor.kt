@@ -1,5 +1,9 @@
 package com.android.konvalesen.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class RequestDonor(
     var idRequester: String? = null,
     var namaRequester: String? = null,
@@ -9,7 +13,7 @@ data class RequestDonor(
     var latRequester: Double? = null,
     var lngRequester: Double? = null,
     var tanggal: String? = null,
-  //  var fcmTokenRequester: String? = null,
+    //  var fcmTokenRequester: String? = null,
     var status: String? = null, // 0=onRequest, 1=Success
-){
+) : Parcelable {
 }

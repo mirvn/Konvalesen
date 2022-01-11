@@ -141,7 +141,6 @@
         android:scrollIndicators="bottom"
         android:scrollbarStyle="outsideInset"
         android:scrollbarThumbHorizontal="@color/konvalesen"
-        android:scrollbarTrackHorizontal="#43FF5A57"
         android:scrollbars="horizontal|none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView5"

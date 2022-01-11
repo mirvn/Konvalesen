@@ -8,10 +8,12 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.konvalesen.R
 import com.android.konvalesen.databinding.FragmentHomeBinding
 import com.android.konvalesen.helper.SessionUser
 import com.android.konvalesen.view.bantuan.BantuanActivity
+import com.android.konvalesen.view.dashboard.adapter.PermintaanBantuanAdapter
 import com.android.konvalesen.view.login.MainActivity
 import com.android.konvalesen.view.onReceive.OnReceiveActivity
 import com.android.konvalesen.view.onRequest.OnRequestActivity
@@ -31,6 +33,7 @@ class HomeFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var requestViewModel: RequestViewModel
     private lateinit var sessionUser: SessionUser
+    private var requesterAdapter: PermintaanBantuanAdapter = PermintaanBantuanAdapter()
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -52,18 +55,17 @@ class HomeFragment : Fragment() {
         //get data user from firebase
         firebaseAuth = FirebaseAuth.getInstance()
         getUserData()
-        val fcmToken = sessionUser.sharedPreferences.getString("fcmToken","").toString()
-        Firebase.messaging.subscribeToTopic(TOPIC)
-        /*FirebaseMessaging.getInstance().subscribeToTopic(
-            sessionUser.sharedPreferences.getString("fcmToken","").toString()
-        ) *///subscribe topic notification
+        val fcmToken = sessionUser.sharedPreferences.getString("fcmToken", "").toString()
+        Firebase.messaging.subscribeToTopic(fcmToken)
+        loadDataOnRv()
+
         binding.toolbar2.setOnMenuItemClickListener { item ->
-            when (item.itemId){
-                R.id.action_logout ->{
+            when (item.itemId) {
+                R.id.action_logout -> {
                     logout()
                 }
-                R.id.action_pendonoran_saya->{
-                    val mIntent = Intent(requireContext(),OnReceiveActivity::class.java)
+                R.id.action_pendonoran_saya -> {
+                    val mIntent = Intent(requireContext(), OnReceiveActivity::class.java)
                     startActivity(mIntent)
                 }
                 R.id.action_bantuan_donor_saya->{
@@ -104,24 +106,44 @@ class HomeFragment : Fragment() {
         userViewModel.getDataUser().observe(viewLifecycleOwner,{
             binding.progressBar3.visibility = View.GONE
             binding.tvNama.text = "Hai, ${it.nama}"
+            binding.btnGolDarProfile.text = it.golongan_darah
             //set session
-            sessionUser.setUserId(it.id.toString())
-            sessionUser.setUserName(it.nama.toString())
-            sessionUser.setUserNomor(it.nomor.toString())
-            sessionUser.setUserGolonganDarah(it.golongan_darah.toString())
-            sessionUser.setFcmToken(it.fcm_token.toString())
-            Log.d(TAG, "getUserData: ${sessionUser.sharedPreferences.getString("fcmToken","")}")
+            if (sessionUser.sharedPreferences.all.values == null) {
+                sessionUser.setUserId(it.id.toString())
+                sessionUser.setUserName(it.nama.toString())
+                sessionUser.setUserNomor(it.nomor.toString())
+                sessionUser.setUserGolonganDarah(it.golongan_darah.toString())
+                sessionUser.setFcmToken(it.fcm_token.toString())
+            }
         })
     }
 
-    private fun logout(){
+    private fun logout() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseAuth.signOut()
         //clear session
         sessionUser.sharedPreferences.edit().clear().apply()
 
-        val mIntent = Intent(activity?.applicationContext,MainActivity::class.java)
+        val mIntent = Intent(activity?.applicationContext, MainActivity::class.java)
         startActivity(mIntent)
         activity?.finish()
+    }
+
+    private fun loadDataOnRv() {
+        requestViewModel.setAllDataReqFromFirebase(
+            getString(R.string.status_mencari_pendonor),
+            sessionUser.sharedPreferences.getString("golonganDarah", "").toString()
+        )
+        requestViewModel.getAllDataReqFromFirebase().observe({ lifecycle }, {
+            requesterAdapter.setDataReqDonor(it)
+            showRv()
+        })
+    }
+
+    private fun showRv() {
+        val rv = binding.rvListBantuDonor
+        rv.setHasFixedSize(true)
+        rv.layoutManager = LinearLayoutManager(requireContext())
+        rv.adapter = requesterAdapter
     }
 }

@@ -6,22 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".view.dashboard.HomeFragment">
 
-    <ProgressBar
-        android:id="@+id/progressBar3"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="254dp"
-        android:layout_height="29dp"
-        android:indeterminate="true"
-        android:indeterminateBehavior="cycle"
-        android:indeterminateTint="@color/konvalesen"
-        android:max="@integer/material_motion_duration_short_1"
-        android:progress="@integer/material_motion_duration_short_1"
-        android:progressTint="@color/konvalesen"
-        app:layout_constraintBottom_toBottomOf="@+id/tvNama"
-        app:layout_constraintEnd_toEndOf="@+id/tvPerintahDonor"
-        app:layout_constraintStart_toStartOf="@+id/tvPerintahDonor"
-        app:layout_constraintTop_toTopOf="@+id/tvNama" />
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
@@ -35,49 +19,147 @@
         app:title="Konvalesen"
         app:titleTextColor="@color/konvalesen" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/img_profile"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/ic_baseline_person_24"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintProfile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/background_loading_otp"
         android:elevation="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/progressBar3"
-        app:layout_constraintStart_toStartOf="@+id/tvNama" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2">
+
+        <Button
+            android:id="@+id/btn_golDarProfile"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFFFFF"
+            android:elevation="5dp"
+            android:enabled="false"
+            android:textColor="@color/konvalesen"
+            app:cornerRadius="100dp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_profile"
+            app:layout_constraintStart_toStartOf="@+id/textView15"
+            app:layout_constraintTop_toBottomOf="@+id/textView15"
+            tools:ignore="TextContrastCheck,SpeakableTextPresentCheck" />
+
+        <ProgressBar
+            android:id="@+id/progressBar3"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:indeterminate="true"
+            android:indeterminateBehavior="cycle"
+            android:indeterminateTint="@color/konvalesen"
+            android:max="@integer/material_motion_duration_short_1"
+            android:progress="@integer/material_motion_duration_short_1"
+            android:progressTint="@color/konvalesen"
+            app:layout_constraintBottom_toBottomOf="@+id/tvNama"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/tvNama"
+            app:layout_constraintTop_toTopOf="@+id/tvNama"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_profile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_baseline_person_24"
+            android:elevation="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvNama"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/konvalesen2"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_profile"
+            app:layout_constraintTop_toTopOf="@+id/img_profile" />
+
+        <TextView
+            android:id="@+id/tvPerintahDonor"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/silahkan_tekan_tombol_minta_bantuan_untuk_meminta_bantuan_donor_plasma"
+            android:textColor="@color/konvalesen2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_profile" />
+
+        <Button
+            android:id="@+id/btn_Bantuan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/minta_bantuan"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            app:cornerRadius="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPerintahDonor"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/golongan_darah"
+            android:textColor="@color/konvalesen2"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/img_profile"
+            app:layout_constraintTop_toBottomOf="@+id/tvNama" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/tvNama"
+        android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Bantu Donor Plasma"
         android:textColor="@color/konvalesen2"
-        android:textSize="30sp"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tvPerintahDonor"
-        app:layout_constraintStart_toStartOf="@+id/btn_Bantuan" />
-
-    <TextView
-        android:id="@+id/tvPerintahDonor"
-        android:layout_width="254dp"
-        android:layout_height="36dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/silahkan_tekan_tombol_minta_bantuan_untuk_meminta_bantuan_donor_plasma"
-        android:textColor="@color/konvalesen2"
-        app:layout_constraintBottom_toTopOf="@+id/btn_Bantuan"
-        app:layout_constraintStart_toStartOf="@+id/btn_Bantuan" />
-
-    <Button
-        android:id="@+id/btn_Bantuan"
-        android:layout_width="258dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="32dp"
-        android:text="@string/minta_bantuan"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        app:cornerRadius="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="TextContrastCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintProfile" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvListBantuDonor"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/background_loading_otp"
+        android:elevation="5dp"
+        android:scrollbarThumbVertical="@color/konvalesen"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16"
+        tools:listitem="@layout/item_membutuhkan_donor" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

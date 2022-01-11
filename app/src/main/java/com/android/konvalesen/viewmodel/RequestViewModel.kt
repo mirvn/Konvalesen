@@ -21,6 +21,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import android.os.AsyncTask
 import com.android.konvalesen.model.User
+import com.google.firebase.firestore.ktx.toObjects
 import okhttp3.OkHttpClient
 import java.lang.Exception
 
@@ -28,6 +29,7 @@ import java.lang.Exception
 class RequestViewModel: ViewModel() {
     private val user = MutableLiveData<RequestDonor>()
     private val userRequester = MutableLiveData<RequestDonor>()
+    private val allUserRequester = MutableLiveData<ArrayList<RequestDonor>>()
     companion object{
         val TAG = RequestViewModel::class.java.simpleName
     }
@@ -45,9 +47,30 @@ class RequestViewModel: ViewModel() {
             }
     }
 
+    fun setAllDataReqFromFirebase(status: String, darahRequester: String) {
+        val db = Firebase.firestore
+        val dataRequester = ArrayList<RequestDonor>()
+        db.collection("requestDonor")
+            .whereEqualTo("status", status)
+            .whereEqualTo("darahRequester", darahRequester)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents.toObjects<RequestDonor>()) {
+                    dataRequester.add(document)
+                }
+                allUserRequester.postValue(dataRequester)
+                Log.d(TAG, "setDataReqFromFirebase-dataRequester:$dataRequester ")
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+    }
+
+    fun getAllDataReqFromFirebase(): MutableLiveData<ArrayList<RequestDonor>> = allUserRequester
+
     fun setDataReqFromFirebase(nomorRequester: String) {
         val db = Firebase.firestore
-        val dataRequester= RequestDonor()
+        val dataRequester = RequestDonor()
         db.collection("requestDonor")
             .whereEqualTo("nomorRequester", nomorRequester)
             .get()

@@ -57,6 +57,7 @@
     <string name="status_mencari_pendonor">Sedang Mencari Pendonor</string>
     <string name="tidak_ada_data_pengajuan_bantuan_donor">Tidak ada data pengajuan bantuan donor</string>
     <string name="warning_bantuan">Permintaan bantuan donor plasma anda belum selesai, anda dapat meminta bantuan setelah permintaan sebelumnya diakhiri atau selesai. Anda dapat membuka permintaan bantuan anda di <b>Menu</b> pojok kanan atas -> <b>Bantuan Donor Saya</b></string>
+    <string name="warning_menerima_bantuan">Kegiatan untuk membantu donor plasma anda belum selesai, anda dapat menjadi pendonor lagi setelah permintaan sebelumnya diakhiri atau selesai. Anda dapat membuka kegiatan pendonoran anda sebelumnya di <b>Menu</b> pojok kanan atas -> <b>Pendonoran Saya</b></string>
     <string name="warning_bantuan_title">Permintaan Gagal</string>
     <string name="title_activity_on_receive_confirmation">OnReceiveConfirmationActivity</string>
     <!-- Strings used for fragments for navigation -->
