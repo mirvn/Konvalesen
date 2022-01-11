@@ -138,7 +138,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:scrollbars="none"
+        android:scrollIndicators="bottom"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbarThumbHorizontal="@color/konvalesen"
+        android:scrollbarTrackHorizontal="#43FF5A57"
+        android:scrollbars="horizontal|none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toBottomOf="@+id/tv_darahKebutuhan">

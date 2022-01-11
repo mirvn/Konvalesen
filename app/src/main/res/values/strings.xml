@@ -57,7 +57,7 @@
     <string name="status_mencari_pendonor">Sedang Mencari Pendonor</string>
     <string name="tidak_ada_data_pengajuan_bantuan_donor">Tidak ada data pengajuan bantuan donor</string>
     <string name="warning_bantuan">Permintaan bantuan donor plasma anda belum selesai, anda dapat meminta bantuan setelah permintaan sebelumnya diakhiri atau selesai. Anda dapat membuka permintaan bantuan anda di <b>Menu</b> pojok kanan atas -> <b>Bantuan Donor Saya</b></string>
-    <string name="watning_bantuan_title">Permintaan Gagal</string>
+    <string name="warning_bantuan_title">Permintaan Gagal</string>
     <string name="title_activity_on_receive_confirmation">OnReceiveConfirmationActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -70,4 +70,16 @@
     <string name="bersedia_menjadi_pendonor">Bersedia Menjadi Pendonor</string>
     <string name="saya_belum_bisa">Saya Belum Bisa</string>
     <string name="request_denied">Request tidak diijinkan, gagal memuat data</string>
+    <string name="tolak_beri_bantuan">Tolak memberi bantuan</string>
+    <string name="messege_tolak_membantu">Apakah anda yakin untuk menolak memberi bantuan? Anda tetap dapat memberi bantuan di waktu lain dan melihat daftar orang yang membutuhkan pada halaman utama</string>
+    <string name="warning_setuju_donor">Sebelum anda menyetujui untuk membantu pendonoran, pastikan anda setuju dan memenuhi persyaratan di atas</string>
+    <string name="mengakhiri_jadi_pendonor">Mengakhiri Jadi Pendonor</string>
+    <string name="cb_confirmation_not_checked">Anda harus menyetujui persyaratan sebagai pendonor untuk melanjutkan</string>
+    <string name="status_approve">Approve</string>
+    <string name="akhiri_pendonoran">Mengakhiri Pendonoran</string>
+    <string name="salah_memasukkan_data">Salah memasukkan data</string>
+    <string name="kebutuhan_darah_sudah_terpenuhi">Kebutuhan darah sudah terpenuhi</string>
+    <string name="permintaan_mengakhiri_gagal">Permintaan gagal, alasan tidak terpenuhi</string>
+    <string name="tidak_dapat_memenuhi_kebutuhan_darah">Tidak dapat memenuhi kebutuhan darah</string>
+    <string name="lihat_petunjuk_arah">Lihat Petunjuk Arah</string>
 </resources>

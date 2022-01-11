@@ -149,7 +149,7 @@ class VerifikasiLoginFragment : Fragment() {
                    )
                )*/
                binding.tvResendCodeLogin.text =
-                   "${getString(R.string.kirim_ulang_kode_verifikasi)}: ${millisUntilFinished / 1000}"
+                   "${getString(R.string.kirim_ulang_kode_verifikasi)}: ${millisUntilFinished / 1000}" //error
            }
 
            override fun onFinish() {

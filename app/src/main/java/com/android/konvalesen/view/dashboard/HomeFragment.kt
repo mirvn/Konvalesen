@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.android.konvalesen.R
@@ -19,9 +18,7 @@ import com.android.konvalesen.view.onRequest.OnRequestActivity
 import com.android.konvalesen.viewmodel.RequestViewModel
 import com.android.konvalesen.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.iid.FirebaseInstanceIdReceiver
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.ktx.messaging
 
 class HomeFragment : Fragment() {
@@ -78,13 +75,14 @@ class HomeFragment : Fragment() {
         }
         val nomor = sessionUser.sharedPreferences.getString("nomor","").toString()
         requestViewModel.setDataReqFromFirebase(nomor)
+
         binding.btnBantuan.setOnClickListener {
             requestViewModel.getDataReqFromFirebase().observe({lifecycle},{dataRequester ->
                 if (dataRequester.nomorRequester != null) {
                     val alert = AlertDialog.Builder(requireContext())
                     alert.apply {
                         setIcon(R.drawable.ic_baseline_warning_24)
-                        setTitle(getString(R.string.watning_bantuan_title))
+                        setTitle(getString(R.string.warning_bantuan_title))
                         setMessage(getString(R.string.warning_bantuan))
                         setCancelable(false)
                         setPositiveButton("OK"){_,_ ->

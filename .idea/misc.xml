@@ -14,7 +14,7 @@
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_bantuan.xml" value="0.25" />
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_home.xml" value="0.22" />
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_maps.xml" value="0.19166666666666668" />
-        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_on_going_receive.xml" value="0.17760416666666667" />
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_on_going_receive.xml" value="0.22" />
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_on_receive.xml" value="0.2" />
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_on_receive_history.xml" value="0.22" />
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/fragment_on_request.xml" value="0.25" />
@@ -26,7 +26,10 @@
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/item_on_receive_history.xml" value="0.33" />
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/item_on_req_history.xml" value="0.33" />
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/item_on_req_penyedia_donor.xml" value="0.22" />
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/layout_akhiri_pendonoran.xml" value="0.33" />
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/layout_alert_bantuan.xml" value="0.17255434782608695" />
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/layout_beri_bantuan.xml" value="0.25" />
+        <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/layout_loading.xml" value="0.33" />
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/layout_loading_otp.xml" value="0.33" />
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/layout_on_receive_bantuan.xml" value="0.33" />
         <entry key="..\:/Direktori/College/Skripsi/konvalesen/app/src/main/res/layout/on_receive_confirmation.xml" value="0.25" />

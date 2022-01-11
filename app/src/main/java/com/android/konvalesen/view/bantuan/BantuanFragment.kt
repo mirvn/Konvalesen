@@ -236,7 +236,6 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 }
             }
         }
-
     }
 
     private val permissionResultCallback =
