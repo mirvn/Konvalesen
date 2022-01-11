@@ -135,7 +135,11 @@ class HomeFragment : Fragment() {
             sessionUser.sharedPreferences.getString("golonganDarah", "").toString()
         )
         requestViewModel.getAllDataReqFromFirebase().observe({ lifecycle }, {
-            requesterAdapter.setDataReqDonor(it)
+            val uidUser = firebaseAuth.currentUser!!.uid
+            val data =
+                it.filter { it.idRequester != uidUser } as ArrayList //Filter data from Requester exclude current user
+            Log.d(TAG, "loadDataOnRv: $data")
+            requesterAdapter.setDataReqDonor(data)
             showRv()
         })
     }
