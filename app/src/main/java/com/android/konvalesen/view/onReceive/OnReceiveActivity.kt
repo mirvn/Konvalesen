@@ -1,11 +1,13 @@
 package com.android.konvalesen.view.onReceive
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.android.konvalesen.R
 import com.android.konvalesen.databinding.ActivityOnReceiveBinding
+import com.android.konvalesen.view.dashboard.HomeActivity
 import com.android.konvalesen.view.onReceive.adapter.SectionPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -34,5 +36,12 @@ class OnReceiveActivity : AppCompatActivity() {
         binding.toolbar6.setNavigationOnClickListener {
             onBackPressed()
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val inten = Intent(this, HomeActivity::class.java)
+        inten.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(inten)
     }
 }

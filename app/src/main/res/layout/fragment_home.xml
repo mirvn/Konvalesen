@@ -24,12 +24,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:outlineAmbientShadowColor="@color/konvalesen"
         android:layout_marginEnd="8dp"
         android:background="@drawable/background_loading_otp"
         android:elevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
+        tools:targetApi="p">
 
         <Button
             android:id="@+id/btn_golDarProfile"
@@ -82,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:textColor="@color/konvalesen2"
+            android:textColor="@color/konvalesen"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

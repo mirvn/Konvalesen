@@ -30,26 +30,32 @@ class SessionUser(context: Context) {
     var editor = sharedPreferences.edit()
 
     fun setUserId(id: String) {
-        editor.putString("id",id)
+        editor.putString("id", id)
         editor.apply()
     }
 
-    fun setUserName(nama:String) {
-        editor.putString("nama",nama)
+    fun setUserName(nama: String) {
+        editor.putString("nama", nama)
         editor.apply()
     }
 
-    fun setUserNomor(nomor:String) {
-        editor.putString("nomor",nomor)
+    fun setUserNomor(nomor: String) {
+        editor.putString("nomor", nomor)
         editor.apply()
     }
 
-    fun setUserGolonganDarah(golonganDarah:String) {
-        editor.putString("golonganDarah",golonganDarah)
+    fun setUserGolonganDarah(golonganDarah: String) {
+        editor.putString("golonganDarah", golonganDarah)
         editor.apply()
     }
-    fun setFcmToken(fcmToken:String) {
-        editor.putString("fcmToken",fcmToken)
+
+    fun setFcmToken(fcmToken: String) {
+        editor.putString("fcmToken", fcmToken)
+        editor.apply()
+    }
+
+    fun setFoto(foto: String) {
+        editor.putString("foto", foto)
         editor.apply()
     }
 }

@@ -1,7 +1,6 @@
 package com.android.konvalesen.viewmodel
 
 import android.content.Context
-import android.icu.text.CaseMap
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
@@ -10,20 +9,13 @@ import com.android.konvalesen.model.NotificationData
 import com.android.konvalesen.model.RequestDonor
 import com.android.konvalesen.pushNotification.Constant
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
-import com.loopj.android.http.RequestParams
 import cz.msebera.android.httpclient.Header
-import cz.msebera.android.httpclient.HttpEntity
 import cz.msebera.android.httpclient.entity.StringEntity
-import org.json.JSONArray
 import org.json.JSONObject
-import android.os.AsyncTask
-import com.android.konvalesen.model.User
-import com.google.firebase.firestore.ktx.toObjects
-import okhttp3.OkHttpClient
-import java.lang.Exception
 
 
 class RequestViewModel: ViewModel() {
@@ -34,10 +26,10 @@ class RequestViewModel: ViewModel() {
         val TAG = RequestViewModel::class.java.simpleName
     }
 
-    fun createNewRequestDonor(data: RequestDonor, context: Context){
+    fun createNewRequestDonor(data: RequestDonor, context: Context) {
         val db = Firebase.firestore
-        db.collection("requestDonor").document(data.idRequester.toString())
-            .set(data)
+        db.collection("requestDonor")
+            .add(data)
             .addOnCompleteListener {
                 Log.d(TAG, "createNewRequestDonor $it")
             }
@@ -68,16 +60,34 @@ class RequestViewModel: ViewModel() {
 
     fun getAllDataReqFromFirebase(): MutableLiveData<ArrayList<RequestDonor>> = allUserRequester
 
-    fun setDataReqFromFirebase(nomorRequester: String) {
+    fun updateStatusRequestDonor(docId: String, context: Context, status: String) {
+        val db = Firebase.firestore
+        db.collection("requestDonor").document(docId)
+            .update(
+                "status", status,
+                "idDoc", docId
+            )
+            .addOnCompleteListener {
+                Log.d(TAG, "createNewRequestDonor $it")
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "createNewRequestDonor: $it")
+                Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    fun setDataReqFromFirebase(nomorRequester: String, status: String) {
         val db = Firebase.firestore
         val dataRequester = RequestDonor()
         db.collection("requestDonor")
             .whereEqualTo("nomorRequester", nomorRequester)
+            .whereEqualTo("status", status)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     Log.d(TAG, "${document.id} => ${document.data}")
 
+                    dataRequester.idDoc = document.id
                     dataRequester.idRequester = document.data["idRequester"].toString()
                     dataRequester.namaRequester = document.data["namaRequester"].toString()
                     dataRequester.alamatRequester = document.data["alamatRequester"].toString()

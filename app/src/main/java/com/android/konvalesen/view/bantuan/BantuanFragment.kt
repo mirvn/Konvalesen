@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -78,6 +77,7 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setGolonganDarah()
+        Log.d(TAG, "onViewCreated: ban,touan, fragme]n,t")
         sessionUser = SessionUser(requireContext())
         auth = FirebaseAuth.getInstance()
         userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
@@ -94,14 +94,17 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         }
 
         binding.btnNext2.setOnClickListener {
-            val myFormat = "dd/MM/yyyy" // mention the format you need
+            val myFormat = "dd-MM-yyyy/HH:mm:ss" // mention the format you need
             val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
-            val nama = sessionUser.sharedPreferences.getString("nama", "")
+            sdf.timeZone = TimeZone.getDefault()
+            val nama = sessionUser.sharedPreferences.getString("nama", "").toString()
+            val nomor = sessionUser.sharedPreferences.getString("nomor", "").toString()
             val uid = auth.currentUser?.uid.toString()
             val dataDonor = RequestDonor(
+                "",
                 uid,
                 nama,
-                sessionUser.sharedPreferences.getString("nomor", ""),
+                nomor,
                 golDarah,
                 binding.tvLokasiOnMap.text.toString(),
                 latLng.latitude,
@@ -219,7 +222,7 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            permissionResultCallback.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            permissionFineLocationResultCallback.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }else{
             mMap.isMyLocationEnabled = true
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
@@ -238,9 +241,10 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         }
     }
 
-    private val permissionResultCallback =
+    private val permissionFineLocationResultCallback =
         registerForActivityResult(
-            ActivityResultContracts.RequestPermission()){
+            ActivityResultContracts.RequestPermission()
+        ) {
             when (it) {
                 true -> {
                     setupMap()

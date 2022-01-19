@@ -12,6 +12,7 @@ import com.google.firebase.ktx.Firebase
 
 class UserViewModel : ViewModel() {
     private val user = MutableLiveData<User>()
+    private val dataSucess = MutableLiveData<User>()
     private val allUser = MutableLiveData<ArrayList<User>>()
 
     companion object {
@@ -23,13 +24,16 @@ class UserViewModel : ViewModel() {
         db.collection("users").document(data.id.toString())
             .set(data)
             .addOnCompleteListener {
-                Log.d(TAG, "createDataUser - user creater: $it")
+                Log.d(TAG, "createDataUser - user created: ${it.result}")
+                dataSucess.postValue(data)
             }
             .addOnFailureListener {
                 Log.d(TAG, "createDataUser: $it")
                 Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
             }
     }
+
+    fun getDataCreated(): MutableLiveData<User> = dataSucess
 
     fun updateDataFCMUser(docId: String, fcmToken: String, context: Context) {
         val db = Firebase.firestore
@@ -59,6 +63,7 @@ class UserViewModel : ViewModel() {
                     dataUser.nomor = document.data["nomor"].toString()
                     dataUser.golongan_darah = document.data["golongan_darah"].toString()
                     dataUser.fcm_token = document.data["fcm_token"].toString()
+                    dataUser.foto = document.data["foto"].toString()
                 }
                 user.postValue(dataUser)
                 /*Log.d(TAG, "getDataUserFromFirebase-dataUser: $dataUser")

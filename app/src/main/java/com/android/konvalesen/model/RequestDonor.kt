@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RequestDonor(
+    var idDoc: String? = null,
     var idRequester: String? = null,
     var namaRequester: String? = null,
     var nomorRequester: String? = null,

@@ -15,6 +15,7 @@ class OnReceiveConfirmationViewModel:ViewModel() {
     private val userRequester = MutableLiveData<RequestDonor>()
     private val allUserRequester = MutableLiveData<ArrayList<RequestDonor>>()
     private val dataApprover = MutableLiveData<ApprovedDonorData>()
+    private val dataHistoryApprover = MutableLiveData<ArrayList<ApprovedDonorData>>()
 
     companion object {
         val TAG = OnReceiveConfirmationViewModel::class.java.simpleName
@@ -32,6 +33,27 @@ class OnReceiveConfirmationViewModel:ViewModel() {
                 //Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
             }
     }
+
+    fun setDataHistoryApprovedFromFirebase(nomorApprover: String) {
+        val db = Firebase.firestore
+        val dataApproverFirebase = ArrayList<ApprovedDonorData>()
+        db.collection("approvedReqDonor")
+            .whereEqualTo("nomorApprover", nomorApprover)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents.toObjects<ApprovedDonorData>()) {
+                    dataApproverFirebase.add(document)
+                }
+                dataHistoryApprover.postValue(dataApproverFirebase)
+                Log.d(TAG, "setDataApproverFromFirebase: $dataApproverFirebase")
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+    }
+
+    fun getDataHistoryApprovedFromFirebase(): MutableLiveData<ArrayList<ApprovedDonorData>> =
+        dataHistoryApprover
 
     fun setDataApprovedFromFirebase(nomorApprover: String, status: String) {
         val db = Firebase.firestore
