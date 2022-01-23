@@ -22,6 +22,8 @@ import com.android.konvalesen.model.ApprovedDonorData
 import com.android.konvalesen.model.RequestDonor
 import com.android.konvalesen.view.dashboard.HomeActivity
 import com.android.konvalesen.viewmodel.OnReceiveConfirmationViewModel
+import com.android.konvalesen.viewmodel.UserViewModel
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -32,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -54,6 +57,7 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var geocoder: Geocoder
     private lateinit var addresses: List<Address>
     private lateinit var receiveViewModel: OnReceiveConfirmationViewModel
+    private lateinit var userViewModel: UserViewModel
 
     //private lateinit var userViewModel: UserViewModel
     private lateinit var auth: FirebaseAuth
@@ -83,6 +87,8 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
         auth = FirebaseAuth.getInstance()
         receiveViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(OnReceiveConfirmationViewModel::class.java)
+        userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+            .get(UserViewModel::class.java)
 
         if (dataReq.idRequester.isNullOrEmpty()) {
             //set from notification
@@ -97,6 +103,15 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                 binding.tvLokasiOnMap3.text = dataRequester[0].alamatRequester.toString()
                 binding.btnGolDarRequester.text = dataRequester[0].darahRequester.toString()
                 binding.tvTgl.text = dataRequester[0].tanggal.toString()
+                userViewModel.getAllDataUserWithIdFromFirebase(dataRequester[0].idRequester.toString())
+                userViewModel.getAlldataUserWithId().observe({ lifecycle }, { user ->
+                    val firebaseStorage =
+                        FirebaseStorage.getInstance()
+                            .getReference("profileImages/${user[0].foto.toString()}")
+                    firebaseStorage.downloadUrl.addOnCompleteListener { taskUri ->
+                        Glide.with(this).load(taskUri.result).into(binding.imgProfileConfirmation)
+                    }
+                })
             })
         } else {
             //set from RV home
@@ -105,6 +120,15 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
             binding.tvLokasiOnMap3.text = dataReq.alamatRequester.toString()
             binding.btnGolDarRequester.text = dataReq.darahRequester.toString()
             binding.tvTgl.text = dataReq.tanggal.toString()
+            userViewModel.getAllDataUserWithIdFromFirebase(dataReq.idRequester.toString())
+            userViewModel.getAlldataUserWithId().observe({ lifecycle }, { user ->
+                val firebaseStorage =
+                    FirebaseStorage.getInstance()
+                        .getReference("profileImages/${user[0].foto.toString()}")
+                firebaseStorage.downloadUrl.addOnCompleteListener { taskUri ->
+                    Glide.with(this).load(taskUri.result).into(binding.imgProfileConfirmation)
+                }
+            })
 
             val nomor = sessionUser.sharedPreferences.getString("nomor", "").toString()
             receiveViewModel.setDataApprovedFromFirebase(
