@@ -24,6 +24,8 @@ import com.android.konvalesen.databinding.FragmentOnGoingReceiveBinding
 import com.android.konvalesen.helper.SessionUser
 import com.android.konvalesen.model.ApprovedDonorData
 import com.android.konvalesen.viewmodel.OnReceiveConfirmationViewModel
+import com.android.konvalesen.viewmodel.UserViewModel
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import java.net.URLEncoder
 import java.util.*
 import kotlin.collections.ArrayList
@@ -54,6 +57,7 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
     private lateinit var geocoder: Geocoder
     private lateinit var addresses: List<Address>
     private lateinit var receiveViewModel: OnReceiveConfirmationViewModel
+    private lateinit var userViewModel: UserViewModel
 
     //private lateinit var userViewModel: UserViewModel
     private lateinit var auth: FirebaseAuth
@@ -83,6 +87,8 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
         auth = FirebaseAuth.getInstance()
         receiveViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(OnReceiveConfirmationViewModel::class.java)
+        userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+            .get(UserViewModel::class.java)
         loadDataOnGoingReceive()
 
         Log.d(TAG, "onCreate: $dataApprover")
@@ -190,6 +196,16 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
                             dataRequester[0].alamatRequester.toString()
                         binding.btnGolDarOnGoingReceive.text =
                             dataRequester[0].darahRequester.toString()
+                        userViewModel.getAllDataUserWithIdFromFirebase(dataRequester[0].idRequester.toString())
+                        userViewModel.getAlldataUserWithId().observe({ lifecycle }, { user ->
+                            val firebaseStorage =
+                                FirebaseStorage.getInstance()
+                                    .getReference("profileImages/${user[0].foto.toString()}")
+                            firebaseStorage.downloadUrl.addOnCompleteListener { taskUri ->
+                                Glide.with(requireContext()).load(taskUri.result)
+                                    .into(binding.imgProfileConfirmation)
+                            }
+                        })
 
                         binding.btnChatWa.setOnClickListener {
                             val url =

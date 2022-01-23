@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.konvalesen.R
 import com.android.konvalesen.databinding.FragmentHomeBinding
 import com.android.konvalesen.helper.SessionUser
+import com.android.konvalesen.model.RequestDonorWithPhoto
 import com.android.konvalesen.view.bantuan.BantuanActivity
 import com.android.konvalesen.view.dashboard.adapter.PermintaanBantuanAdapter
 import com.android.konvalesen.view.login.MainActivity
@@ -148,6 +149,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadDataOnRv() {
+        //show all req with same blood type
         requestViewModel.setAllDataReqWithStatusFromFirebase(
             getString(R.string.status_mencari_pendonor),
             sessionUser.sharedPreferences.getString("golonganDarah", "").toString()
@@ -156,9 +158,27 @@ class HomeFragment : Fragment() {
             val uidUser = firebaseAuth.currentUser!!.uid
             val data =
                 it.filter { it.idRequester != uidUser } as ArrayList //Filter data from Requester exclude current user
+            var dataSingleWithPhoto = RequestDonorWithPhoto()
             Log.d(TAG, "loadDataOnRv: $data")
             if (data.isNotEmpty()) {
-                requesterAdapter.setDataReqDonor(data)
+                requesterAdapter.clearDataReqDonor()
+                for (i in 0 until data.size) {
+                    userViewModel.getAllDataUserWithIdFromFirebase(data[i].idRequester.toString())
+                    userViewModel.getAlldataUserWithId().observe({ lifecycle }, { user ->
+                        dataSingleWithPhoto.tanggal = data[i].tanggal.toString()
+                        dataSingleWithPhoto.status = data[i].status.toString()
+                        dataSingleWithPhoto.nomorRequester = data[i].nomorRequester.toString()
+                        dataSingleWithPhoto.namaRequester = data[i].namaRequester.toString()
+                        dataSingleWithPhoto.lngRequester = data[i].lngRequester
+                        dataSingleWithPhoto.latRequester = data[i].latRequester
+                        dataSingleWithPhoto.idRequester = data[i].idRequester.toString()
+                        dataSingleWithPhoto.idDoc = data[i].idDoc.toString()
+                        dataSingleWithPhoto.fotoRequester = user[i].foto.toString()
+                        dataSingleWithPhoto.darahRequester = data[i].darahRequester.toString()
+                        dataSingleWithPhoto.alamatRequester = data[i].alamatRequester.toString()
+                        requesterAdapter.setDataReqDonor(dataSingleWithPhoto)
+                    })
+                }
                 showRv()
             }
         })

@@ -20,6 +20,7 @@ import com.android.konvalesen.databinding.ActivityOnReceiveConfirmationBinding
 import com.android.konvalesen.helper.SessionUser
 import com.android.konvalesen.model.ApprovedDonorData
 import com.android.konvalesen.model.RequestDonor
+import com.android.konvalesen.model.RequestDonorWithPhoto
 import com.android.konvalesen.view.dashboard.HomeActivity
 import com.android.konvalesen.viewmodel.OnReceiveConfirmationViewModel
 import com.android.konvalesen.viewmodel.UserViewModel
@@ -70,7 +71,7 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
     //address
     private var alamat = ""
     private var lokasiAlamat = ""
-    private var dataReq = RequestDonor()
+    private var dataReq = RequestDonorWithPhoto()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -357,7 +358,7 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                             latLng
                         ).width(10f).color(R.color.konvalesen)
                         mMap.addPolyline(line)
-                        latLngRequester?.let { CameraUpdateFactory.newLatLngZoom(it, 5f) }
+                        latLngRequester?.let { CameraUpdateFactory.newLatLngZoom(it, 8f) }
                             ?.let { mMap.animateCamera(it) }
 
                         //calculate distance between 2 points

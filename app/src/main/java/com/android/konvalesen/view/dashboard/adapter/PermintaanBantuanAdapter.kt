@@ -14,16 +14,18 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.recyclerview.widget.RecyclerView
 import com.android.konvalesen.databinding.ItemMembutuhkanDonorBinding
-import com.android.konvalesen.model.RequestDonor
+import com.android.konvalesen.model.RequestDonorWithPhoto
 import com.android.konvalesen.view.onReceive.OnReceiveConfirmationActivity
 import com.android.konvalesen.viewmodel.OnReceiveConfirmationViewModel
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.storage.FirebaseStorage
 
 class PermintaanBantuanAdapter : RecyclerView.Adapter<PermintaanBantuanAdapter.ListViewHolder>() {
-    val listReqDonor = ArrayList<RequestDonor>()
+    val listReqDonor = ArrayList<RequestDonorWithPhoto>()
     private lateinit var mMap: GoogleMap
     private lateinit var lastLocation: Location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -31,20 +33,31 @@ class PermintaanBantuanAdapter : RecyclerView.Adapter<PermintaanBantuanAdapter.L
     private lateinit var addresses: List<Address>
     private lateinit var receiveViewModel: OnReceiveConfirmationViewModel
 
-    fun setDataReqDonor(dataReqList: ArrayList<RequestDonor>) {
-        listReqDonor.clear()
-        listReqDonor.addAll(dataReqList)
+    fun setDataReqDonor(dataReqList: RequestDonorWithPhoto) {
+        listReqDonor.add(dataReqList)
         notifyDataSetChanged()
+    }
+
+    fun clearDataReqDonor() {
+        listReqDonor.clear()
     }
 
     inner class ListViewHolder(val binding: ItemMembutuhkanDonorBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(reqDonorData: RequestDonor) {
+        fun bind(reqDonorData: RequestDonorWithPhoto) {
             calculateDistance(reqDonorData)
             binding.tvNamaMembutuhkan.text = reqDonorData.namaRequester.toString()
             binding.tvTanggal.text = reqDonorData.tanggal.toString()
             binding.tvGoldarMembutuhkan.text = reqDonorData.darahRequester.toString()
+            val firebaseStorage =
+                FirebaseStorage.getInstance()
+                    .getReference("profileImages/${reqDonorData.fotoRequester.toString()}")
+            firebaseStorage.downloadUrl.addOnCompleteListener { taskUri ->
+                Glide.with(itemView.context).load(taskUri.result)
+                    .into(binding.imgProfileMembutuhkan)
+            }
+
             binding.btnDetailMembutuhkan.setOnClickListener {
                 val intent = Intent(itemView.context, OnReceiveConfirmationActivity::class.java)
                 intent.putExtra(OnReceiveConfirmationActivity.EXTRA_DATA_REQ, reqDonorData)
@@ -52,7 +65,7 @@ class PermintaanBantuanAdapter : RecyclerView.Adapter<PermintaanBantuanAdapter.L
             }
         }
 
-        private fun calculateDistance(reqDonorData: RequestDonor) {
+        private fun calculateDistance(reqDonorData: RequestDonorWithPhoto) {
             if (ActivityCompat.checkSelfPermission(
                     itemView.context,
                     Manifest.permission.ACCESS_FINE_LOCATION
