@@ -74,20 +74,27 @@ class OnReceiveHistoryFragment : Fragment() {
                             dataReq = liveDataReq.filter { data ->
                                 data.status != getString(R.string.status_mencari_pendonor)
                             } as ArrayList<RequestDonor>
-                            singleDataHistory.tgl_approve = donorDone[i].tanggalApprove.toString()
-                            singleDataHistory.status = donorDone[i].status.toString()
-                            singleDataHistory.nama_penerima = dataReq[i].namaRequester.toString()
-                            singleDataHistory.lokasi = dataReq[i].alamatRequester.toString()
-                            singleDataHistory.gol_darah_penerima =
-                                dataReq[i].darahRequester.toString()
-                            userViewModel.getAllDataUserFromFirebase()
-                            userViewModel.getAlldataUser()
-                                .observe({ lifecycle }, { dataUserRequester ->
-                                    val data =
-                                        dataUserRequester.filter { it.id == donorDone[i].idRequester }
-                                    singleDataHistory.foto_penerima = data[i].foto.toString()
-                                    historyAdapter.setDataHistoryRec(singleDataHistory)
-                                })
+                            if (dataReq.isNotEmpty()) {
+                                singleDataHistory.tgl_approve =
+                                    donorDone[i].tanggalApprove.toString()
+                                singleDataHistory.status = donorDone[i].status.toString()
+                                singleDataHistory.nama_penerima =
+                                    dataReq[i].namaRequester.toString()
+                                singleDataHistory.lokasi = dataReq[i].alamatRequester.toString()
+                                singleDataHistory.gol_darah_penerima =
+                                    dataReq[i].darahRequester.toString()
+                                userViewModel.getAllDataUserFromFirebase()
+                                userViewModel.getAlldataUser()
+                                    .observe({ lifecycle }, { dataUserRequester ->
+                                        val data =
+                                            dataUserRequester.filter { it.id == donorDone[i].idRequester }
+                                        singleDataHistory.foto_penerima = data[i].foto.toString()
+                                        historyAdapter.setDataHistoryRec(singleDataHistory)
+                                    })
+                            } else {
+                                binding.rvHistoryOnRec.visibility = View.GONE
+                                binding.textView14.visibility = View.VISIBLE
+                            }
                         })
                 }
                 showRv()

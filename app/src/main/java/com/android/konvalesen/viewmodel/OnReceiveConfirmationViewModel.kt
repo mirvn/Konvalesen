@@ -34,6 +34,28 @@ class OnReceiveConfirmationViewModel:ViewModel() {
             }
     }
 
+    fun setDataHistoryApproveWithIdReqFromFirebase(idRequester: String, status: String) {
+        val db = Firebase.firestore
+        val dataApproverFirebase = ArrayList<ApprovedDonorData>()
+        db.collection("approvedReqDonor")
+            .whereEqualTo("idRequester", idRequester)
+            .whereEqualTo("status", status)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents.toObjects<ApprovedDonorData>()) {
+                    dataApproverFirebase.add(document)
+                }
+                dataHistoryApprover.postValue(dataApproverFirebase)
+                Log.d(TAG, "setDataApproverFromFirebase: $dataApproverFirebase")
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+    }
+
+    fun getDataHistoryApproveWithIdReqFromFirebase(): MutableLiveData<ArrayList<ApprovedDonorData>> =
+        dataHistoryApprover
+
     fun setDataHistoryApprovedFromFirebase(nomorApprover: String) {
         val db = Firebase.firestore
         val dataApproverFirebase = ArrayList<ApprovedDonorData>()

@@ -94,4 +94,24 @@ class UserViewModel : ViewModel() {
     }
 
     fun getAlldataUser(): MutableLiveData<ArrayList<User>> = allUser
+
+    fun getAllDataUserWithIdFromFirebase(id: String) {
+        val db = Firebase.firestore
+        val userArray = ArrayList<User>()
+        db.collection("users")
+            .whereEqualTo("id", id)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents.toObjects<User>()) {
+                    userArray.add(document)
+                }
+                allUser.postValue(userArray)
+                Log.d(TAG, "getDataUserFromFirebase-userArray:$userArray")
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+    }
+
+    fun getAlldataUserWithId(): MutableLiveData<ArrayList<User>> = allUser
 }

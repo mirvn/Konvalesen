@@ -10,16 +10,24 @@ import android.widget.CheckBox
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.konvalesen.R
 import com.android.konvalesen.databinding.FragmentOnRequestBinding
 import com.android.konvalesen.helper.SessionUser
+import com.android.konvalesen.model.AcceptedDonor
 import com.android.konvalesen.view.dashboard.HomeActivity
+import com.android.konvalesen.view.onRequest.adapter.OnGoingRequestAdapter
+import com.android.konvalesen.viewmodel.OnReceiveConfirmationViewModel
 import com.android.konvalesen.viewmodel.RequestViewModel
+import com.android.konvalesen.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class OnGoingRequestFragment : Fragment() {
     private lateinit var binding: FragmentOnRequestBinding
     private lateinit var requestViewModel: RequestViewModel
+    private lateinit var receiveViewModel: OnReceiveConfirmationViewModel
+    private lateinit var userViewModel: UserViewModel
+    private var adapterOnGoingGoingReq: OnGoingRequestAdapter = OnGoingRequestAdapter()
     private lateinit var sessionUser: SessionUser
     private lateinit var auth: FirebaseAuth
     override fun onCreateView(
@@ -27,7 +35,7 @@ class OnGoingRequestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentOnRequestBinding.inflate(inflater,container,false)
+        binding = FragmentOnRequestBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -36,6 +44,10 @@ class OnGoingRequestFragment : Fragment() {
         binding.progressBar6.visibility = View.VISIBLE
         requestViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(RequestViewModel::class.java)
+        receiveViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+            .get(OnReceiveConfirmationViewModel::class.java)
+        userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+            .get(UserViewModel::class.java)
         sessionUser = SessionUser(requireContext())
         auth = FirebaseAuth.getInstance()
         val nomor = sessionUser.sharedPreferences.getString("nomor", "").toString()
@@ -48,6 +60,7 @@ class OnGoingRequestFragment : Fragment() {
                 showLayout(true)
                 binding.tvLokasiOnMap2.text = dataRequester.alamatRequester.toString()
                 binding.btnGolA3.text = dataRequester.darahRequester.toString()
+                setRvData()
             } else {
                 binding.progressBar6.visibility = View.INVISIBLE
                 showLayout(false)
@@ -126,6 +139,42 @@ class OnGoingRequestFragment : Fragment() {
         }
     }
 
+    private fun setRvData() {
+        requestViewModel.getDataReqFromFirebase().observe({ lifecycle }, { dataRequester ->
+            receiveViewModel.setDataHistoryApproveWithIdReqFromFirebase(
+                dataRequester.idRequester.toString(),
+                getString(R.string.status_approve)
+            )
+            receiveViewModel.getDataHistoryApproveWithIdReqFromFirebase()
+                .observe({ lifecycle }, { historyApproved ->
+                    if (historyApproved.isNotEmpty()) {
+                        var singleDataAccept = AcceptedDonor()
+                        for (i in 0 until historyApproved.size) {
+                            userViewModel.getAllDataUserWithIdFromFirebase(historyApproved[i].idRequester.toString())
+                            userViewModel.getAlldataUserWithId().observe({ lifecycle }, {
+                                singleDataAccept.nama = it[i].nama.toString()
+                                singleDataAccept.foto = it[i].foto.toString()
+                                singleDataAccept.nomor = it[i].nomor.toString()
+                                singleDataAccept.jarak = historyApproved[i].jarakApprover.toString()
+                                adapterOnGoingGoingReq.setDataHistory(singleDataAccept)
+                            })
+                        }
+                        showRv()
+                    } else {
+                        binding.rvOnGoingRequest.visibility = View.INVISIBLE
+                        binding.tvRvKosong.visibility = View.VISIBLE
+                    }
+                })
+        })
+    }
+
+    private fun showRv() {
+        val rv = binding.rvOnGoingRequest
+        rv.setHasFixedSize(true)
+        rv.layoutManager = LinearLayoutManager(requireContext())
+        rv.adapter = adapterOnGoingGoingReq
+    }
+
     private fun showLayout(show: Boolean) {
         if (show) {
             binding.tvMintaBantuan2.visibility = View.VISIBLE
@@ -139,7 +188,7 @@ class OnGoingRequestFragment : Fragment() {
             binding.rvOnGoingRequest.visibility = View.VISIBLE
             binding.btnAkhiriPermintaanDonor.visibility = View.VISIBLE
             binding.tvDataKosong.visibility = View.GONE
-        }else {
+        } else {
             binding.tvMintaBantuan2.visibility = View.GONE
             binding.imageView4.visibility = View.GONE
             binding.imageView9.visibility = View.GONE

@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.auth.FirebaseAuth
+import java.net.URLEncoder
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -164,6 +165,9 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
 
     private fun loadDataOnGoingReceive() {
         binding.progressBar10.visibility = View.VISIBLE
+        val nama = sessionUser.sharedPreferences.getString("nama", "").toString()
+        val messege =
+            "Hai, saya $nama dari Aplikasi Konvalesen ingin jadi pendonor plasma buat kamu :)"
         val nomor = sessionUser.sharedPreferences.getString("nomor", "").toString()
         receiveViewModel.setDataApprovedFromFirebase(nomor, getString(R.string.status_approve))
         receiveViewModel.getDataApprovedFromFirebase().observe({ lifecycle }, {
@@ -189,7 +193,12 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
 
                         binding.btnChatWa.setOnClickListener {
                             val url =
-                                "https://api.whatsapp.com/send?phone=${dataRequester[0].nomorRequester}"
+                                "https://api.whatsapp.com/send?phone=${dataRequester[0].nomorRequester}&text=${
+                                    URLEncoder.encode(
+                                        messege,
+                                        "UTF-8"
+                                    )
+                                }"
                             val i = Intent(Intent.ACTION_VIEW)
                             i.data = Uri.parse(url)
                             startActivity(i)
