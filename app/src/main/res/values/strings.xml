@@ -175,4 +175,9 @@
     </string>
     <string name="action_settings">Settings</string>
     <string name="permintaan_donor_diakhiri">Permintaan donor diakhiri</string>
+    <string name="bantu_donor_plasma">Bantu Donor Plasma</string>
+    <string name="data_kosong_anda_belum_menerima_untuk_menjadi_pendonor">Data Kosong, anda belum menerima untuk menjadi pendonor</string>
+    <string name="jarak_lokasi">Jarak Lokasi:</string>
+    <string name="tanggal_request">Tanggal Request:</string>
+    <string name="data_history_kosong">Data history kosong</string>
 </resources>

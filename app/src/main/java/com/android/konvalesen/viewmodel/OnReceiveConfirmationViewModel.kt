@@ -66,6 +66,7 @@ class OnReceiveConfirmationViewModel:ViewModel() {
                 for (document in documents) {
                     Log.d(TAG, "${document.id} => ${document.data}")
 
+                    dataApproverFirebase.docId = document.id
                     dataApproverFirebase.idApprover = document.data["idApprover"].toString()
                     dataApproverFirebase.idRequester = document.data["idRequester"].toString()
                     dataApproverFirebase.jarakApprover = document.data["jarakApprover"].toString()
@@ -85,8 +86,8 @@ class OnReceiveConfirmationViewModel:ViewModel() {
 
     fun createNewApprovedReq(data: ApprovedDonorData, context: Context) {
         val db = Firebase.firestore
-        db.collection("approvedReqDonor").document(data.idApprover.toString())
-            .set(data)
+        db.collection("approvedReqDonor")
+            .add(data)
             .addOnCompleteListener {
                 Log.d(TAG, "createNewRequestDonor $it")
             }

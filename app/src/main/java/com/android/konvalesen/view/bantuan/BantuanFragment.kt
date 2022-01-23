@@ -112,6 +112,7 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 sdf.format(System.currentTimeMillis()).toString(),
                 getString(R.string.status_mencari_pendonor)
             )
+            //get all user to get fcmToken notification
             userViewModel.getAlldataUser().observe({ lifecycle }, {
                 allUser.addAll(it)
             })

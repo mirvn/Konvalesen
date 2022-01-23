@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -17,12 +16,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
-        android:id="@+id/cb_salahData"
+        android:id="@+id/cb_kebutuhanTidakTerpenuhi"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="@string/tidak_dapat_memenuhi_kebutuhan_darah"
+        android:text="@string/salah_memasukkan_data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView9"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -34,7 +33,7 @@
         android:layout_marginBottom="8dp"
         android:text="@string/kebutuhan_darah_sudah_terpenuhi"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/cb_salahData"
-        app:layout_constraintStart_toStartOf="@+id/cb_salahData"
-        app:layout_constraintTop_toBottomOf="@+id/cb_salahData" />
+        app:layout_constraintEnd_toEndOf="@+id/cb_kebutuhanTidakTerpenuhi"
+        app:layout_constraintStart_toStartOf="@+id/cb_kebutuhanTidakTerpenuhi"
+        app:layout_constraintTop_toBottomOf="@+id/cb_kebutuhanTidakTerpenuhi" />
 </androidx.constraintlayout.widget.ConstraintLayout>

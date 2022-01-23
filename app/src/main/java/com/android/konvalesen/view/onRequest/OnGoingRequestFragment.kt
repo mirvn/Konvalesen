@@ -1,6 +1,7 @@
 package com.android.konvalesen.view.onRequest
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.android.konvalesen.R
 import com.android.konvalesen.databinding.FragmentOnRequestBinding
 import com.android.konvalesen.helper.SessionUser
+import com.android.konvalesen.view.dashboard.HomeActivity
 import com.android.konvalesen.viewmodel.RequestViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -31,6 +33,7 @@ class OnGoingRequestFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.progressBar6.visibility = View.VISIBLE
         requestViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(RequestViewModel::class.java)
         sessionUser = SessionUser(requireContext())
@@ -38,11 +41,15 @@ class OnGoingRequestFragment : Fragment() {
         val nomor = sessionUser.sharedPreferences.getString("nomor", "").toString()
         requestViewModel.setDataReqFromFirebase(nomor, getString(R.string.status_mencari_pendonor))
         requestViewModel.getDataReqFromFirebase().observe({ lifecycle }, { dataRequester ->
-            if (dataRequester != null) {
+            if (dataRequester.idRequester != null &&
+                dataRequester.status == getString(R.string.status_mencari_pendonor)
+            ) {
+                binding.progressBar6.visibility = View.INVISIBLE
                 showLayout(true)
                 binding.tvLokasiOnMap2.text = dataRequester.alamatRequester.toString()
                 binding.btnGolA3.text = dataRequester.darahRequester.toString()
             } else {
+                binding.progressBar6.visibility = View.INVISIBLE
                 showLayout(false)
             }
         })
@@ -50,7 +57,7 @@ class OnGoingRequestFragment : Fragment() {
         binding.btnAkhiriPermintaanDonor.setOnClickListener {
             val alert = AlertDialog.Builder(requireContext())
             val v: View = View.inflate(requireContext(), R.layout.layout_akhiri_pendonoran, null)
-            val cbSalahData = v.findViewById<CheckBox>(R.id.cb_salahData)
+            val cbSalahData = v.findViewById<CheckBox>(R.id.cb_kebutuhanTidakTerpenuhi)
             cbSalahData.text = getString(R.string.salah_memasukkan_data)
             val cbKebutuhanTerpenuhi = v.findViewById<CheckBox>(R.id.cb_kebutuhanTerpenuhi)
             alert.apply {
@@ -78,7 +85,12 @@ class OnGoingRequestFragment : Fragment() {
                                     getString(R.string.permintaan_donor_diakhiri),
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                activity?.onBackPressed()
+                                activity?.startActivity(
+                                    Intent(
+                                        requireContext(),
+                                        HomeActivity::class.java
+                                    )
+                                )
                                 setAlert.dismiss()
                             } else if (cbKebutuhanTerpenuhi.isChecked) {
                                 setAlert.show()
@@ -92,7 +104,12 @@ class OnGoingRequestFragment : Fragment() {
                                     getString(R.string.permintaan_donor_diakhiri),
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                activity?.onBackPressed()
+                                activity?.startActivity(
+                                    Intent(
+                                        requireContext(),
+                                        HomeActivity::class.java
+                                    )
+                                )
                                 setAlert.dismiss()
                             } else {
                                 Toast.makeText(
@@ -111,7 +128,6 @@ class OnGoingRequestFragment : Fragment() {
 
     private fun showLayout(show: Boolean) {
         if (show) {
-            binding.progressBar6.visibility = View.INVISIBLE
             binding.tvMintaBantuan2.visibility = View.VISIBLE
             binding.imageView4.visibility = View.VISIBLE
             binding.imageView9.visibility = View.VISIBLE
@@ -122,20 +138,19 @@ class OnGoingRequestFragment : Fragment() {
             binding.tvBersediaMendonor.visibility = View.VISIBLE
             binding.rvOnGoingRequest.visibility = View.VISIBLE
             binding.btnAkhiriPermintaanDonor.visibility = View.VISIBLE
-            binding.tvDataKosong.visibility = View.INVISIBLE
-        }else{
-            binding.progressBar6.visibility = View.INVISIBLE
-            binding.tvMintaBantuan2.visibility =View.INVISIBLE
-            binding.imageView4.visibility =View.INVISIBLE
-            binding.imageView9.visibility =View.INVISIBLE
-            binding.tvLokasiOnMap2.visibility =View.INVISIBLE
-            binding.tvLokasiPenerima2.visibility =View.INVISIBLE
-            binding.tvDarahKebutuhan2.visibility =View.INVISIBLE
-            binding.btnGolA3.visibility =View.INVISIBLE
-            binding.tvBersediaMendonor.visibility =View.INVISIBLE
-            binding.rvOnGoingRequest.visibility =View.INVISIBLE
-            binding.btnAkhiriPermintaanDonor.visibility =View.INVISIBLE
-            binding.tvDataKosong.visibility =View.VISIBLE
+            binding.tvDataKosong.visibility = View.GONE
+        }else {
+            binding.tvMintaBantuan2.visibility = View.GONE
+            binding.imageView4.visibility = View.GONE
+            binding.imageView9.visibility = View.GONE
+            binding.tvLokasiOnMap2.visibility = View.GONE
+            binding.tvLokasiPenerima2.visibility = View.GONE
+            binding.tvDarahKebutuhan2.visibility = View.GONE
+            binding.btnGolA3.visibility = View.GONE
+            binding.tvBersediaMendonor.visibility = View.GONE
+            binding.rvOnGoingRequest.visibility = View.GONE
+            binding.btnAkhiriPermintaanDonor.visibility = View.GONE
+            binding.tvDataKosong.visibility = View.VISIBLE
         }
     }
 }

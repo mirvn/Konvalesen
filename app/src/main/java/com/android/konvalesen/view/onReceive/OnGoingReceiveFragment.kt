@@ -93,14 +93,15 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
         binding.btnAkhiriDonorOnGoingReceive.setOnClickListener {
             val alert = AlertDialog.Builder(requireContext())
             val v: View = View.inflate(requireContext(), R.layout.layout_akhiri_pendonoran, null)
-            val cbSalahData = v.findViewById<CheckBox>(R.id.cb_salahData)
+            val cbKebutuhanTidakTerpenuhi =
+                v.findViewById<CheckBox>(R.id.cb_kebutuhanTidakTerpenuhi)
             val cbKebutuhanTerpenuhi = v.findViewById<CheckBox>(R.id.cb_kebutuhanTerpenuhi)
 
-            cbSalahData.setOnClickListener {
+            cbKebutuhanTidakTerpenuhi.setOnClickListener {
                 cbKebutuhanTerpenuhi.isChecked = false
             }
             cbKebutuhanTerpenuhi.setOnClickListener {
-                cbSalahData.isChecked = false
+                cbKebutuhanTidakTerpenuhi.isChecked = false
             }
 
             alert.apply {
@@ -114,29 +115,35 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
                         setView(viewLoading)
                         setCancelable(false)
                     }.create()
-                    if (cbSalahData.isChecked) {
-                        setAlert.show()
-                        receiveViewModel.updateDataApprovedToDoneFirebase(
-                            auth.currentUser?.uid.toString(),
-                            cbSalahData.text.toString()
-                        )
-                        loadDataOnGoingReceive()
-                        setAlert.dismiss()
-                    } else if (cbKebutuhanTerpenuhi.isChecked) {
-                        setAlert.show()
-                        receiveViewModel.updateDataApprovedToDoneFirebase(
-                            auth.currentUser?.uid.toString(),
-                            cbKebutuhanTerpenuhi.text.toString()
-                        )
-                        loadDataOnGoingReceive()
-                        setAlert.dismiss()
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.permintaan_mengakhiri_gagal),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    receiveViewModel.getDataApprovedFromFirebase().observe({ lifecycle }, {
+                        if (cbKebutuhanTidakTerpenuhi.isChecked) {
+                            setAlert.show()
+                            receiveViewModel.updateDataApprovedToDoneFirebase(
+                                it.docId.toString(),
+                                cbKebutuhanTidakTerpenuhi.text.toString()
+                            )
+                            receiveViewModel.getDataApprovedFromFirebase()
+                                .removeObservers(requireActivity())
+                            loadDataOnGoingReceive()
+                            setAlert.dismiss()
+                        } else if (cbKebutuhanTerpenuhi.isChecked) {
+                            setAlert.show()
+                            receiveViewModel.updateDataApprovedToDoneFirebase(
+                                it.docId.toString(),
+                                cbKebutuhanTerpenuhi.text.toString()
+                            )
+                            receiveViewModel.getDataApprovedFromFirebase()
+                                .removeObservers(requireActivity())
+                            loadDataOnGoingReceive()
+                            setAlert.dismiss()
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.permintaan_mengakhiri_gagal),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
                 }
                 setNegativeButton("CANCEL") { _, _ ->
                 }
@@ -164,14 +171,14 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
             if (it.nomorApprover == nomor &&
                 it.status == getString(R.string.status_approve)
             ) {
-                dataApprover.addAll(listOf(it))
-                binding.tvJarakOnGoingReceive.text = it.jarakApprover
+                //dataApprover.addAll(listOf(it))
                 receiveViewModel.setAllDataReqWithIdFromFirebase(
                     it.idRequester.toString(), getString(R.string.status_mencari_pendonor)
                 )
                 receiveViewModel.getAllDataReqWithIdFromFirebase()
                     .observe({ lifecycle }, { dataRequester ->
-                        binding.tvTglOnGoingReceive.text = dataRequester[0].tanggal.toString()
+                        binding.tvTglOnGoingReceive.text =
+                            dataRequester[0].tanggal.toString()
                         binding.tvNamaOnGoingReceive.text =
                             dataRequester[0].namaRequester.toString()
                         setProgressBar(false)
@@ -230,7 +237,7 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
                                 latLng
                             ).width(10f).color(R.color.konvalesen)
                             mMap.addPolyline(line)
-                            latLngRequester?.let { CameraUpdateFactory.newLatLngZoom(it, 5f) }
+                            latLngRequester?.let { CameraUpdateFactory.newLatLngZoom(it, 8f) }
                                 ?.let { mMap.animateCamera(it) }
 
                             //calculate distance between 2 points

@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
         getUserData()
         val fcmToken = sessionUser.sharedPreferences.getString("fcmToken", "").toString()
         Firebase.messaging.subscribeToTopic(fcmToken)
-        //loadDataOnRv()
+        loadDataOnRv()
 
         binding.toolbar2.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -148,11 +148,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadDataOnRv() {
-        requestViewModel.setAllDataReqFromFirebase(
+        requestViewModel.setAllDataReqWithStatusFromFirebase(
             getString(R.string.status_mencari_pendonor),
             sessionUser.sharedPreferences.getString("golonganDarah", "").toString()
         )
-        requestViewModel.getAllDataReqFromFirebase().observe({ lifecycle }, {
+        requestViewModel.getAllDataReqWithStatusFromFirebase().observe({ lifecycle }, {
             val uidUser = firebaseAuth.currentUser!!.uid
             val data =
                 it.filter { it.idRequester != uidUser } as ArrayList //Filter data from Requester exclude current user

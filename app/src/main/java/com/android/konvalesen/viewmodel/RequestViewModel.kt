@@ -39,7 +39,27 @@ class RequestViewModel: ViewModel() {
             }
     }
 
-    fun setAllDataReqFromFirebase(status: String, darahRequester: String) {
+    fun setAllDataReqFromFirebase(idRequester: String) {
+        val db = Firebase.firestore
+        val dataRequester = ArrayList<RequestDonor>()
+        db.collection("requestDonor")
+            .whereEqualTo("idRequester", idRequester)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents.toObjects<RequestDonor>()) {
+                    dataRequester.add(document)
+                }
+                allUserRequester.postValue(dataRequester)
+                Log.d(TAG, "setDataReqFromFirebase-dataRequester:$dataRequester ")
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+    }
+
+    fun getAllDataReqFromFirebase(): MutableLiveData<ArrayList<RequestDonor>> = allUserRequester
+
+    fun setAllDataReqWithStatusFromFirebase(status: String, darahRequester: String) {
         val db = Firebase.firestore
         val dataRequester = ArrayList<RequestDonor>()
         db.collection("requestDonor")
@@ -58,7 +78,8 @@ class RequestViewModel: ViewModel() {
             }
     }
 
-    fun getAllDataReqFromFirebase(): MutableLiveData<ArrayList<RequestDonor>> = allUserRequester
+    fun getAllDataReqWithStatusFromFirebase(): MutableLiveData<ArrayList<RequestDonor>> =
+        allUserRequester
 
     fun updateStatusRequestDonor(docId: String, context: Context, status: String) {
         val db = Firebase.firestore

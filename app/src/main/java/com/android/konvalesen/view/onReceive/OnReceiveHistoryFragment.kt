@@ -12,9 +12,12 @@ import com.android.konvalesen.R
 import com.android.konvalesen.databinding.FragmentOnReceiveHistoryBinding
 import com.android.konvalesen.helper.SessionUser
 import com.android.konvalesen.model.ApprovedDonorData
+import com.android.konvalesen.model.HistoryOnReceive
+import com.android.konvalesen.model.RequestDonor
 import com.android.konvalesen.view.onReceive.adapter.OnReceiveHistoryAdapter
 import com.android.konvalesen.viewmodel.OnReceiveConfirmationViewModel
 import com.android.konvalesen.viewmodel.RequestViewModel
+import com.android.konvalesen.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class OnReceiveHistoryFragment : Fragment() {
@@ -25,6 +28,7 @@ class OnReceiveHistoryFragment : Fragment() {
     private lateinit var binding: FragmentOnReceiveHistoryBinding
     private lateinit var receiveViewModel: OnReceiveConfirmationViewModel
     private lateinit var requestViewModel: RequestViewModel
+    private lateinit var userViewModel: UserViewModel
     private lateinit var auth: FirebaseAuth
     private lateinit var sessionUser: SessionUser
     private var historyAdapter: OnReceiveHistoryAdapter = OnReceiveHistoryAdapter()
@@ -46,17 +50,51 @@ class OnReceiveHistoryFragment : Fragment() {
             .get(OnReceiveConfirmationViewModel::class.java)
         requestViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(RequestViewModel::class.java)
+        userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+            .get(UserViewModel::class.java)
         val nomor = sessionUser.sharedPreferences.getString("nomor", "").toString()
         receiveViewModel.setDataHistoryApprovedFromFirebase(nomor)
         loadDataHistory()
     }
 
     private fun loadDataHistory() {
-        var dataHistory: ArrayList<ApprovedDonorData>
+        var donorDone: ArrayList<ApprovedDonorData>
         receiveViewModel.getDataHistoryApprovedFromFirebase().observe({ lifecycle }, {
-            dataHistory = it.filter { it.status != getString(R.string.status_approve) } as ArrayList
-            Log.d(TAG, "loadDataHistory: $dataHistory")
-            //requestViewModel.setDataReqFromFirebase()
+            donorDone = it.filter { it.status != getString(R.string.status_approve) } as ArrayList
+            Log.d(TAG, "loadDataHistory: $donorDone")
+            if (donorDone.isNotEmpty()) {
+                binding.textView14.visibility = View.GONE
+                historyAdapter.clearDataHistory()
+                var dataReq = ArrayList<RequestDonor>()
+                var singleDataHistory = HistoryOnReceive()
+                for (i in 0 until donorDone.size) {
+                    requestViewModel.setAllDataReqFromFirebase(donorDone[i].idRequester.toString())
+                    requestViewModel.getAllDataReqFromFirebase()
+                        .observe({ lifecycle }, { liveDataReq ->
+                            dataReq = liveDataReq.filter { data ->
+                                data.status != getString(R.string.status_mencari_pendonor)
+                            } as ArrayList<RequestDonor>
+                            singleDataHistory.tgl_approve = donorDone[i].tanggalApprove.toString()
+                            singleDataHistory.status = donorDone[i].status.toString()
+                            singleDataHistory.nama_penerima = dataReq[i].namaRequester.toString()
+                            singleDataHistory.lokasi = dataReq[i].alamatRequester.toString()
+                            singleDataHistory.gol_darah_penerima =
+                                dataReq[i].darahRequester.toString()
+                            userViewModel.getAllDataUserFromFirebase()
+                            userViewModel.getAlldataUser()
+                                .observe({ lifecycle }, { dataUserRequester ->
+                                    val data =
+                                        dataUserRequester.filter { it.id == donorDone[i].idRequester }
+                                    singleDataHistory.foto_penerima = data[i].foto.toString()
+                                    historyAdapter.setDataHistoryRec(singleDataHistory)
+                                })
+                        })
+                }
+                showRv()
+            } else {
+                binding.rvHistoryOnRec.visibility = View.GONE
+                binding.textView14.visibility = View.VISIBLE
+            }
         })
     }
 

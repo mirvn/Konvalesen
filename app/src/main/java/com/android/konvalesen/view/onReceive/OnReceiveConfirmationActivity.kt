@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -71,19 +72,24 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         binding = ActivityOnReceiveConfirmationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        uidRequester = intent.getStringExtra(UID_EXTRA).toString()
-        Log.d("TAG", "onCreate: $uidRequester")
-        dataReq = intent.getParcelableExtra(EXTRA_DATA_REQ)!!
+        //check whether Extra from intent exist or not
+        if (intent.extras?.containsKey(EXTRA_DATA_REQ) == true) {
+            dataReq = intent?.getParcelableExtra(EXTRA_DATA_REQ)!!
+        } else {
+            uidRequester = intent.getStringExtra(UID_EXTRA).toString()
+        }
         Log.d(TAG, "onCreate: $dataReq")
         sessionUser = SessionUser(this)
         auth = FirebaseAuth.getInstance()
         receiveViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(OnReceiveConfirmationViewModel::class.java)
-        receiveViewModel.setDataReqFromFirebase(
-            uidRequester,
-            getString(R.string.status_mencari_pendonor)
-        )
+
         if (dataReq.idRequester.isNullOrEmpty()) {
+            //set from notification
+            receiveViewModel.setDataReqFromFirebase(
+                uidRequester,
+                getString(R.string.status_mencari_pendonor)
+            )
             receiveViewModel.getDataReqFromFirebase().observe({ lifecycle }, {
                 dataRequester.addAll(listOf(it))
                 binding.tvNamaRequesterBantuan.text = dataRequester[0].namaRequester.toString()
@@ -93,6 +99,7 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                 binding.tvTgl.text = dataRequester[0].tanggal.toString()
             })
         } else {
+            //set from RV home
             binding.tvNamaRequesterBantuan.text = dataReq.namaRequester.toString()
             setProgressBar(false)
             binding.tvLokasiOnMap3.text = dataReq.alamatRequester.toString()
@@ -110,117 +117,19 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-    }
-
-    override fun onMapReady(gMap: GoogleMap) {
-        mMap = gMap
-        mMap.uiSettings.isZoomControlsEnabled = true //zoom control
-        setupMap()
-    }
-
-    private fun setupMap() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // You can directly ask for the permission.
-            requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                0
-            )
-        }else {
-            mMap.isMyLocationEnabled = true
-            var latLngRequester: LatLng?
-
-            if (dataReq.idRequester.isNullOrEmpty()) {
-                receiveViewModel.getDataReqFromFirebase().observe({ lifecycle }, {
-                    latLngRequester =
-                        dataRequester[0].latRequester?.let {
-                            dataRequester[0].lngRequester?.let { it1 ->
-                                LatLng(it, it1)
-                            }
-                        }
-                    fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                        if (location != null) {
-                            lastLocation = location
-                            latLng = LatLng(location.latitude, location.longitude)
-                            latLngRequester?.let { placeMarkerOnMap(it) }
-                            val line = PolylineOptions().add(
-                                latLngRequester,
-                                latLng
-                            ).width(10f).color(R.color.konvalesen)
-                            mMap.addPolyline(line)
-                            latLngRequester?.let { CameraUpdateFactory.newLatLngZoom(it, 5f) }
-                                ?.let { mMap.animateCamera(it) }
-                            geocoder = Geocoder(this, Locale.getDefault())
-
-                            //calculate distance between 2 points
-                            val destinationPoint = Location("destinationPoint")
-                            latLngRequester?.latitude.let {
-                                if (it != null) {
-                                    destinationPoint.latitude = it
-                                }
-                            }
-                            latLngRequester?.longitude.let {
-                                if (it != null) {
-                                    destinationPoint.longitude = it
-                                }
-                            }
-                            dist = location.distanceTo(destinationPoint).toString()
-                            binding.tvJarak.text = "+-${dist}meter"
-                        }
-                    }
-                })
-            } else {
-                latLngRequester =
-                    dataReq.latRequester?.let {
-                        dataReq.lngRequester?.let { it1 ->
-                            LatLng(it, it1)
-                        }
-                    }
-                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                    if (location != null) {
-                        lastLocation = location
-                        latLng = LatLng(location.latitude, location.longitude)
-                        latLngRequester?.let { placeMarkerOnMap(it) }
-                        val line = PolylineOptions().add(
-                            latLngRequester,
-                            latLng
-                        ).width(10f).color(R.color.konvalesen)
-                        mMap.addPolyline(line)
-                        latLngRequester?.let { CameraUpdateFactory.newLatLngZoom(it, 5f) }
-                            ?.let { mMap.animateCamera(it) }
-
-                        //calculate distance between 2 points
-                        val destinationPoint = Location("destinationPoint")
-                        latLngRequester?.latitude.let {
-                            if (it != null) {
-                                destinationPoint.latitude = it
-                            }
-                        }
-                        latLngRequester?.longitude.let {
-                            if (it != null) {
-                                destinationPoint.longitude = it
-                            }
-                        }
-                        dist = location.distanceTo(destinationPoint).toString()
-                        binding.tvJarak.text = "+-${dist}meter"
-                    }
-                }
-            }
-        }
-
         binding.btnBersediaMendonor.setOnClickListener {
             val nomor = sessionUser.sharedPreferences.getString("nomor", "").toString()
-
+            receiveViewModel.setDataApprovedFromFirebase(
+                nomor,
+                getString(R.string.status_approve)
+            )
             receiveViewModel.getDataApprovedFromFirebase().observe({ lifecycle }, {
                 val alert = AlertDialog.Builder(this)
                 val v: View = View.inflate(this, R.layout.layout_beri_bantuan, null)
                 val cb = v.findViewById<CheckBox>(R.id.cb_setujuBantu)
+                val myFormat = "dd-MM-yyyy/HH:mm:ss" // mention the format you need
+                val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
+                sdf.timeZone = TimeZone.getDefault()
 
                 if (it.nomorApprover == nomor && it.status == getString(R.string.status_approve)) {
                     val alert1 = AlertDialog.Builder(this)
@@ -234,13 +143,16 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                         }
                     }.create().show()
                 } else {
+                    //set from notification
                     if (dataReq.idRequester.isNullOrEmpty()) {
                         val dataApprover = ApprovedDonorData(
+                            "",
                             auth.currentUser?.uid.toString(),
                             uidRequester,
                             sessionUser.sharedPreferences.getString("nama", "").toString(),
                             sessionUser.sharedPreferences.getString("nomor", "").toString(),
                             dist,
+                            sdf.format(System.currentTimeMillis()).toString(),
                             getString(R.string.status_approve)
                         )
                         alert.apply {
@@ -274,12 +186,15 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                             }
                         }.create().show()
                     } else {
+                        //set from rv home
                         val dataApprover = ApprovedDonorData(
+                            "",
                             auth.currentUser?.uid.toString(),
                             dataReq.idRequester,
                             sessionUser.sharedPreferences.getString("nama", "").toString(),
                             sessionUser.sharedPreferences.getString("nomor", "").toString(),
                             dist,
+                            sdf.format(System.currentTimeMillis()).toString(),
                             getString(R.string.status_approve)
                         )
                         alert.apply {
@@ -334,6 +249,112 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }.create().show()
         }
+    }
+
+    override fun onMapReady(gMap: GoogleMap) {
+        mMap = gMap
+        mMap.uiSettings.isZoomControlsEnabled = true //zoom control
+        setupMap()
+    }
+
+    private fun setupMap() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // You can directly ask for the permission.
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                0
+            )
+        } else {
+            mMap.isMyLocationEnabled = true
+            var latLngRequester: LatLng?
+
+            if (dataReq.idRequester.isNullOrEmpty()) {
+                //set from notification
+                receiveViewModel.getDataReqFromFirebase().observe({ lifecycle }, {
+                    latLngRequester =
+                        dataRequester[0].latRequester?.let {
+                            dataRequester[0].lngRequester?.let { it1 ->
+                                LatLng(it, it1)
+                            }
+                        }
+                    fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                        if (location != null) {
+                            lastLocation = location
+                            latLng = LatLng(location.latitude, location.longitude)
+                            latLngRequester?.let { placeMarkerOnMap(it) }
+                            val line = PolylineOptions().add(
+                                latLngRequester,
+                                latLng
+                            ).width(10f).color(R.color.konvalesen)
+                            mMap.addPolyline(line)
+                            latLngRequester?.let { CameraUpdateFactory.newLatLngZoom(it, 8f) }
+                                ?.let { mMap.animateCamera(it) }
+                            geocoder = Geocoder(this, Locale.getDefault())
+
+                            //calculate distance between 2 points
+                            val destinationPoint = Location("destinationPoint")
+                            latLngRequester?.latitude.let {
+                                if (it != null) {
+                                    destinationPoint.latitude = it
+                                }
+                            }
+                            latLngRequester?.longitude.let {
+                                if (it != null) {
+                                    destinationPoint.longitude = it
+                                }
+                            }
+                            dist = location.distanceTo(destinationPoint).toString()
+                            binding.tvJarak.text = "+-${dist}meter"
+                        }
+                    }
+                })
+            } else {
+                //set from rv home
+                latLngRequester =
+                    dataReq.latRequester?.let {
+                        dataReq.lngRequester?.let { it1 ->
+                            LatLng(it, it1)
+                        }
+                    }
+                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                    if (location != null) {
+                        lastLocation = location
+                        latLng = LatLng(location.latitude, location.longitude)
+                        latLngRequester?.let { placeMarkerOnMap(it) }
+                        val line = PolylineOptions().add(
+                            latLngRequester,
+                            latLng
+                        ).width(10f).color(R.color.konvalesen)
+                        mMap.addPolyline(line)
+                        latLngRequester?.let { CameraUpdateFactory.newLatLngZoom(it, 5f) }
+                            ?.let { mMap.animateCamera(it) }
+
+                        //calculate distance between 2 points
+                        val destinationPoint = Location("destinationPoint")
+                        latLngRequester?.latitude.let {
+                            if (it != null) {
+                                destinationPoint.latitude = it
+                            }
+                        }
+                        latLngRequester?.longitude.let {
+                            if (it != null) {
+                                destinationPoint.longitude = it
+                            }
+                        }
+                        dist = location.distanceTo(destinationPoint).toString()
+                        binding.tvJarak.text = "+-${dist}meter"
+                    }
+                }
+            }
+        }
+
     }
 
     override fun onRequestPermissionsResult(
