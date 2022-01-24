@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -21,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/img_profile_onReqHistory" />
@@ -32,7 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Kebutuhan Darah :"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/img_profile_onReqHistory"
         app:layout_constraintTop_toTopOf="@+id/img_profile_onReqHistory" />
@@ -42,7 +39,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -51,7 +47,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Status :"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_goldarOnReqHistory"
         app:layout_constraintTop_toBottomOf="@+id/tv_goldarOnReqHistory" />
@@ -62,7 +57,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView7"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />

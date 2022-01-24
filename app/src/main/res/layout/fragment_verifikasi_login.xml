@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:cursorVisible="true"
-        android:inputType="text"
+        android:inputType="number"
         android:textSize="18sp"
         android:textStyle="bold"
         app:cursorWidth="2dp"

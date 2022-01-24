@@ -59,7 +59,7 @@
             android:id="@+id/edt_nama"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/ex_muhammad_irvan"
+            android:hint="@string/nama"
             android:textColor="@color/design_default_color_on_secondary"
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>

@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView10"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -31,7 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView11"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -42,7 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textView12"
         app:layout_constraintStart_toStartOf="@+id/textView12"
@@ -54,7 +51,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView13"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
@@ -65,7 +61,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Nama Penerima :"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/img_profileOnReceiveHistory"
         app:layout_constraintTop_toBottomOf="@+id/tv_tanggalOnReceiveHistory" />
@@ -75,7 +70,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Lokasi :"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/textView10"
         app:layout_constraintTop_toBottomOf="@+id/tv_namaPenerimaOnReceiveHistory" />
@@ -85,7 +79,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Gol.Darah :"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/img_profileOnReceiveHistory"
         app:layout_constraintStart_toStartOf="@+id/img_profileOnReceiveHistory"
@@ -96,7 +89,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Status :"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/textView11"
         app:layout_constraintTop_toBottomOf="@+id/tv_lokasiPenerimaOnReceiveHistory" />
@@ -108,7 +100,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

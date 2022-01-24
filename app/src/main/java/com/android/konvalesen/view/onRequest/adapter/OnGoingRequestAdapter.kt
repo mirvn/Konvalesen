@@ -35,7 +35,7 @@ class OnGoingRequestAdapter : RecyclerView.Adapter<OnGoingRequestAdapter.ListVie
         fun bind(dataHistory: AcceptedDonor) {
             //binding data with view
             binding.tvNamaPendonor.text = dataHistory.nama
-            binding.tvJarakPendonor.text = dataHistory.jarak
+            binding.tvJarakPendonor.text = "+- ${dataHistory.jarak} Meter"
             val firebaseStorage =
                 FirebaseStorage.getInstance()
                     .getReference("profileImages/${dataHistory.foto}")

@@ -180,4 +180,5 @@
     <string name="jarak_lokasi">Jarak Lokasi:</string>
     <string name="tanggal_request">Tanggal Request:</string>
     <string name="data_history_kosong">Data history kosong</string>
+    <string name="nomor_telephone">Nomor Telephone</string>
 </resources>

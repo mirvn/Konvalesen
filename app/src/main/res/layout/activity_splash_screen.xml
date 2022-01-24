@@ -6,42 +6,66 @@
     android:layout_height="match_parent"
     tools:context=".view.SplashScreenActivity">
 
-    <TextView
-        android:id="@+id/tv_konvalesen2"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="332dp"
-        android:text="K   NVALESEN"
-        android:textColor="#000000"
-        android:textSize="45sp"
-        android:textStyle="bold"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="54dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="17dp"
-        android:src="@drawable/ic_baseline_bloodtype_24"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_konvalesen2"
-        app:layout_constraintStart_toStartOf="@+id/tv_konvalesen2"
-        app:layout_constraintTop_toTopOf="@+id/tv_konvalesen2" />
+        <TextView
+            android:id="@+id/tv_konvalesen2"
+            style="@style/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="K"
+            android:textSize="45sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="38dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="3dp"
+            android:src="@drawable/ic_baseline_bloodtype_24"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_konvalesen2"
+            app:layout_constraintStart_toEndOf="@+id/tv_konvalesen2"
+            app:layout_constraintTop_toTopOf="@+id/tv_konvalesen2" />
+
+        <TextView
+            android:id="@+id/tv_konvalesen"
+            style="@style/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NVALESEN"
+            android:textSize="45sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:indeterminate="true"
         android:indeterminateBehavior="cycle"
         android:indeterminateTint="@color/konvalesen"
         android:max="@integer/material_motion_duration_short_1"
         android:progress="@integer/material_motion_duration_short_1"
         android:progressTint="@color/konvalesen"
-        app:layout_constraintEnd_toEndOf="@+id/tv_konvalesen2"
-        app:layout_constraintStart_toStartOf="@+id/tv_konvalesen2"
-        app:layout_constraintTop_toBottomOf="@+id/tv_konvalesen2" />
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout3"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

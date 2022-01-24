@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_profile_membutuhkan"
@@ -16,7 +14,7 @@
         android:background="@drawable/ic_baseline_person_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_tanggal" />
 
     <TextView
         android:id="@+id/tv_namaMembutuhkan"
@@ -24,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/img_profile_membutuhkan"
         app:layout_constraintTop_toTopOf="@+id/img_profile_membutuhkan" />
@@ -35,7 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Golongan Darah:"
-        android:textColor="@color/konvalesen2"
         app:layout_constraintStart_toStartOf="@+id/tv_namaMembutuhkan"
         app:layout_constraintTop_toBottomOf="@+id/tv_namaMembutuhkan" />
 
@@ -50,17 +46,17 @@
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_jarakMembantu"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_tanggal" />
+        app:layout_constraintTop_toTopOf="@+id/tv_namaMembutuhkan" />
 
     <TextView
         android:id="@+id/tv_tanggal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_namaMembutuhkan" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_goldarMembutuhkan"
@@ -68,7 +64,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toTopOf="@+id/textView4" />
@@ -79,7 +74,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/tv_goldarMembutuhkan" />

@@ -45,9 +45,10 @@
                 android:id="@+id/edt_nomor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/xxxxxxxxxxx"
+                android:hint="@string/nomor_telephone"
                 android:inputType="number"
-                android:textColor="@color/design_default_color_on_secondary" />
+                android:textColor="@color/design_default_color_on_secondary"
+                tools:ignore="TextContrastCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView

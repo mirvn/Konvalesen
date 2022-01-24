@@ -22,4 +22,12 @@
     <style name="Theme.Konvalesen.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Konvalesen.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="logo">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="bg">
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
 </resources>

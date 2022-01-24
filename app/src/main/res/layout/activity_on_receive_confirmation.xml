@@ -67,7 +67,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/darah_yang_dibutuhkan"
-        android:textColor="@color/konvalesen2"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imageView12"
@@ -129,7 +128,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/lokasi_rumah_sakit"
-        android:textColor="@color/konvalesen2"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imageView11"
@@ -185,7 +183,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -206,8 +203,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textColor="@color/konvalesen2"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -217,7 +212,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Jarak Lokasi:"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_namaRequesterBantuan"
         app:layout_constraintTop_toBottomOf="@+id/tv_namaRequesterBantuan" />
@@ -229,7 +223,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="Tanggal Request:"
-        android:textColor="@color/konvalesen2"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map2" />
