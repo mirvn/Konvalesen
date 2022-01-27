@@ -1,7 +1,6 @@
 package com.android.konvalesen.view.dashboard.adapter
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
@@ -11,7 +10,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.recyclerview.widget.RecyclerView
 import com.android.konvalesen.databinding.ItemMembutuhkanDonorBinding
 import com.android.konvalesen.model.RequestDonorWithPhoto
@@ -75,8 +73,8 @@ class PermintaanBantuanAdapter : RecyclerView.Adapter<PermintaanBantuanAdapter.L
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 // You can directly ask for the permission.
-                val permission = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-                requestPermissions(Activity(), permission, 0)
+                //val permission = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+                //HomeFragment().checkPermission()
             } else {
                 val latLngRequester: LatLng? =
                     reqDonorData.latRequester?.let {

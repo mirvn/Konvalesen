@@ -1,13 +1,17 @@
 package com.android.konvalesen.view.dashboard
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -108,6 +112,35 @@ class HomeFragment : Fragment() {
         }
     }
 
+    fun checkPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionFineLocationResultCallback.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        } else {
+            //Toast.makeText(requireContext(), "", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val permissionFineLocationResultCallback =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) {
+            when (it) {
+                true -> {
+                    checkPermission()
+                }
+                false -> {
+                    checkPermission()
+                }
+            }
+        }
+
     private fun getUserData() {
         firebaseAuth.currentUser?.phoneNumber.let {
             userViewModel.getDataUserFromFirebase(it.toString())
@@ -159,9 +192,9 @@ class HomeFragment : Fragment() {
             val data =
                 it.filter { it.idRequester != uidUser } as ArrayList //Filter data from Requester exclude current user
             var dataSingleWithPhoto = RequestDonorWithPhoto()
-            Log.d(TAG, "loadDataOnRv: $data")
+            Log.d(TAG, "loadDataOnRv: ${data}")
             if (data.isNotEmpty()) {
-                requesterAdapter.clearDataReqDonor()
+                //requesterAdapter.clearDataReqDonor()
                 for (i in 0 until data.size) {
                     userViewModel.getAllDataUserWithIdFromFirebase(data[i].idRequester.toString())
                     userViewModel.getAlldataUserWithId().observe({ lifecycle }, { user ->
@@ -179,6 +212,7 @@ class HomeFragment : Fragment() {
                         requesterAdapter.setDataReqDonor(dataSingleWithPhoto)
                     })
                 }
+                checkPermission()
                 showRv()
             }
         })
