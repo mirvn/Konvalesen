@@ -79,9 +79,9 @@
     <string name="status_approve">Approve</string>
     <string name="akhiri_pendonoran">Mengakhiri Pendonoran</string>
     <string name="salah_memasukkan_data">Salah memasukkan data</string>
-    <string name="kebutuhan_darah_sudah_terpenuhi">Kebutuhan darah sudah terpenuhi</string>
+    <string name="kebutuhan_darah_sudah_terpenuhi">Kebutuhan plasma sudah terpenuhi</string>
     <string name="permintaan_mengakhiri_gagal">Permintaan gagal, alasan tidak terpenuhi</string>
-    <string name="tidak_dapat_memenuhi_kebutuhan_darah">Tidak dapat memenuhi kebutuhan darah</string>
+    <string name="tidak_dapat_memenuhi_kebutuhan_darah">Tidak dapat memenuhi kebutuhan plasma</string>
     <string name="lihat_petunjuk_arah">Lihat Petunjuk Arah</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">

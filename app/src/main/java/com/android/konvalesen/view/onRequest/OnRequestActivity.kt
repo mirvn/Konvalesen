@@ -43,5 +43,6 @@ class OnRequestActivity : AppCompatActivity() {
         val inten = Intent(this, HomeActivity::class.java)
         inten.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(inten)
+        finish()
     }
 }

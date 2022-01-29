@@ -21,12 +21,16 @@ class OnReceiveConfirmationViewModel:ViewModel() {
         val TAG = OnReceiveConfirmationViewModel::class.java.simpleName
     }
 
-    fun updateDataApprovedToDoneFirebase(docId: String, status: String) {
+    fun updateDataApprovedToDoneFirebase(docId: String, status: String, context: Context) {
         val db = Firebase.firestore
         db.collection("approvedReqDonor").document(docId)
-            .update("status", status)
+            .update(
+                "status", status,
+                "docId", docId
+            )
             .addOnCompleteListener {
                 Log.d(TAG, "updateDataApprovedToDoneFirebase: $it")
+                Toast.makeText(context, "Pendonoran diakhkiri", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
                 Log.d(TAG, "updateDataApprovedToDoneFirebase: $it")

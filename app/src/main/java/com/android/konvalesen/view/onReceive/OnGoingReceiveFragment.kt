@@ -23,6 +23,7 @@ import com.android.konvalesen.R
 import com.android.konvalesen.databinding.FragmentOnGoingReceiveBinding
 import com.android.konvalesen.helper.SessionUser
 import com.android.konvalesen.model.ApprovedDonorData
+import com.android.konvalesen.view.dashboard.HomeActivity
 import com.android.konvalesen.viewmodel.OnReceiveConfirmationViewModel
 import com.android.konvalesen.viewmodel.UserViewModel
 import com.bumptech.glide.Glide
@@ -127,7 +128,8 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
                             setAlert.show()
                             receiveViewModel.updateDataApprovedToDoneFirebase(
                                 it.docId.toString(),
-                                cbKebutuhanTidakTerpenuhi.text.toString()
+                                cbKebutuhanTidakTerpenuhi.text.toString(),
+                                requireContext()
                             )
                             receiveViewModel.getDataApprovedFromFirebase()
                                 .removeObservers(requireActivity())
@@ -137,7 +139,8 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
                             setAlert.show()
                             receiveViewModel.updateDataApprovedToDoneFirebase(
                                 it.docId.toString(),
-                                cbKebutuhanTerpenuhi.text.toString()
+                                cbKebutuhanTerpenuhi.text.toString(),
+                                requireContext()
                             )
                             receiveViewModel.getDataApprovedFromFirebase()
                                 .removeObservers(requireActivity())
@@ -187,37 +190,117 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
                 )
                 receiveViewModel.getAllDataReqWithIdFromFirebase()
                     .observe({ lifecycle }, { dataRequester ->
-                        binding.tvTglOnGoingReceive.text =
-                            dataRequester[0].tanggal.toString()
-                        binding.tvNamaOnGoingReceive.text =
-                            dataRequester[0].namaRequester.toString()
-                        setProgressBar(false)
-                        binding.tvLokasiOnMapOnGoingReceive.text =
-                            dataRequester[0].alamatRequester.toString()
-                        binding.btnGolDarOnGoingReceive.text =
-                            dataRequester[0].darahRequester.toString()
-                        userViewModel.getAllDataUserWithIdFromFirebase(dataRequester[0].idRequester.toString())
-                        userViewModel.getAlldataUserWithId().observe({ lifecycle }, { user ->
-                            val firebaseStorage =
-                                FirebaseStorage.getInstance()
-                                    .getReference("profileImages/${user[0].foto.toString()}")
-                            firebaseStorage.downloadUrl.addOnCompleteListener { taskUri ->
-                                Glide.with(requireContext()).load(taskUri.result)
-                                    .into(binding.imgProfileConfirmation)
-                            }
-                        })
+                        if (dataRequester.isNotEmpty()) {
+                            binding.tvTglOnGoingReceive.text =
+                                dataRequester[0].tanggal.toString()
+                            binding.tvNamaOnGoingReceive.text =
+                                dataRequester[0].namaRequester.toString()
+                            setProgressBar(false)
+                            binding.tvLokasiOnMapOnGoingReceive.text =
+                                dataRequester[0].alamatRequester.toString()
+                            binding.btnGolDarOnGoingReceive.text =
+                                dataRequester[0].darahRequester.toString()
+                            userViewModel.getAllDataUserWithIdFromFirebase(dataRequester[0].idRequester.toString())
+                            userViewModel.getAlldataUserWithId().observe({ lifecycle }, { user ->
+                                val firebaseStorage =
+                                    FirebaseStorage.getInstance()
+                                        .getReference("profileImages/${user[0].foto.toString()}")
+                                firebaseStorage.downloadUrl.addOnCompleteListener { taskUri ->
+                                    Glide.with(requireContext()).load(taskUri.result)
+                                        .into(binding.imgProfileConfirmation)
+                                }
+                            })
 
-                        binding.btnChatWa.setOnClickListener {
-                            val url =
-                                "https://api.whatsapp.com/send?phone=${dataRequester[0].nomorRequester}&text=${
-                                    URLEncoder.encode(
-                                        messege,
-                                        "UTF-8"
+                            binding.btnChatWa.setOnClickListener {
+                                val url =
+                                    "https://api.whatsapp.com/send?phone=${dataRequester[0].nomorRequester}&text=${
+                                        URLEncoder.encode(
+                                            messege,
+                                            "UTF-8"
+                                        )
+                                    }"
+                                val i = Intent(Intent.ACTION_VIEW)
+                                i.data = Uri.parse(url)
+                                startActivity(i)
+                            }
+                        } else {
+                            val alertDialog = AlertDialog.Builder(requireContext())
+                            val v: View = View.inflate(
+                                requireContext(),
+                                R.layout.layout_akhiri_pendonoran,
+                                null
+                            )
+                            val cbKebutuhanTidakTerpenuhi =
+                                v.findViewById<CheckBox>(R.id.cb_kebutuhanTidakTerpenuhi)
+                            val cbKebutuhanTerpenuhi =
+                                v.findViewById<CheckBox>(R.id.cb_kebutuhanTerpenuhi)
+                            cbKebutuhanTidakTerpenuhi.text =
+                                getString(R.string.tidak_dapat_memenuhi_kebutuhan_darah)
+
+                            cbKebutuhanTidakTerpenuhi.setOnClickListener {
+                                cbKebutuhanTerpenuhi.isChecked = false
+                            }
+                            cbKebutuhanTerpenuhi.setOnClickListener {
+                                cbKebutuhanTidakTerpenuhi.isChecked = false
+                            }
+                            alertDialog.apply {
+                                setView(v)
+                                setTitle("Selesaikan Pendonoran")
+                                setMessage("Penerima donor telah mengakhiri permintaan bantuan, silahkan mengakhiri pemberian bantuan donor ini.")
+                                setIcon(R.drawable.ic_baseline_warning_24)
+                                setPositiveButton(getString(R.string.akhiri_pendonoran)) { _, _ ->
+                                    val nomor =
+                                        sessionUser.sharedPreferences.getString("nomor", "")
+                                            .toString()
+                                    receiveViewModel.setDataApprovedFromFirebase(
+                                        nomor,
+                                        getString(R.string.status_approve)
                                     )
-                                }"
-                            val i = Intent(Intent.ACTION_VIEW)
-                            i.data = Uri.parse(url)
-                            startActivity(i)
+                                    receiveViewModel.getDataApprovedFromFirebase()
+                                        .observe({ lifecycle }, { approvedData ->
+                                            if (cbKebutuhanTidakTerpenuhi.isChecked) {
+                                                receiveViewModel.updateDataApprovedToDoneFirebase(
+                                                    approvedData.docId.toString(),
+                                                    cbKebutuhanTidakTerpenuhi.text.toString(),
+                                                    requireContext()
+                                                )
+                                                activity?.startActivity(
+                                                    Intent(
+                                                        requireContext(),
+                                                        HomeActivity::class.java
+                                                    )
+                                                )
+                                                activity?.finish()
+                                            } else if (cbKebutuhanTerpenuhi.isChecked) {
+                                                receiveViewModel.updateDataApprovedToDoneFirebase(
+                                                    approvedData.docId.toString(),
+                                                    cbKebutuhanTerpenuhi.text.toString(),
+                                                    requireContext()
+                                                )
+                                                activity?.startActivity(
+                                                    Intent(
+                                                        requireContext(),
+                                                        HomeActivity::class.java
+                                                    )
+                                                )
+                                                activity?.finish()
+                                            } else {
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    getString(R.string.permintaan_mengakhiri_gagal),
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                                activity?.startActivity(
+                                                    Intent(
+                                                        requireContext(),
+                                                        HomeActivity::class.java
+                                                    )
+                                                )
+                                                activity?.finish()
+                                            }
+                                        })
+                                }
+                            }.create().show()
                         }
                     })
             } else {
@@ -247,39 +330,41 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
             var latLngRequester: LatLng?
             receiveViewModel.getAllDataReqWithIdFromFirebase()
                 .observe({ lifecycle }, { dataRequester ->
-                    latLngRequester = dataRequester[0].latRequester?.let {
-                        dataRequester[0].lngRequester?.let { it1 ->
-                            LatLng(it, it1)
+                    if (dataRequester.isNotEmpty()) {
+                        latLngRequester = dataRequester[0].latRequester?.let {
+                            dataRequester[0].lngRequester?.let { it1 ->
+                                LatLng(it, it1)
+                            }
                         }
-                    }
-                    fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                        if (location != null) {
-                            lastLocation = location
-                            latLng = LatLng(location.latitude, location.longitude)
-                            latLngRequester?.let { placeMarkerOnMap(it) }
-                            val line = PolylineOptions().add(
-                                latLngRequester,
-                                latLng
-                            ).width(10f).color(R.color.konvalesen)
-                            mMap.addPolyline(line)
-                            latLngRequester?.let { CameraUpdateFactory.newLatLngZoom(it, 8f) }
-                                ?.let { mMap.animateCamera(it) }
+                        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                            if (location != null) {
+                                lastLocation = location
+                                latLng = LatLng(location.latitude, location.longitude)
+                                latLngRequester?.let { placeMarkerOnMap(it) }
+                                val line = PolylineOptions().add(
+                                    latLngRequester,
+                                    latLng
+                                ).width(10f).color(R.color.konvalesen)
+                                mMap.addPolyline(line)
+                                latLngRequester?.let { CameraUpdateFactory.newLatLngZoom(it, 8f) }
+                                    ?.let { mMap.animateCamera(it) }
 
-                            //calculate distance between 2 points
-                            val destinationPoint = Location("destinationPoint")
-                            latLngRequester?.latitude.let {
-                                if (it != null) {
-                                    destinationPoint.latitude = it
+                                //calculate distance between 2 points
+                                val destinationPoint = Location("destinationPoint")
+                                latLngRequester?.latitude.let {
+                                    if (it != null) {
+                                        destinationPoint.latitude = it
+                                    }
                                 }
-                            }
-                            latLngRequester?.longitude.let {
-                                if (it != null) {
-                                    destinationPoint.longitude = it
+                                latLngRequester?.longitude.let {
+                                    if (it != null) {
+                                        destinationPoint.longitude = it
+                                    }
                                 }
+                                dist = location.distanceTo(destinationPoint).toString()
+                                Log.d(TAG, "setupMap- Distance2points: $dist")
+                                binding.tvJarakOnGoingReceive.text = "+-${dist}meter"
                             }
-                            dist = location.distanceTo(destinationPoint).toString()
-                            Log.d(TAG, "setupMap- Distance2points: $dist")
-                            binding.tvJarakOnGoingReceive.text = "+-${dist}meter"
                         }
                     }
                 })

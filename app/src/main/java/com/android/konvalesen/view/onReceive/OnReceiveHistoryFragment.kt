@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.konvalesen.R
@@ -32,6 +35,7 @@ class OnReceiveHistoryFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var sessionUser: SessionUser
     private var historyAdapter: OnReceiveHistoryAdapter = OnReceiveHistoryAdapter()
+    private var dataHistory = ArrayList<HistoryOnReceive>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,12 +65,10 @@ class OnReceiveHistoryFragment : Fragment() {
         var donorDone: ArrayList<ApprovedDonorData>
         receiveViewModel.getDataHistoryApprovedFromFirebase().observe({ lifecycle }, {
             donorDone = it.filter { it.status != getString(R.string.status_approve) } as ArrayList
-            Log.d(TAG, "loadDataHistory: $donorDone")
             if (donorDone.isNotEmpty()) {
                 binding.textView14.visibility = View.GONE
-                historyAdapter.clearDataHistory()
+                //historyAdapter.clearDataHistory()
                 var dataReq = ArrayList<RequestDonor>()
-                var singleDataHistory = HistoryOnReceive()
                 for (i in 0 until donorDone.size) {
                     requestViewModel.setAllDataReqFromFirebase(donorDone[i].idRequester.toString())
                     requestViewModel.getAllDataReqFromFirebase()
@@ -75,22 +77,23 @@ class OnReceiveHistoryFragment : Fragment() {
                                 data.status != getString(R.string.status_mencari_pendonor)
                             } as ArrayList<RequestDonor>
                             if (dataReq.isNotEmpty()) {
-                                singleDataHistory.tgl_approve =
+                                dataHistory.ensureCapacity(1)
+                                val data = HistoryOnReceive()
+                                data.tgl_approve =
                                     donorDone[i].tanggalApprove.toString()
-                                singleDataHistory.status = donorDone[i].status.toString()
-                                singleDataHistory.nama_penerima =
+                                data.status =
+                                    donorDone[i].status.toString()
+                                data.nama_penerima =
                                     dataReq[i].namaRequester.toString()
-                                singleDataHistory.lokasi = dataReq[i].alamatRequester.toString()
-                                singleDataHistory.gol_darah_penerima =
+                                data.lokasi =
+                                    dataReq[i].alamatRequester.toString()
+                                data.gol_darah_penerima =
                                     dataReq[i].darahRequester.toString()
-                                userViewModel.getAllDataUserFromFirebase()
-                                userViewModel.getAlldataUser()
-                                    .observe({ lifecycle }, { dataUserRequester ->
-                                        val data =
-                                            dataUserRequester.filter { it.id == donorDone[i].idRequester }
-                                        singleDataHistory.foto_penerima = data[i].foto.toString()
-                                        historyAdapter.setDataHistoryRec(singleDataHistory)
-                                    })
+                                data.nomor_penerima =
+                                    dataReq[i].nomorRequester.toString()
+                                dataHistory.add(data)
+                                Log.d(TAG, "loadDataHistory2: $dataHistory")
+                                historyAdapter.setDataHistoryRec(dataHistory)
                             } else {
                                 binding.rvHistoryOnRec.visibility = View.GONE
                                 binding.textView14.visibility = View.VISIBLE
@@ -110,5 +113,15 @@ class OnReceiveHistoryFragment : Fragment() {
         rv.setHasFixedSize(true)
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = historyAdapter
+    }
+
+    //extention function for observe once
+    fun <T> LiveData<T>.observeListener(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+        observe(lifecycleOwner, object : Observer<T> {
+            override fun onChanged(t: T?) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 }

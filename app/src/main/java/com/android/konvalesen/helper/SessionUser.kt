@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.android.konvalesen.R
+import com.android.konvalesen.model.HistoryOnReceive
 
 class SessionUser(context: Context) {
     //Menyimpan data Shared Preference
@@ -20,12 +21,16 @@ class SessionUser(context: Context) {
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
 
-    var sharedPreferences = EncryptedSharedPreferences.create(context,
+    var sharedPreferences = EncryptedSharedPreferences.create(
+        context,
         R.string.session_encrypted_user.toString(),
         masterKeyAlias,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
+    private val historyOnReceive = ArrayList<HistoryOnReceive>().apply {
+        ensureCapacity(1)
+    }
 
     var editor = sharedPreferences.edit()
 

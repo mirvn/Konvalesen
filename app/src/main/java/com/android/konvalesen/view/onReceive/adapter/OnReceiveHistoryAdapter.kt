@@ -1,28 +1,23 @@
 package com.android.konvalesen.view.onReceive.adapter
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.android.konvalesen.R
 import com.android.konvalesen.databinding.ItemOnReceiveHistoryBinding
+import com.android.konvalesen.helper.SessionUser
 import com.android.konvalesen.model.HistoryOnReceive
-import com.bumptech.glide.Glide
-import com.google.firebase.storage.FirebaseStorage
+import java.net.URLEncoder
 
 class OnReceiveHistoryAdapter : RecyclerView.Adapter<OnReceiveHistoryAdapter.ListViewHolder>() {
-    val listHistoryRec = ArrayList<HistoryOnReceive>()
-/*    private lateinit var mMap: GoogleMap
-    private lateinit var lastLocation: Location
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var geocoder: Geocoder
-    private lateinit var addresses: List<Address>*/
+    private val listHistoryRec: MutableList<HistoryOnReceive> = ArrayList()
 
-    fun setDataHistoryRec(dataHistory: HistoryOnReceive) {
-        listHistoryRec.add(dataHistory)
-        notifyDataSetChanged()
-    }
-
-    fun clearDataHistory() {
+    fun setDataHistoryRec(dataHistory: ArrayList<HistoryOnReceive>) {
         listHistoryRec.clear()
+        listHistoryRec.addAll(dataHistory)
+        notifyDataSetChanged()
     }
 
     inner class ListViewHolder(val binding: ItemOnReceiveHistoryBinding) :
@@ -34,13 +29,23 @@ class OnReceiveHistoryAdapter : RecyclerView.Adapter<OnReceiveHistoryAdapter.Lis
             binding.tvNamaPenerimaOnReceiveHistory.text = dataHistory.nama_penerima
             binding.tvSatusOnReceiveHistory.text = dataHistory.status
             binding.tvLokasiPenerimaOnReceiveHistory.text = dataHistory.lokasi
-            binding.tvGoldarOnReceiveHistory.text = dataHistory.gol_darah_penerima
-            val firebaseStorage =
-                FirebaseStorage.getInstance()
-                    .getReference("profileImages/${dataHistory.foto_penerima}")
-            firebaseStorage.downloadUrl.addOnCompleteListener { taskUri ->
-                Glide.with(itemView.context).load(taskUri.result)
-                    .into(binding.imgProfileOnReceiveHistory)
+            binding.button.text =
+                itemView.context.getString(R.string.golongan_darah) + ": " + dataHistory.gol_darah_penerima
+            binding.btnHubungiLagi.setOnClickListener {
+                val session = SessionUser(itemView.context)
+                val nama = session.sharedPreferences.getString("nama", "").toString()
+                val messege =
+                    "Hai, saya $nama yang dulu pernah menerima permintaan donor dari kamu ..."
+                val url =
+                    "https://api.whatsapp.com/send?phone=${dataHistory.nomor_penerima}&text=${
+                        URLEncoder.encode(
+                            messege,
+                            "UTF-8"
+                        )
+                    }"
+                val i = Intent(Intent.ACTION_VIEW)
+                i.data = Uri.parse(url)
+                itemView.context.startActivity(i)
             }
         }
     }

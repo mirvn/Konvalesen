@@ -98,13 +98,13 @@ class OnGoingRequestFragment : Fragment() {
                                     getString(R.string.permintaan_donor_diakhiri),
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                setAlert.dismiss()
                                 activity?.startActivity(
                                     Intent(
                                         requireContext(),
                                         HomeActivity::class.java
                                     )
                                 )
-                                setAlert.dismiss()
                             } else if (cbKebutuhanTerpenuhi.isChecked) {
                                 setAlert.show()
                                 requestViewModel.updateStatusRequestDonor(
@@ -117,13 +117,13 @@ class OnGoingRequestFragment : Fragment() {
                                     getString(R.string.permintaan_donor_diakhiri),
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                setAlert.dismiss()
                                 activity?.startActivity(
                                     Intent(
                                         requireContext(),
                                         HomeActivity::class.java
                                     )
                                 )
-                                setAlert.dismiss()
                             } else {
                                 Toast.makeText(
                                     requireContext(),
@@ -149,8 +149,9 @@ class OnGoingRequestFragment : Fragment() {
                 .observe({ lifecycle }, { historyApproved ->
                     if (historyApproved.isNotEmpty()) {
                         var singleDataAccept = AcceptedDonor()
+                        adapterOnGoingGoingReq.clearDataHistory()
                         for (i in 0 until historyApproved.size) {
-                            userViewModel.getAllDataUserWithIdFromFirebase(historyApproved[i].idRequester.toString())
+                            userViewModel.getAllDataUserWithIdFromFirebase(historyApproved[i].idApprover.toString())
                             userViewModel.getAlldataUserWithId().observe({ lifecycle }, {
                                 singleDataAccept.nama = it[i].nama.toString()
                                 singleDataAccept.foto = it[i].foto.toString()

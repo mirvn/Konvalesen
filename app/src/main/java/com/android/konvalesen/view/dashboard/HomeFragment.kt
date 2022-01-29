@@ -78,10 +78,12 @@ class HomeFragment : Fragment() {
                 R.id.action_pendonoran_saya -> {
                     val mIntent = Intent(requireContext(), OnReceiveActivity::class.java)
                     startActivity(mIntent)
+                    activity?.finish()
                 }
                 R.id.action_bantuan_donor_saya->{
                     val mIntent = Intent(requireContext(),OnRequestActivity::class.java)
                     startActivity(mIntent)
+                    activity?.finish()
                 }
             }
             true
@@ -107,6 +109,7 @@ class HomeFragment : Fragment() {
                     val intent = Intent(requireContext(), BantuanActivity::class.java)
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     activity?.startActivity(intent)
+                    activity?.finish()
                 }
             })
         }

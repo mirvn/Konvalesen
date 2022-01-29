@@ -47,7 +47,7 @@ class OnGoingRequestAdapter : RecyclerView.Adapter<OnGoingRequestAdapter.ListVie
                 val session = SessionUser(itemView.context)
                 val nama = session.sharedPreferences.getString("nama", "").toString()
                 val messege =
-                    "Hai, saya $nama lagi mencari pendonor plasma dari Aplikasi Konvalesen"
+                    "Hai, saya $nama lagi mencari pendonor plasma dari Aplikasi Konvalesen. Apa kamu mau membantu?"
                 val url =
                     "https://api.whatsapp.com/send?phone=${dataHistory.nomor}&text=${
                         URLEncoder.encode(

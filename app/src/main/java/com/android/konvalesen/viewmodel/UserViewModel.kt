@@ -106,7 +106,7 @@ class UserViewModel : ViewModel() {
                     userArray.add(document)
                 }
                 allUser.postValue(userArray)
-                Log.d(TAG, "getDataUserFromFirebase-userArray:$userArray")
+                Log.d(TAG, "getDataUserFromFirebase-userArrayWithid:$userArray")
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents: ", exception)

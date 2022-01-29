@@ -10,5 +10,5 @@ data class HistoryOnReceive(
     var lokasi: String = "",
     var status: String = "",
     var gol_darah_penerima: String = "",
-    var foto_penerima: String = "",
+    var nomor_penerima: String = "",
 ) : Parcelable {}
