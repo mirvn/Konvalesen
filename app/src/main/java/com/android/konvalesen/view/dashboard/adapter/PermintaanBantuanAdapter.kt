@@ -3,8 +3,6 @@ package com.android.konvalesen.view.dashboard.adapter
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,22 +12,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.konvalesen.databinding.ItemMembutuhkanDonorBinding
 import com.android.konvalesen.model.RequestDonorWithPhoto
 import com.android.konvalesen.view.onReceive.OnReceiveConfirmationActivity
-import com.android.konvalesen.viewmodel.OnReceiveConfirmationViewModel
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.storage.FirebaseStorage
 
 class PermintaanBantuanAdapter : RecyclerView.Adapter<PermintaanBantuanAdapter.ListViewHolder>() {
     val listReqDonor = ArrayList<RequestDonorWithPhoto>()
-    private lateinit var mMap: GoogleMap
-    private lateinit var lastLocation: Location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var geocoder: Geocoder
-    private lateinit var addresses: List<Address>
-    private lateinit var receiveViewModel: OnReceiveConfirmationViewModel
 
     fun setDataReqDonor(dataReqList: RequestDonorWithPhoto) {
         listReqDonor.add(dataReqList)
@@ -38,6 +29,7 @@ class PermintaanBantuanAdapter : RecyclerView.Adapter<PermintaanBantuanAdapter.L
 
     fun clearDataReqDonor() {
         listReqDonor.clear()
+        notifyDataSetChanged()
     }
 
     inner class ListViewHolder(val binding: ItemMembutuhkanDonorBinding) :
@@ -51,6 +43,7 @@ class PermintaanBantuanAdapter : RecyclerView.Adapter<PermintaanBantuanAdapter.L
             val firebaseStorage =
                 FirebaseStorage.getInstance()
                     .getReference("profileImages/${reqDonorData.fotoRequester.toString()}")
+            Log.d("TAG", "bind foto: ${reqDonorData.fotoRequester.toString()}")
             firebaseStorage.downloadUrl.addOnCompleteListener { taskUri ->
                 Glide.with(itemView.context).load(taskUri.result)
                     .into(binding.imgProfileMembutuhkan)
@@ -126,11 +119,11 @@ class PermintaanBantuanAdapter : RecyclerView.Adapter<PermintaanBantuanAdapter.L
         return listReqDonor.size
     }
 
-    override fun getItemId(position: Int): Long {
+    /*override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
     override fun getItemViewType(position: Int): Int {
         return position
-    }
+    }*/
 }

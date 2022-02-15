@@ -16,7 +16,6 @@ import com.android.konvalesen.databinding.FragmentOnReceiveHistoryBinding
 import com.android.konvalesen.helper.SessionUser
 import com.android.konvalesen.model.ApprovedDonorData
 import com.android.konvalesen.model.HistoryOnReceive
-import com.android.konvalesen.model.RequestDonor
 import com.android.konvalesen.view.onReceive.adapter.OnReceiveHistoryAdapter
 import com.android.konvalesen.viewmodel.OnReceiveConfirmationViewModel
 import com.android.konvalesen.viewmodel.RequestViewModel
@@ -63,34 +62,37 @@ class OnReceiveHistoryFragment : Fragment() {
 
     private fun loadDataHistory() {
         var donorDone: ArrayList<ApprovedDonorData>
-        receiveViewModel.getDataHistoryApprovedFromFirebase().observe({ lifecycle }, {
+        receiveViewModel.getDataHistoryApprovedFromFirebase().observeListener({ lifecycle }, {
             donorDone = it.filter { it.status != getString(R.string.status_approve) } as ArrayList
+            Log.d(TAG, "loadDataHistory-donorDone: ${donorDone}")
+            Log.d(TAG, "loadDataHistory-donorDone: ${donorDone.size}")
             if (donorDone.isNotEmpty()) {
                 binding.textView14.visibility = View.GONE
                 //historyAdapter.clearDataHistory()
-                var dataReq = ArrayList<RequestDonor>()
+                val data = HistoryOnReceive()
                 for (i in 0 until donorDone.size) {
-                    requestViewModel.setAllDataReqFromFirebase(donorDone[i].idRequester.toString())
-                    requestViewModel.getAllDataReqFromFirebase()
+                    Log.d(TAG, "loadDataHistory-i: $i")
+                    requestViewModel.setAllDataReqWithDocIdFromFirebase(
+                        donorDone[i].docIdRequester.toString()
+                    )
+                    requestViewModel.getAllDataReqWithDocIdFromFirebase()
                         .observe({ lifecycle }, { liveDataReq ->
-                            dataReq = liveDataReq.filter { data ->
-                                data.status != getString(R.string.status_mencari_pendonor)
-                            } as ArrayList<RequestDonor>
-                            if (dataReq.isNotEmpty()) {
-                                dataHistory.ensureCapacity(1)
-                                val data = HistoryOnReceive()
+                            Log.d(TAG, "loadDataHistory-dataReqreal:$liveDataReq ")
+                            Log.d(TAG, "loadDataHistory-dataReqreal:${liveDataReq.size} ")
+                            if (liveDataReq.isNotEmpty()) {
+                                //dataHistory.ensureCapacity(1)
                                 data.tgl_approve =
                                     donorDone[i].tanggalApprove.toString()
                                 data.status =
                                     donorDone[i].status.toString()
                                 data.nama_penerima =
-                                    dataReq[i].namaRequester.toString()
+                                    liveDataReq[i].namaRequester.toString()
                                 data.lokasi =
-                                    dataReq[i].alamatRequester.toString()
+                                    liveDataReq[i].alamatRequester.toString()
                                 data.gol_darah_penerima =
-                                    dataReq[i].darahRequester.toString()
+                                    liveDataReq[i].darahRequester.toString()
                                 data.nomor_penerima =
-                                    dataReq[i].nomorRequester.toString()
+                                    liveDataReq[i].nomorRequester.toString()
                                 dataHistory.add(data)
                                 Log.d(TAG, "loadDataHistory2: $dataHistory")
                                 historyAdapter.setDataHistoryRec(dataHistory)

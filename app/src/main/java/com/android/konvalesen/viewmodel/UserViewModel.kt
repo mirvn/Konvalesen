@@ -105,6 +105,7 @@ class UserViewModel : ViewModel() {
                 for (document in documents.toObjects<User>()) {
                     userArray.add(document)
                 }
+                allUser.value?.clear()
                 allUser.postValue(userArray)
                 Log.d(TAG, "getDataUserFromFirebase-userArrayWithid:$userArray")
             }

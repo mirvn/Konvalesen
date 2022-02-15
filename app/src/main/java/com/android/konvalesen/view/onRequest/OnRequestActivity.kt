@@ -20,6 +20,7 @@ class OnRequestActivity : AppCompatActivity() {
             R.string.tab_text_3
         )
     }
+
     private lateinit var binding: ActivityOnRequestBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

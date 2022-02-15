@@ -7,4 +7,4 @@ import kotlinx.parcelize.Parcelize
 data class PushNotification(
     val data: NotificationData,
     val to: String
-):Parcelable{}
+) : Parcelable {}

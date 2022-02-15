@@ -18,7 +18,7 @@
         app:cornerRadius="10dp"
         app:icon="@drawable/ic_baseline_arrow_forward_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         tools:ignore="TextContrastCheck" />
 
     <TextView
@@ -60,7 +60,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nama"
-            android:textColor="@color/design_default_color_on_secondary"
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,10 +95,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_golonganDarah" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@+id/textView8"
         app:layout_constraintStart_toStartOf="@+id/textView8"
         app:layout_constraintTop_toBottomOf="@+id/textView8">
@@ -108,7 +108,6 @@
             android:id="@+id/btn_golB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:backgroundTint="#FFFFFF"
             android:elevation="10dp"
             android:text="@string/b"
@@ -122,6 +121,7 @@
             android:id="@+id/btn_golA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:backgroundTint="#FFFFFF"
             android:elevation="10dp"
             android:text="@string/a"
@@ -135,7 +135,7 @@
             android:id="@+id/btn_golO"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="5dp"
             android:backgroundTint="#FFFFFF"
             android:elevation="10dp"
             android:text="@string/o"
@@ -147,22 +147,10 @@
             tools:ignore="TextContrastCheck" />
 
         <Button
-            android:id="@+id/btn_golABmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#FFFFFF"
-            android:elevation="10dp"
-            android:text="@string/ab_min"
-            android:textColor="@color/konvalesen"
-            app:cornerRadius="100dp"
-            app:layout_constraintEnd_toEndOf="@+id/btn_golAB"
-            app:layout_constraintTop_toBottomOf="@+id/btn_golAB"
-            tools:ignore="TextContrastCheck" />
-
-        <Button
             android:id="@+id/btn_golAB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:backgroundTint="#FFFFFF"
             android:elevation="10dp"
             android:text="@string/ab"
@@ -172,47 +160,16 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextContrastCheck" />
 
-        <Button
-            android:id="@+id/btn_golOmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="#FFFFFF"
-            android:elevation="10dp"
-            android:text="@string/o_min"
-            android:textColor="@color/konvalesen"
-            app:cornerRadius="100dp"
-            app:layout_constraintEnd_toStartOf="@+id/btn_golABmin"
-            app:layout_constraintStart_toEndOf="@+id/btn_golBmin"
-            app:layout_constraintTop_toBottomOf="@+id/btn_golO"
-            tools:ignore="TextContrastCheck" />
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_golBmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="#FFFFFF"
-            android:elevation="10dp"
-            android:text="@string/b_min"
-            android:textColor="@color/konvalesen"
-            app:cornerRadius="100dp"
-            app:layout_constraintStart_toEndOf="@+id/btn_golA"
-            app:layout_constraintTop_toBottomOf="@+id/btn_golB"
-            tools:ignore="TextContrastCheck" />
-
-        <Button
-            android:id="@+id/btn_golAplus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#FFFFFF"
-            android:elevation="10dp"
-            android:text="@string/a_plus"
-            android:textColor="@color/konvalesen"
-            app:cornerRadius="100dp"
-            app:layout_constraintStart_toStartOf="@+id/btn_golAmin"
-            app:layout_constraintTop_toBottomOf="@+id/btn_golAmin"
-            tools:ignore="TextContrastCheck" />
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
         <Button
             android:id="@+id/btn_golAmin"
@@ -223,52 +180,100 @@
             android:text="@string/a_min"
             android:textColor="@color/konvalesen"
             app:cornerRadius="100dp"
-            app:layout_constraintStart_toStartOf="@+id/btn_golA"
-            app:layout_constraintTop_toBottomOf="@+id/btn_golA"
+            tools:ignore="TextContrastCheck" />
+
+        <Button
+            android:id="@+id/btn_golBmin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="#FFFFFF"
+            android:elevation="10dp"
+            android:text="@string/b_min"
+            android:textColor="@color/konvalesen"
+            app:cornerRadius="100dp"
+            tools:ignore="TextContrastCheck" />
+
+        <Button
+            android:id="@+id/btn_golOmin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="#FFFFFF"
+            android:elevation="10dp"
+            android:text="@string/o_min"
+            android:textColor="@color/konvalesen"
+            app:cornerRadius="100dp"
+            tools:ignore="TextContrastCheck" />
+
+        <Button
+            android:id="@+id/btn_golABmin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="#FFFFFF"
+            android:elevation="10dp"
+            android:text="@string/ab_min"
+            android:textColor="@color/konvalesen"
+            app:cornerRadius="100dp"
+            tools:ignore="TextContrastCheck" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <Button
+            android:id="@+id/btn_golOplus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFFFFF"
+            android:elevation="10dp"
+            android:text="@string/o_plus"
+            android:textColor="@color/konvalesen"
+            app:cornerRadius="100dp"
+            tools:ignore="TextContrastCheck" />
+
+        <Button
+            android:id="@+id/btn_golAplus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="#FFFFFF"
+            android:elevation="10dp"
+            android:text="@string/a_plus"
+            android:textColor="@color/konvalesen"
+            app:cornerRadius="100dp"
             tools:ignore="TextContrastCheck" />
 
         <Button
             android:id="@+id/btn_golBplus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="5dp"
             android:backgroundTint="#FFFFFF"
             android:elevation="10dp"
             android:text="@string/b_plus"
             android:textColor="@color/konvalesen"
             app:cornerRadius="100dp"
-            app:layout_constraintStart_toEndOf="@+id/btn_golA"
-            app:layout_constraintTop_toBottomOf="@+id/btn_golBmin"
-            tools:ignore="TextContrastCheck" />
-
-        <Button
-            android:id="@+id/btn_golOplus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="#FFFFFF"
-            android:elevation="10dp"
-            android:text="@string/o_plus"
-            android:textColor="@color/konvalesen"
-            app:cornerRadius="100dp"
-            app:layout_constraintEnd_toStartOf="@+id/btn_golABplus"
-            app:layout_constraintStart_toEndOf="@+id/btn_golBplus"
-            app:layout_constraintTop_toBottomOf="@+id/btn_golOmin"
             tools:ignore="TextContrastCheck" />
 
         <Button
             android:id="@+id/btn_golABplus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:backgroundTint="#FFFFFF"
             android:elevation="10dp"
             android:text="@string/ab_plus"
             android:textColor="@color/konvalesen"
             app:cornerRadius="100dp"
-            app:layout_constraintEnd_toEndOf="@+id/btn_golABmin"
-            app:layout_constraintTop_toBottomOf="@+id/btn_golABmin"
             tools:ignore="TextContrastCheck" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_pilihFoto"

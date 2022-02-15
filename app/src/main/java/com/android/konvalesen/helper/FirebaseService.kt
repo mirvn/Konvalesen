@@ -16,18 +16,17 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.android.konvalesen.R
-import com.android.konvalesen.view.onReceive.OnGoingReceiveFragment
 import com.android.konvalesen.view.onReceive.OnReceiveConfirmationActivity
 import com.android.konvalesen.view.onRequest.OnRequestActivity
 import com.android.konvalesen.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlin.random.Random
 
-    private const val CHANNEL_ID = "channel_id"
-class FirebaseService: FirebaseMessagingService() {
+private const val CHANNEL_ID = "channel_id"
+
+class FirebaseService : FirebaseMessagingService() {
 
     override fun onNewToken(newToken: String) {
         super.onNewToken(newToken)
@@ -36,11 +35,12 @@ class FirebaseService: FirebaseMessagingService() {
         updateFcmTokenToServer(newToken)
     }
 
-    private fun updateFcmTokenToServer(newToken: String){
+    private fun updateFcmTokenToServer(newToken: String) {
         val auth = FirebaseAuth.getInstance()
-        val userViewModel = ViewModelProvider(ViewModelStore(), ViewModelProvider.NewInstanceFactory())
-            .get(UserViewModel::class.java)
-        userViewModel.updateDataFCMUser(auth.currentUser?.uid.toString(),newToken,this)
+        val userViewModel =
+            ViewModelProvider(ViewModelStore(), ViewModelProvider.NewInstanceFactory())
+                .get(UserViewModel::class.java)
+        userViewModel.updateDataFCMUser(auth.currentUser?.uid.toString(), newToken, this)
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -48,13 +48,24 @@ class FirebaseService: FirebaseMessagingService() {
         val intent = Intent(this, OnReceiveConfirmationActivity::class.java)
 
         val uidSender = message.notification?.body.toString().substringAfterLast('.')
-        intent.putExtra(OnReceiveConfirmationActivity.UID_EXTRA,uidSender)
+        intent.putExtra(OnReceiveConfirmationActivity.UID_EXTRA, uidSender)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0 /* Request code */, intent,
-            FLAG_ONE_SHOT
-        )
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val pendingIntent: PendingIntent
+        //split intent for different action
+        if (message.notification?.title.toString() == getString(R.string.pendonor_baru_buat_kamu)) {
+            val intentToOngoingReq = Intent(this, OnRequestActivity::class.java)
+            pendingIntent = PendingIntent.getActivity(
+                this, 0 /* Request code */, intentToOngoingReq,
+                FLAG_ONE_SHOT
+            )
+        } else {
+            pendingIntent = PendingIntent.getActivity(
+                this, 0 /* Request code */, intent,
+                FLAG_ONE_SHOT
+            )
+        }
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationId = Random.nextInt()
 
         // Since android Oreo notification channel is needed.
@@ -63,7 +74,7 @@ class FirebaseService: FirebaseMessagingService() {
         }
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val data =  message.notification?.body.toString().substringBeforeLast('.')
+        val data = message.notification?.body.toString().substringBeforeLast('.')
         Log.d("TAG", "onMessageReceived: $data")
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_baseline_bloodtype_24)
@@ -79,14 +90,14 @@ class FirebaseService: FirebaseMessagingService() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(notificationManager: NotificationManager){
+    private fun createNotificationChannel(notificationManager: NotificationManager) {
         val channel = NotificationChannel(
             CHANNEL_ID,
             "ChannelTitle",
             IMPORTANCE_HIGH
         ).apply {
             enableLights(true)
-            lightColor=(Color.GREEN)
+            lightColor = (Color.GREEN)
             setShowBadge(true)
         }
         notificationManager.createNotificationChannel(channel)

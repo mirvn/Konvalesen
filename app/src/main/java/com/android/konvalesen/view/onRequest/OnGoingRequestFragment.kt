@@ -1,5 +1,6 @@
 package com.android.konvalesen.view.onRequest
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -105,6 +106,7 @@ class OnGoingRequestFragment : Fragment() {
                                         HomeActivity::class.java
                                     )
                                 )
+                                Activity().finish()
                             } else if (cbKebutuhanTerpenuhi.isChecked) {
                                 setAlert.show()
                                 requestViewModel.updateStatusRequestDonor(
@@ -124,6 +126,7 @@ class OnGoingRequestFragment : Fragment() {
                                         HomeActivity::class.java
                                     )
                                 )
+                                Activity().finish()
                             } else {
                                 Toast.makeText(
                                     requireContext(),

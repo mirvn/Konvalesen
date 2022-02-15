@@ -5,6 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class NotificationData(
-    val title:String,
-    val message:String
-):Parcelable{}
+    val title: String,
+    val message: String
+) : Parcelable {}

@@ -37,7 +37,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private lateinit var binding: FragmentBantuanBinding
@@ -76,7 +75,7 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setGolonganDarah()
+        //setGolonganDarah()
         Log.d(TAG, "onViewCreated: ban,touan, fragme]n,t")
         sessionUser = SessionUser(requireContext())
         auth = FirebaseAuth.getInstance()
@@ -132,6 +131,14 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
             //start pushNotification and create data in Firebase or just create data in Firebase
             if (allUserSameBloodTypeExcludeUserFcmToken.isEmpty()) {
                 requestViewModel.createNewRequestDonor(dataDonor, requireContext())
+                //get docId & update to firestore field
+                requestViewModel.setDataReqFromFirebase(
+                    dataDonor.nomorRequester.toString(),
+                    getString(R.string.status_mencari_pendonor)
+                )
+                requestViewModel.getDataReqFromFirebase().observe({ lifecycle }, {
+                    requestViewModel.updateDocIdRequestDonor(it.idDoc.toString(), requireContext())
+                })
                 val intent = Intent(requireContext(), OnRequestActivity::class.java)
                 activity?.startActivity(intent)
             } else {
@@ -147,144 +154,19 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                         "onViewCreated-allUserSameBloodTypeExcludeUserFcmToken: ${allUserSameBloodTypeExcludeUserFcmToken[i]}"
                     )
                 }
+                //get docId & update to firestore field
+                requestViewModel.setDataReqFromFirebase(
+                    dataDonor.nomorRequester.toString(),
+                    getString(R.string.status_mencari_pendonor)
+                )
+                requestViewModel.getDataReqFromFirebase().observe({ lifecycle }, {
+                    requestViewModel.updateDocIdRequestDonor(it.idDoc.toString(), requireContext())
+                })
                 val intent = Intent(requireContext(), OnRequestActivity::class.java)
                 activity?.startActivity(intent)
             }
         }
-    }
 
-/*    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val response = RetrofitInstance.api.postNotification(notification)
-            if (response.isSuccessful){
-                Log.d(TAG, "pushNotification: ${Gson().toJson(response)}")
-            }else Log.e(TAG, "pushNotification: ${response.errorBody().toString()}")
-        }catch (e:Exception){
-            Log.e(TAG, "pushNotification: ${e}")
-        }
-    }*/
-
-    override fun onMapReady(gMap: GoogleMap) {
-        mMap = gMap
-        mMap.uiSettings.isZoomControlsEnabled = true //zoom control
-        mMap.setOnMarkerClickListener(this)
-        //onClick
-        mMap.setOnMapClickListener {
-            mMap.clear()
-            latLng = it
-            val markerOptions = MarkerOptions().position(it).draggable(true)
-            geocoder = Geocoder(requireContext(), Locale.getDefault())
-            addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-
-            alamat = addresses[0].getAddressLine(0).toString()
-            lokasiAlamat = addresses[0].locality.toString()
-            Log.d("TAG", "onMarkerDragEnd - lokasi:${addresses[0].locality} ")
-            markerOptions.title(alamat)
-            mMap.addMarker(markerOptions)
-            //
-            binding.tvLokasiOnMap.text = alamat
-        }
-        mMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
-            override fun onMarkerDrag(marker: Marker) {
-                //
-            }
-
-            override fun onMarkerDragEnd(marker: Marker) {
-                latLng = marker.position
-                addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-                alamat = addresses[0].getAddressLine(0).toString()
-                if (addresses[0].premises != null) {
-                    lokasiAlamat = addresses[0].locality.toString()
-                }
-                Log.d("TAG", "onMarkerDragEnd - lokasi:$lokasiAlamat ")
-
-                marker.title = alamat
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.position, 12f))
-                setProgressBar(false)
-                binding.tvLokasiOnMap.text = alamat
-            }
-
-            override fun onMarkerDragStart(marker: Marker) {
-                binding.tvLokasiOnMap.text = ""
-                setProgressBar(true)
-            }
-        })
-        setupMap()
-    }
-
-    override fun onMarkerClick(marker: Marker): Boolean = false
-
-    private fun setupMap() {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissionFineLocationResultCallback.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        }else{
-            mMap.isMyLocationEnabled = true
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                if (location != null) {
-                    lastLocation = location
-                    latLng = LatLng(location.latitude, location.longitude)
-                    placeMarkerOnMap(latLng)
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
-                    geocoder = Geocoder(requireContext(), Locale.getDefault())
-                    addresses =
-                        geocoder.getFromLocation(location.latitude, location.longitude, 1)
-
-                    lokasiAlamat = addresses[0].locality.toString()
-                }
-            }
-        }
-    }
-
-    private val permissionFineLocationResultCallback =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) {
-            when (it) {
-                true -> {
-                    setupMap()
-                }
-                false -> {
-                    setupMap()
-                }
-            }
-        }
-
-    private fun placeMarkerOnMap(currentLatLong: LatLng) {
-        val markerOptions = MarkerOptions().position(currentLatLong).draggable(true)
-        geocoder = Geocoder(requireContext(), Locale.getDefault())
-        addresses = geocoder.getFromLocation(currentLatLong.latitude, currentLatLong.longitude, 1)
-
-        alamat = addresses[0].getAddressLine(0).toString()
-        if (addresses[0].premises != null) {
-            lokasiAlamat = addresses[0].locality.toString()
-            Log.d("TAG", "onMarkerDragEnd - lokasi:$lokasiAlamat ")
-        }
-
-        markerOptions.title(alamat)
-        mMap.addMarker(markerOptions)
-        //
-        setProgressBar(false)
-        binding.tvLokasiOnMap.text = alamat
-    }
-
-    private fun setProgressBar(setOn: Boolean) {
-        if (setOn) {
-            binding.progressBar4.visibility = View.VISIBLE
-            binding.progressBar5.visibility = View.VISIBLE
-        } else {
-            binding.progressBar4.visibility = View.INVISIBLE
-            binding.progressBar5.visibility = View.INVISIBLE
-        }
-    }
-
-    private fun setGolonganDarah() {
         binding.btnGolA2.setOnClickListener {
             golDarah = binding.btnGolA2.text as String?
             binding.btnGolA2.setBackgroundColor(
@@ -1186,4 +1068,143 @@ class BantuanFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
             )
         }
     }
+
+/*    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            if (response.isSuccessful){
+                Log.d(TAG, "pushNotification: ${Gson().toJson(response)}")
+            }else Log.e(TAG, "pushNotification: ${response.errorBody().toString()}")
+        }catch (e:Exception){
+            Log.e(TAG, "pushNotification: ${e}")
+        }
+    }*/
+
+    override fun onMapReady(gMap: GoogleMap) {
+        mMap = gMap
+        mMap.uiSettings.isZoomControlsEnabled = true //zoom control
+        mMap.setOnMarkerClickListener(this)
+        //onClick
+        mMap.setOnMapClickListener {
+            mMap.clear()
+            latLng = it
+            val markerOptions = MarkerOptions().position(it).draggable(true)
+            geocoder = Geocoder(requireContext(), Locale.getDefault())
+            addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+
+            alamat = addresses[0].getAddressLine(0).toString()
+            lokasiAlamat = addresses[0].subAdminArea.toString()
+            Log.d("TAG", "onMarkerDragEnd - lokasi:${addresses[0].locality} ")
+            markerOptions.title(alamat)
+            mMap.addMarker(markerOptions)
+            //
+            binding.tvLokasiOnMap.text = alamat
+        }
+        mMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
+            override fun onMarkerDrag(marker: Marker) {
+                //
+            }
+
+            override fun onMarkerDragEnd(marker: Marker) {
+                latLng = marker.position
+                addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                alamat = addresses[0].getAddressLine(0).toString()
+                if (addresses[0].premises != null) {
+                    lokasiAlamat = addresses[0].subAdminArea.toString()
+                }
+                Log.d("TAG", "onMarkerDragEnd - lokasi:$lokasiAlamat ")
+
+                marker.title = alamat
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.position, 12f))
+                setProgressBar(false)
+                binding.tvLokasiOnMap.text = alamat
+            }
+
+            override fun onMarkerDragStart(marker: Marker) {
+                binding.tvLokasiOnMap.text = ""
+                setProgressBar(true)
+            }
+        })
+        setupMap()
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean = false
+
+    private fun setupMap() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionFineLocationResultCallback.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        } else {
+            mMap.isMyLocationEnabled = true
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    lastLocation = location
+                    latLng = LatLng(location.latitude, location.longitude)
+                    placeMarkerOnMap(latLng)
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
+                    geocoder = Geocoder(requireContext(), Locale.getDefault())
+                    addresses =
+                        geocoder.getFromLocation(location.latitude, location.longitude, 2)
+
+                    Log.d(TAG, "setupMap: $addresses")
+                    lokasiAlamat = addresses[0].subAdminArea.toString()
+                    /*if (addresses[0].locality == null) lokasiAlamat = addresses[0].subLocality.toString()
+                    if (addresses[0].locality == null) lokasiAlamat = addresses[0].subAdminArea.toString()
+                    if (addresses[0].locality == null) lokasiAlamat = addresses[0].adminArea.toString()*/
+                }
+            }
+        }
+    }
+
+    private val permissionFineLocationResultCallback =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) {
+            when (it) {
+                true -> {
+                    setupMap()
+                }
+                false -> {
+                    setupMap()
+                }
+            }
+        }
+
+    private fun placeMarkerOnMap(currentLatLong: LatLng) {
+        val markerOptions = MarkerOptions().position(currentLatLong).draggable(true)
+        geocoder = Geocoder(requireContext(), Locale.getDefault())
+        addresses = geocoder.getFromLocation(currentLatLong.latitude, currentLatLong.longitude, 1)
+
+        alamat = addresses[0].getAddressLine(0).toString()
+        if (addresses[0].premises != null) {
+            lokasiAlamat = addresses[0].subAdminArea.toString()
+            Log.d("TAG", "onMarkerDragEnd - lokasi:$lokasiAlamat ")
+        }
+
+        markerOptions.title(alamat)
+        mMap.addMarker(markerOptions)
+        //
+        setProgressBar(false)
+        binding.tvLokasiOnMap.text = alamat
+    }
+
+    private fun setProgressBar(setOn: Boolean) {
+        if (setOn) {
+            binding.progressBar4.visibility = View.VISIBLE
+            binding.progressBar5.visibility = View.VISIBLE
+        } else {
+            binding.progressBar4.visibility = View.INVISIBLE
+            binding.progressBar5.visibility = View.INVISIBLE
+        }
+    }
+
+    /*private fun setGolonganDarah() {
+
+    }*/
 }

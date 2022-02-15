@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.konvalesen.R
 import com.android.konvalesen.databinding.FragmentHomeBinding
 import com.android.konvalesen.helper.SessionUser
+import com.android.konvalesen.model.RequestDonor
 import com.android.konvalesen.model.RequestDonorWithPhoto
 import com.android.konvalesen.view.bantuan.BantuanActivity
 import com.android.konvalesen.view.dashboard.adapter.PermintaanBantuanAdapter
@@ -33,21 +34,24 @@ import com.google.firebase.messaging.ktx.messaging
 import com.google.firebase.storage.FirebaseStorage
 
 class HomeFragment : Fragment() {
-    companion object{
+    companion object {
         private val TAG = HomeFragment::class.java.simpleName
         val TOPIC = "topics/notifDonor"
     }
+
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var firebaseAuth:FirebaseAuth
+    private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var userViewModel: UserViewModel
     private lateinit var requestViewModel: RequestViewModel
     private lateinit var sessionUser: SessionUser
     private lateinit var nomor: String
     private var requesterAdapter: PermintaanBantuanAdapter = PermintaanBantuanAdapter()
+    private var data: ArrayList<RequestDonor> = ArrayList()
+    private var dataSingleWithPhoto = RequestDonorWithPhoto()
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -70,6 +74,21 @@ class HomeFragment : Fragment() {
         Firebase.messaging.subscribeToTopic(fcmToken)
         loadDataOnRv()
 
+        /*binding.refreshRv.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener{
+            override fun onRefresh() {
+                requesterAdapter.clearDataReqDonor()
+                requesterAdapter.notifyDataSetChanged()
+                binding.rvListBantuDonor.adapter = requesterAdapter
+                data.clear()
+                //show all req with same blood type
+                requestViewModel.setAllDataReqWithStatusFromFirebase(
+                    getString(R.string.status_mencari_pendonor),
+                    sessionUser.sharedPreferences.getString("golonganDarah", "").toString()
+                )
+                binding.refreshRv.isRefreshing = false
+            }
+        })*/
+
         binding.toolbar2.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_logout -> {
@@ -80,8 +99,8 @@ class HomeFragment : Fragment() {
                     startActivity(mIntent)
                     activity?.finish()
                 }
-                R.id.action_bantuan_donor_saya->{
-                    val mIntent = Intent(requireContext(),OnRequestActivity::class.java)
+                R.id.action_bantuan_donor_saya -> {
+                    val mIntent = Intent(requireContext(), OnRequestActivity::class.java)
                     startActivity(mIntent)
                     activity?.finish()
                 }
@@ -126,7 +145,7 @@ class HomeFragment : Fragment() {
         ) {
             permissionFineLocationResultCallback.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         } else {
-            //Toast.makeText(requireContext(), "", Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -192,12 +211,13 @@ class HomeFragment : Fragment() {
         )
         requestViewModel.getAllDataReqWithStatusFromFirebase().observe({ lifecycle }, {
             val uidUser = firebaseAuth.currentUser!!.uid
-            val data =
+            data.clear()
+            data =
                 it.filter { it.idRequester != uidUser } as ArrayList //Filter data from Requester exclude current user
-            var dataSingleWithPhoto = RequestDonorWithPhoto()
-            Log.d(TAG, "loadDataOnRv: ${data}")
+            Log.d(TAG, "loadDataOnRv-size: ${data.size}")
             if (data.isNotEmpty()) {
-                //requesterAdapter.clearDataReqDonor()
+                requesterAdapter.clearDataReqDonor()
+                binding.tvKosong.visibility = View.INVISIBLE
                 for (i in 0 until data.size) {
                     userViewModel.getAllDataUserWithIdFromFirebase(data[i].idRequester.toString())
                     userViewModel.getAlldataUserWithId().observe({ lifecycle }, { user ->
@@ -209,7 +229,7 @@ class HomeFragment : Fragment() {
                         dataSingleWithPhoto.latRequester = data[i].latRequester
                         dataSingleWithPhoto.idRequester = data[i].idRequester.toString()
                         dataSingleWithPhoto.idDoc = data[i].idDoc.toString()
-                        dataSingleWithPhoto.fotoRequester = user[i].foto.toString()
+                        dataSingleWithPhoto.fotoRequester = user[0].foto.toString()
                         dataSingleWithPhoto.darahRequester = data[i].darahRequester.toString()
                         dataSingleWithPhoto.alamatRequester = data[i].alamatRequester.toString()
                         requesterAdapter.setDataReqDonor(dataSingleWithPhoto)
@@ -217,6 +237,9 @@ class HomeFragment : Fragment() {
                 }
                 checkPermission()
                 showRv()
+            } else {
+                binding.rvListBantuDonor.visibility = View.INVISIBLE
+                binding.tvKosong.visibility = View.VISIBLE
             }
         })
     }

@@ -19,7 +19,7 @@
         android:id="@+id/verifikasiFragment"
         android:name="com.android.konvalesen.view.login.VerifikasiRegisterFragment"
         android:label="fragment_verifikasi"
-        tools:layout="@layout/fragment_verifikasi_register" >
+        tools:layout="@layout/fragment_verifikasi_register">
         <argument
             android:name="phoneNumber"
             app:argType="string" />
@@ -28,7 +28,7 @@
         android:id="@+id/verifikasiLoginFragment"
         android:name="com.android.konvalesen.view.login.VerifikasiLoginFragment"
         android:label="fragment_verifikasi_login"
-        tools:layout="@layout/fragment_verifikasi_login" >
+        tools:layout="@layout/fragment_verifikasi_login">
         <action
             android:id="@+id/action_verifikasiLoginFragment_to_welcomeFragment"
             app:destination="@id/welcomeFragment"

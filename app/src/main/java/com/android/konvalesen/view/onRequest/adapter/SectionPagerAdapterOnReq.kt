@@ -6,7 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.android.konvalesen.view.onRequest.OnGoingRequestFragment
 import com.android.konvalesen.view.onRequest.OnRequestHistoryFragment
 
-class SectionPagerAdapterOnReq(activity: AppCompatActivity): FragmentStateAdapter(activity) {
+class SectionPagerAdapterOnReq(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
     override fun getItemCount(): Int {
         return 2
     }

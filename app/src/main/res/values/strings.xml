@@ -16,7 +16,7 @@
     <string name="selamat_datang">Selamat Datang</string>
     <string name="_62">+62</string>
     <string name="buat_akun">Buat Akun</string>
-    <string name="silahkan_memasukkan_nomor_handphone_anda">Silahkan memasukkan nomor Handphone anda untuk melanjutkan</string>
+    <string name="silahkan_memasukkan_nomor_handphone_anda">Silahkan memasukkan nomor Handphone anda:</string>
     <string name="xxxxxxxxxxx">xxxxxxxxxxx</string>
     <string name="kirim_ulang_kode_verifikasi">Kirim Ulang Kode Verifikasi</string>
     <string name="xxxxxx">XXXXXX</string>
@@ -46,7 +46,7 @@
     <string name="minta_bantuan">Minta Bantuan</string>
     <string name="darah_yang_dibutuhkan">Darah yang dibutuhkan</string>
     <string name="lokasi_rumah_sakit">Lokasi Rumah Sakit</string>
-    <string name="meminta_bantuan_donor">Meminta Bantuan Donor</string>
+    <string name="meminta_bantuan_donor">Meminta Bantuan Donor Plasma Konvalesen</string>
     <string name="session_encrypted_user">session_user</string>
     <string name="bantu_donor">Bantu Donor</string>
     <string name="tab_text_1">Donor Dalam Proses</string>
@@ -181,4 +181,5 @@
     <string name="tanggal_request">Tanggal Request:</string>
     <string name="data_history_kosong">Data history kosong</string>
     <string name="nomor_telephone">Nomor Telephone</string>
+    <string name="pendonor_baru_buat_kamu">Pendonor Baru buat kamu</string>
 </resources>

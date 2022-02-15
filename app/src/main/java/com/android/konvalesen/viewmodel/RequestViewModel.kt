@@ -18,11 +18,12 @@ import cz.msebera.android.httpclient.entity.StringEntity
 import org.json.JSONObject
 
 
-class RequestViewModel: ViewModel() {
+class RequestViewModel : ViewModel() {
     private val user = MutableLiveData<RequestDonor>()
     private val userRequester = MutableLiveData<RequestDonor>()
     private val allUserRequester = MutableLiveData<ArrayList<RequestDonor>>()
-    companion object{
+
+    companion object {
         val TAG = RequestViewModel::class.java.simpleName
     }
 
@@ -39,11 +40,12 @@ class RequestViewModel: ViewModel() {
             }
     }
 
-    fun setAllDataReqFromFirebase(idRequester: String) {
+    fun setAllDataReqWithStatusAndIdFromFirebase(idRequester: String, status: String) {
         val db = Firebase.firestore
         val dataRequester = ArrayList<RequestDonor>()
         db.collection("requestDonor")
             .whereEqualTo("idRequester", idRequester)
+            .whereNotEqualTo("status", status)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents.toObjects<RequestDonor>()) {
@@ -57,7 +59,29 @@ class RequestViewModel: ViewModel() {
             }
     }
 
-    fun getAllDataReqFromFirebase(): MutableLiveData<ArrayList<RequestDonor>> = allUserRequester
+    fun getAllDataReqWithStatusAndIdFromFirebase(): MutableLiveData<ArrayList<RequestDonor>> =
+        allUserRequester
+
+    fun setAllDataReqWithDocIdFromFirebase(docIdRequester: String) {
+        val db = Firebase.firestore
+        val dataRequester = ArrayList<RequestDonor>()
+        db.collection("requestDonor")
+            .whereEqualTo("idDoc", docIdRequester)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents.toObjects<RequestDonor>()) {
+                    dataRequester.add(document)
+                }
+                allUserRequester.postValue(dataRequester)
+                Log.d(TAG, "setDataReqFromFirebase-dataRequester:$dataRequester ")
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+    }
+
+    fun getAllDataReqWithDocIdFromFirebase(): MutableLiveData<ArrayList<RequestDonor>> =
+        allUserRequester
 
     fun setAllDataReqWithNumberFromFirebase(idRequester: String, nomorRequester: String) {
         val db = Firebase.firestore
@@ -92,6 +116,7 @@ class RequestViewModel: ViewModel() {
                 for (document in documents.toObjects<RequestDonor>()) {
                     dataRequester.add(document)
                 }
+                allUserRequester.value?.clear()
                 allUserRequester.postValue(dataRequester)
                 Log.d(TAG, "setDataReqFromFirebase-dataRequester:$dataRequester ")
             }
@@ -108,6 +133,21 @@ class RequestViewModel: ViewModel() {
         db.collection("requestDonor").document(docId)
             .update(
                 "status", status,
+                "idDoc", docId
+            )
+            .addOnCompleteListener {
+                Log.d(TAG, "createNewRequestDonor $it")
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "createNewRequestDonor: $it")
+                Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    fun updateDocIdRequestDonor(docId: String, context: Context) {
+        val db = Firebase.firestore
+        db.collection("requestDonor").document(docId)
+            .update(
                 "idDoc", docId
             )
             .addOnCompleteListener {
@@ -151,7 +191,7 @@ class RequestViewModel: ViewModel() {
 
     fun getDataReqFromFirebase(): MutableLiveData<RequestDonor> = userRequester
 
-    fun sendNotification(to:String, message:NotificationData,context: Context) {
+    fun sendNotification(to: String, message: NotificationData, context: Context) {
         val url = Constant.BASE_URL
 
         val notificationParams = JSONObject()
@@ -159,8 +199,8 @@ class RequestViewModel: ViewModel() {
         notificationParams.put("body", message.message)
 
         val sendNotification = JSONObject()
-        sendNotification.put("to",to)
-        sendNotification.put("notification",notificationParams)
+        sendNotification.put("to", to)
+        sendNotification.put("notification", notificationParams)
 
         val params = StringEntity(sendNotification.toString())
         params.setContentType("application/json")
@@ -168,28 +208,42 @@ class RequestViewModel: ViewModel() {
         Log.d(TAG, "sendNotification: $params")
 
         val client = AsyncHttpClient()
-        client.addHeader("Authorization", "key="+Constant.FCM_SERVER_KEY)
+        client.addHeader("Authorization", "key=" + Constant.FCM_SERVER_KEY)
         //client.addHeader("Content-Type", Constant.CONTENT_TYPE)
-        client.post(context,url,params,Constant.CONTENT_TYPE,object :AsyncHttpResponseHandler(){
-            override fun onSuccess(
-                statusCode: Int,
-                headers: Array<out Header>?,
-                responseBody: ByteArray?
-            ) {
-                Log.d(TAG, "onSuccessNotification: $responseBody")
-                Toast.makeText(context, "Permintaan Bantuan Berhasil", Toast.LENGTH_SHORT).show()
-            }
+        client.post(
+            context,
+            url,
+            params,
+            Constant.CONTENT_TYPE,
+            object : AsyncHttpResponseHandler() {
+                override fun onSuccess(
+                    statusCode: Int,
+                    headers: Array<out Header>?,
+                    responseBody: ByteArray?
+                ) {
+                    Log.d(TAG, "onSuccessNotification: $responseBody")
+                    if (message.title == "Pendonor Baru buat kamu") {
+                        Toast.makeText(
+                            context,
+                            "Notifikasi berhasil dikirim ke penerima bantuan",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(context, "Permintaan Bantuan Berhasil", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
 
-            override fun onFailure(
-                statusCode: Int,
-                headers: Array<out Header>?,
-                responseBody: ByteArray?,
-                error: Throwable?
-            ) {
-                Log.e(TAG, "onFailureNotification: ${error.toString()}", )
-                Toast.makeText(context, "Permintaan Bantuan Gagal", Toast.LENGTH_SHORT).show()
-            }
+                override fun onFailure(
+                    statusCode: Int,
+                    headers: Array<out Header>?,
+                    responseBody: ByteArray?,
+                    error: Throwable?
+                ) {
+                    Log.e(TAG, "onFailureNotification: ${error.toString()}")
+                    Toast.makeText(context, "Permintaan Bantuan Gagal", Toast.LENGTH_SHORT).show()
+                }
 
-        })
+            })
     }
 }

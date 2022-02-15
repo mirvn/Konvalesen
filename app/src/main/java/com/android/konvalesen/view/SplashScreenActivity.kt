@@ -1,8 +1,8 @@
 package com.android.konvalesen.view
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.android.konvalesen.R
 import com.android.konvalesen.view.dashboard.HomeActivity
 import com.android.konvalesen.view.login.MainActivity
@@ -20,12 +20,12 @@ class SplashScreenActivity : AppCompatActivity() {
             val auth = FirebaseAuth.getInstance()
             // Check if user is signed in (non-null) and update UI accordingly.
             val currentUser = auth.currentUser
-            if (currentUser == null){
-                val intent = Intent(applicationContext,MainActivity::class.java)
+            if (currentUser == null) {
+                val intent = Intent(applicationContext, MainActivity::class.java)
                 startActivity(intent)
                 finish()
-            }else{
-                val intent = Intent(applicationContext,HomeActivity::class.java)
+            } else {
+                val intent = Intent(applicationContext, HomeActivity::class.java)
                 startActivity(intent)
                 finish()
             }

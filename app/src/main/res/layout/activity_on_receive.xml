@@ -29,11 +29,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar6"
         app:tabIndicatorAnimationMode="elastic"
-        app:tabIndicatorGravity="bottom"
         app:tabIndicatorColor="@color/white"
+        app:tabIndicatorGravity="bottom"
+        app:tabIndicatorHeight="4dp"
         app:tabSelectedTextColor="@color/white"
         app:tabTextColor="@color/red"
-        app:tabIndicatorHeight="4dp"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.viewpager2.widget.ViewPager2

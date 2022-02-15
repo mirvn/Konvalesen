@@ -11,7 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 
-class OnReceiveConfirmationViewModel:ViewModel() {
+class OnReceiveConfirmationViewModel : ViewModel() {
     private val userRequester = MutableLiveData<RequestDonor>()
     private val allUserRequester = MutableLiveData<ArrayList<RequestDonor>>()
     private val dataApprover = MutableLiveData<ApprovedDonorData>()
@@ -134,6 +134,7 @@ class OnReceiveConfirmationViewModel:ViewModel() {
                 for (document in documents) {
                     Log.d(TAG, "${document.id} => ${document.data}")
 
+                    dataRequester.idDoc = document.id
                     dataRequester.idRequester = document.data["idRequester"].toString()
                     dataRequester.namaRequester = document.data["namaRequester"].toString()
                     dataRequester.alamatRequester = document.data["alamatRequester"].toString()

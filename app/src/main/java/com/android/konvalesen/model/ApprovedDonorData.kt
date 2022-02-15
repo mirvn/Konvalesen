@@ -2,6 +2,7 @@ package com.android.konvalesen.model
 
 data class ApprovedDonorData(
     var docId: String? = null,
+    var docIdRequester: String? = null,
     var idApprover: String? = null,
     var idRequester: String? = null,
     var namaApprover: String? = null,

@@ -16,7 +16,6 @@
             android:layout_width="71dp"
             android:layout_height="64dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_masukkanNomor4">
 
@@ -25,8 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:text="@string/_62"
-                android:textColor="@color/design_default_color_on_secondary" />
+                android:text="@string/_62" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -35,7 +33,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/btn_next4"
             app:layout_constraintStart_toEndOf="@+id/til_nomorPrefix"
@@ -47,7 +44,6 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/nomor_telephone"
                 android:inputType="number"
-                android:textColor="@color/design_default_color_on_secondary"
                 tools:ignore="TextContrastCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/silahkan_memasukkan_nomor_handphone_anda"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             app:layout_constraintEnd_toEndOf="@+id/textView3"
             app:layout_constraintStart_toStartOf="@+id/textView3"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />

@@ -14,15 +14,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.android.konvalesen.R
 import com.android.konvalesen.databinding.ActivityOnReceiveConfirmationBinding
 import com.android.konvalesen.helper.SessionUser
 import com.android.konvalesen.model.ApprovedDonorData
+import com.android.konvalesen.model.NotificationData
 import com.android.konvalesen.model.RequestDonor
 import com.android.konvalesen.model.RequestDonorWithPhoto
 import com.android.konvalesen.view.dashboard.HomeActivity
 import com.android.konvalesen.viewmodel.OnReceiveConfirmationViewModel
+import com.android.konvalesen.viewmodel.RequestViewModel
 import com.android.konvalesen.viewmodel.UserViewModel
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -38,14 +43,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         private var TAG = OnReceiveConfirmationActivity::class.java.simpleName
-        const val UID_EXTRA: String = "uid"
-        const val EXTRA_DATA_REQ = "extra_data_req"
+        const val UID_EXTRA: String = "uid" //from Notification
+        const val EXTRA_DATA_REQ = "extra_data_req" //from Intent
     }
 
     private lateinit var binding: ActivityOnReceiveConfirmationBinding
@@ -59,6 +63,7 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var addresses: List<Address>
     private lateinit var receiveViewModel: OnReceiveConfirmationViewModel
     private lateinit var userViewModel: UserViewModel
+    private lateinit var requestViewModel: RequestViewModel
 
     //private lateinit var userViewModel: UserViewModel
     private lateinit var auth: FirebaseAuth
@@ -71,7 +76,7 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
     //address
     private var alamat = ""
     private var lokasiAlamat = ""
-    private var dataReq = RequestDonorWithPhoto()
+    private var dataReqFromIntent = RequestDonorWithPhoto()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,19 +84,25 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(binding.root)
         //check whether Extra from intent exist or not
         if (intent.extras?.containsKey(EXTRA_DATA_REQ) == true) {
-            dataReq = intent?.getParcelableExtra(EXTRA_DATA_REQ)!!
+            dataReqFromIntent = intent?.getParcelableExtra(EXTRA_DATA_REQ)!!
         } else {
             uidRequester = intent.getStringExtra(UID_EXTRA).toString()
         }
-        Log.d(TAG, "onCreate: $dataReq")
+        Log.d(TAG, "onCreate: $dataReqFromIntent")
         sessionUser = SessionUser(this)
         auth = FirebaseAuth.getInstance()
         receiveViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(OnReceiveConfirmationViewModel::class.java)
         userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(UserViewModel::class.java)
+        requestViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+            .get(RequestViewModel::class.java)
 
-        if (dataReq.idRequester.isNullOrEmpty()) {
+        binding.toolbar3.setNavigationOnClickListener {
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+        }
+        if (dataReqFromIntent.idRequester.isNullOrEmpty()) {
             //set from notification
             receiveViewModel.setDataReqFromFirebase(
                 uidRequester,
@@ -105,24 +116,25 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                 binding.btnGolDarRequester.text = dataRequester[0].darahRequester.toString()
                 binding.tvTgl.text = dataRequester[0].tanggal.toString()
                 userViewModel.getAllDataUserWithIdFromFirebase(dataRequester[0].idRequester.toString())
-                userViewModel.getAlldataUserWithId().observe({ lifecycle }, { user ->
+                userViewModel.getAlldataUserWithId().observeOnce({ lifecycle }, { user ->
                     val firebaseStorage =
                         FirebaseStorage.getInstance()
                             .getReference("profileImages/${user[0].foto.toString()}")
                     firebaseStorage.downloadUrl.addOnCompleteListener { taskUri ->
-                        Glide.with(this).load(taskUri.result).into(binding.imgProfileConfirmation)
+                        Glide.with(applicationContext).load(taskUri.result)
+                            .into(binding.imgProfileConfirmation)
                     }
                 })
             })
         } else {
             //set from RV home
-            binding.tvNamaRequesterBantuan.text = dataReq.namaRequester.toString()
+            binding.tvNamaRequesterBantuan.text = dataReqFromIntent.namaRequester.toString()
             setProgressBar(false)
-            binding.tvLokasiOnMap3.text = dataReq.alamatRequester.toString()
-            binding.btnGolDarRequester.text = dataReq.darahRequester.toString()
-            binding.tvTgl.text = dataReq.tanggal.toString()
-            userViewModel.getAllDataUserWithIdFromFirebase(dataReq.idRequester.toString())
-            userViewModel.getAlldataUserWithId().observe({ lifecycle }, { user ->
+            binding.tvLokasiOnMap3.text = dataReqFromIntent.alamatRequester.toString()
+            binding.btnGolDarRequester.text = dataReqFromIntent.darahRequester.toString()
+            binding.tvTgl.text = dataReqFromIntent.tanggal.toString()
+            userViewModel.getAllDataUserWithIdFromFirebase(dataReqFromIntent.idRequester.toString())
+            userViewModel.getAlldataUserWithId().observeOnce({ lifecycle }, { user ->
                 val firebaseStorage =
                     FirebaseStorage.getInstance()
                         .getReference("profileImages/${user[0].foto.toString()}")
@@ -130,12 +142,12 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                     Glide.with(this).load(taskUri.result).into(binding.imgProfileConfirmation)
                 }
             })
-
+/*
             val nomor = sessionUser.sharedPreferences.getString("nomor", "").toString()
             receiveViewModel.setDataApprovedFromFirebase(
                 nomor,
                 getString(R.string.status_approve)
-            )
+            )*/
         }
         Log.d(TAG, "onCreate: $dataRequester")
         mapFragment = supportFragmentManager.findFragmentById(R.id.map2) as SupportMapFragment
@@ -148,16 +160,21 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                 nomor,
                 getString(R.string.status_approve)
             )
-            receiveViewModel.getDataApprovedFromFirebase().observe({ lifecycle }, {
-                val alert = AlertDialog.Builder(this)
-                val v: View = View.inflate(this, R.layout.layout_beri_bantuan, null)
+            receiveViewModel.getDataApprovedFromFirebase().observeOnce({ lifecycle }, {
+                val alert = AlertDialog.Builder(this@OnReceiveConfirmationActivity)
+                val v: View = View.inflate(
+                    this@OnReceiveConfirmationActivity,
+                    R.layout.layout_beri_bantuan,
+                    null
+                )
                 val cb = v.findViewById<CheckBox>(R.id.cb_setujuBantu)
+
                 val myFormat = "dd-MM-yyyy/HH:mm:ss" // mention the format you need
                 val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
                 sdf.timeZone = TimeZone.getDefault()
 
                 if (it.nomorApprover == nomor && it.status == getString(R.string.status_approve)) {
-                    val alert1 = AlertDialog.Builder(this)
+                    val alert1 = AlertDialog.Builder(this@OnReceiveConfirmationActivity)
                     alert1.apply {
                         setIcon(R.drawable.ic_baseline_warning_24)
                         setTitle(getString(R.string.warning_bantuan_title))
@@ -169,60 +186,145 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                     }.create().show()
                 } else {
                     //set from notification
-                    if (dataReq.idRequester.isNullOrEmpty()) {
-                        val dataApprover = ApprovedDonorData(
-                            "",
-                            auth.currentUser?.uid.toString(),
+                    if (dataReqFromIntent.idRequester.isNullOrEmpty()) {
+                        receiveViewModel.setDataReqFromFirebase(
                             uidRequester,
-                            sessionUser.sharedPreferences.getString("nama", "").toString(),
-                            sessionUser.sharedPreferences.getString("nomor", "").toString(),
-                            dist,
-                            sdf.format(System.currentTimeMillis()).toString(),
-                            getString(R.string.status_approve)
+                            getString(R.string.status_mencari_pendonor)
                         )
-                        alert.apply {
-                            setView(v)
-                            setIcon(R.drawable.ic_baseline_bloodtype_24)
-                            setTitle(getString(R.string.bantu_donor))
-                            //setMessage(getString(R.string.warning_setuju_donor))
-                            setCancelable(false)
-                            setPositiveButton("SETUJU") { _, _ ->
-                                if (cb.isChecked) {
-                                    receiveViewModel.createNewApprovedReq(
-                                        dataApprover,
-                                        this@OnReceiveConfirmationActivity
-                                    )
-                                    val mIntent =
-                                        Intent(
-                                            this@OnReceiveConfirmationActivity,
-                                            OnReceiveActivity::class.java
-                                        )
-                                    startActivity(mIntent)
-                                    finish()
-                                } else {
-                                    Toast.makeText(
-                                        this@OnReceiveConfirmationActivity,
-                                        getString(R.string.cb_confirmation_not_checked),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                        val nama = sessionUser.sharedPreferences.getString("nama", "").toString()
+                        receiveViewModel.getDataReqFromFirebase().observeOnce({ lifecycle }, {
+                            var latLngRequester: LatLng?
+                            latLngRequester =
+                                dataRequester[0].latRequester?.let {
+                                    dataRequester[0].lngRequester?.let { it1 ->
+                                        LatLng(it, it1)
+                                    }
+                                }
+                            if (ActivityCompat.checkSelfPermission(
+                                    this,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                    this,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                                ) != PackageManager.PERMISSION_GRANTED
+                            ) {
+                                requestPermissions(
+                                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                                    0
+                                )
+                            } else {
+                                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                                    if (location != null) {
+                                        lastLocation = location
+                                        latLng = LatLng(location.latitude, location.longitude)
+                                        latLngRequester?.let { placeMarkerOnMap(it) }
+                                        val line = PolylineOptions().add(
+                                            latLngRequester,
+                                            latLng
+                                        ).width(10f).color(R.color.konvalesen)
+                                        mMap.addPolyline(line)
+                                        latLngRequester?.let {
+                                            CameraUpdateFactory.newLatLngZoom(
+                                                it,
+                                                8f
+                                            )
+                                        }
+                                            ?.let { mMap.animateCamera(it) }
+                                        geocoder = Geocoder(this, Locale.getDefault())
+
+                                        //calculate distance between 2 points
+                                        val destinationPoint = Location("destinationPoint")
+                                        latLngRequester?.latitude.let {
+                                            if (it != null) {
+                                                destinationPoint.latitude = it
+                                            }
+                                        }
+                                        latLngRequester?.longitude.let {
+                                            if (it != null) {
+                                                destinationPoint.longitude = it
+                                            }
+                                        }
+                                        dist = location.distanceTo(destinationPoint).toString()
+                                        binding.tvJarak.text = "+-${dist}meter"
+                                    }
                                 }
                             }
-                            setNegativeButton("CANCEL") { _, _ ->
-                            }
-                        }.create().show()
+
+                            val dataApprover = ApprovedDonorData(
+                                "",
+                                it.idDoc.toString(),
+                                auth.currentUser?.uid.toString(),
+                                uidRequester,
+                                sessionUser.sharedPreferences.getString("nama", "").toString(),
+                                sessionUser.sharedPreferences.getString("nomor", "").toString(),
+                                dist,
+                                sdf.format(System.currentTimeMillis()).toString(),
+                                getString(R.string.status_approve)
+                            )
+                            val alertSet = alert.apply {
+                                setView(v)
+                                setIcon(R.drawable.ic_baseline_bloodtype_24)
+                                setTitle(getString(R.string.bantu_donor))
+                                //setMessage(getString(R.string.warning_setuju_donor))
+                                setCancelable(false)
+                                setPositiveButton("SETUJU") { _, _ ->
+                                    if (cb.isChecked) {
+                                        receiveViewModel.createNewApprovedReq(
+                                            dataApprover,
+                                            this@OnReceiveConfirmationActivity
+                                        )
+                                        userViewModel.getAllDataUserWithIdFromFirebase(uidRequester)
+                                        userViewModel.getAlldataUserWithId()
+                                            .observeOnce({ lifecycle }, {
+                                                val notificationData = NotificationData(
+                                                    getString(R.string.pendonor_baru_buat_kamu),
+                                                    "$nama Telah menyetujui menjadi pendonor plasmamu"
+                                                )
+                                                requestViewModel.sendNotification(
+                                                    it[0].fcm_token.toString(),
+                                                    notificationData,
+                                                    this@OnReceiveConfirmationActivity
+                                                )
+                                            })
+                                        val mIntent =
+                                            Intent(
+                                                this@OnReceiveConfirmationActivity,
+                                                OnReceiveActivity::class.java
+                                            )
+                                        receiveViewModel.getDataApprovedFromFirebase()
+                                            .removeObservers(this@OnReceiveConfirmationActivity)
+                                        startActivity(mIntent)
+                                        finish()
+                                    } else {
+                                        Toast.makeText(
+                                            this@OnReceiveConfirmationActivity,
+                                            getString(R.string.cb_confirmation_not_checked),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        receiveViewModel.getDataApprovedFromFirebase()
+                                            .removeObservers(this@OnReceiveConfirmationActivity)
+                                    }
+                                }
+                                setNegativeButton("CANCEL") { _, _ ->
+                                }
+                            }.create()
+                            alertSet.show()
+                        })
                     } else {
                         //set from rv home
+                        val nama = sessionUser.sharedPreferences.getString("nama", "").toString()
                         val dataApprover = ApprovedDonorData(
                             "",
+                            dataReqFromIntent.idDoc.toString(),
                             auth.currentUser?.uid.toString(),
-                            dataReq.idRequester,
+                            dataReqFromIntent.idRequester,
                             sessionUser.sharedPreferences.getString("nama", "").toString(),
                             sessionUser.sharedPreferences.getString("nomor", "").toString(),
                             dist,
                             sdf.format(System.currentTimeMillis()).toString(),
                             getString(R.string.status_approve)
                         )
-                        alert.apply {
+                        val alertSet = alert.apply {
                             setView(v)
                             setIcon(R.drawable.ic_baseline_bloodtype_24)
                             setTitle(getString(R.string.bantu_donor))
@@ -234,24 +336,42 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                                         dataApprover,
                                         this@OnReceiveConfirmationActivity
                                     )
-                                    val mIntent =
-                                        Intent(
-                                            this@OnReceiveConfirmationActivity,
-                                            OnReceiveActivity::class.java
-                                        )
-                                    startActivity(mIntent)
-                                    finish()
+                                    userViewModel.getAllDataUserWithIdFromFirebase(dataReqFromIntent.idRequester.toString())
+                                    userViewModel.getAlldataUserWithId()
+                                        .observeOnce({ lifecycle }, {
+                                            val notificationData = NotificationData(
+                                                getString(R.string.pendonor_baru_buat_kamu),
+                                                "$nama Telah menyetujui menjadi pendonor plasmamu"
+                                            )
+                                            requestViewModel.sendNotification(
+                                                it[0].fcm_token.toString(),
+                                                notificationData,
+                                                this@OnReceiveConfirmationActivity
+                                            )
+                                            val mIntent =
+                                                Intent(
+                                                    this@OnReceiveConfirmationActivity,
+                                                    OnReceiveActivity::class.java
+                                                )
+                                            receiveViewModel.getDataApprovedFromFirebase()
+                                                .removeObservers(this@OnReceiveConfirmationActivity)
+                                            startActivity(mIntent)
+                                            finish()
+                                        })
                                 } else {
                                     Toast.makeText(
                                         this@OnReceiveConfirmationActivity,
                                         getString(R.string.cb_confirmation_not_checked),
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                    receiveViewModel.getDataApprovedFromFirebase()
+                                        .removeObservers(this@OnReceiveConfirmationActivity)
                                 }
                             }
                             setNegativeButton("CANCEL") { _, _ ->
                             }
-                        }.create().show()
+                        }.create()
+                        alertSet.show()
                     }
                 }
             })
@@ -274,6 +394,16 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }.create().show()
         }
+    }
+
+    //extention function for observe once
+    fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+        observe(lifecycleOwner, object : Observer<T> {
+            override fun onChanged(t: T?) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 
     override fun onMapReady(gMap: GoogleMap) {
@@ -300,7 +430,7 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.isMyLocationEnabled = true
             var latLngRequester: LatLng?
 
-            if (dataReq.idRequester.isNullOrEmpty()) {
+            if (dataReqFromIntent.idRequester.isNullOrEmpty()) {
                 //set from notification
                 receiveViewModel.getDataReqFromFirebase().observe({ lifecycle }, {
                     latLngRequester =
@@ -343,8 +473,8 @@ class OnReceiveConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
             } else {
                 //set from rv home
                 latLngRequester =
-                    dataReq.latRequester?.let {
-                        dataReq.lngRequester?.let { it1 ->
+                    dataReqFromIntent.latRequester?.let {
+                        dataReqFromIntent.lngRequester?.let { it1 ->
                             LatLng(it, it1)
                         }
                     }

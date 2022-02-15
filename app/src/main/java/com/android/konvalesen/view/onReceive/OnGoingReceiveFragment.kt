@@ -1,6 +1,7 @@
 package com.android.konvalesen.view.onReceive
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -40,7 +41,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import java.net.URLEncoder
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
@@ -270,7 +270,7 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
                                                         HomeActivity::class.java
                                                     )
                                                 )
-                                                activity?.finish()
+                                                Activity().finish()
                                             } else if (cbKebutuhanTerpenuhi.isChecked) {
                                                 receiveViewModel.updateDataApprovedToDoneFirebase(
                                                     approvedData.docId.toString(),
@@ -283,20 +283,19 @@ class OnGoingReceiveFragment : Fragment(), OnMapReadyCallback {
                                                         HomeActivity::class.java
                                                     )
                                                 )
-                                                activity?.finish()
+                                                Activity().finish()
                                             } else {
                                                 Toast.makeText(
                                                     requireContext(),
                                                     getString(R.string.permintaan_mengakhiri_gagal),
                                                     Toast.LENGTH_SHORT
                                                 ).show()
-                                                activity?.startActivity(
+                                                /*activity?.startActivity(
                                                     Intent(
                                                         requireContext(),
                                                         HomeActivity::class.java
                                                     )
-                                                )
-                                                activity?.finish()
+                                                )*/
                                             }
                                         })
                                 }

@@ -86,7 +86,7 @@ dependencies {
     //firestore
     implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
     //maps KTX library
-   // implementation 'com.google.maps.android:maps-ktx:2.3.0'
+    // implementation 'com.google.maps.android:maps-ktx:2.3.0'
     //implementation 'com.google.maps.android:maps-utils-ktx:2.3.0'
     // maps sdk
     implementation 'com.google.android.gms:play-services-maps:18.0.0'
@@ -104,4 +104,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 }

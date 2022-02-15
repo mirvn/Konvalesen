@@ -9,7 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.android.konvalesen.databinding.FragmentWelcomeBinding
-import com.google.firebase.auth.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -31,29 +31,32 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = Firebase.auth
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object :OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                val dialogBuilder = AlertDialog.Builder(activity!!)
-                dialogBuilder.setMessage("Anda yakin keluar dari aplikasi?")
-                    // if the dialog is cancelable
-                    .setCancelable(false)
-                    .setPositiveButton("Ya") { _, _ ->
-                        activity?.finish()
-                    }
-                    .setNegativeButton("Tidak"){ dialog, _ ->
-                        dialog.dismiss()
-                    }
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val dialogBuilder = AlertDialog.Builder(activity!!)
+                    dialogBuilder.setMessage("Anda yakin keluar dari aplikasi?")
+                        // if the dialog is cancelable
+                        .setCancelable(false)
+                        .setPositiveButton("Ya") { _, _ ->
+                            activity?.finish()
+                        }
+                        .setNegativeButton("Tidak") { dialog, _ ->
+                            dialog.dismiss()
+                        }
 
-                val alert = dialogBuilder.create()
-                alert.setTitle("Konvalesen")
-                alert.show()
-            }
-        })
+                    val alert = dialogBuilder.create()
+                    alert.setTitle("Konvalesen")
+                    alert.show()
+                }
+            })
 
         binding.btnNext4.setOnClickListener {
             val phoneNumber = "${binding.edtNomorPrefix.text}${binding.edtNomor.text}"
             //send number with Arguments
-            val action = WelcomeFragmentDirections.actionWelcomeFragmentToVerifikasiLoginFragment(phoneNumber)
+            val action =
+                WelcomeFragmentDirections.actionWelcomeFragmentToVerifikasiLoginFragment(phoneNumber)
             Navigation.findNavController(binding.root).navigate(action)
         }
     }

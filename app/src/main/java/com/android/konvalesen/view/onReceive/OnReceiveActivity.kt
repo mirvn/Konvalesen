@@ -20,6 +20,7 @@ class OnReceiveActivity : AppCompatActivity() {
             R.string.tab_text_2
         )
     }
+
     private lateinit var binding: ActivityOnReceiveBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

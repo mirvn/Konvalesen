@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -82,6 +81,7 @@ class VerifikasiLoginFragment : Fragment() {
                 val code = credential.smsCode
                 binding.pinKodeVerifRegistrasiLogin.setText(code)
                 if (binding.pinKodeVerifRegistrasiLogin.text?.isNotEmpty() == true) {
+                    countDown.cancel()
                     signInWithPhoneAuthCredential(credential)
                 }
             }
@@ -140,29 +140,18 @@ class VerifikasiLoginFragment : Fragment() {
     }
 
     private fun countDown() {
-       countDown = object : CountDownTimer(60000, 1000) {
-           override fun onTick(millisUntilFinished: Long) {
-/*               binding.tvResendCodeLogin.setTextColor(
-                   ContextCompat.getColor(
-                       activity!!.applicationContext,
-                       R.color.countdown_text
-                   )
-               )*/
-               binding.tvResendCodeLogin.text =
-                   "${getString(R.string.kirim_ulang_kode_verifikasi)}: ${millisUntilFinished / 1000}" //error
-           }
+        countDown = object : CountDownTimer(60000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                binding.tvResendCodeLogin.text =
+                    "${activity?.applicationContext?.getString(R.string.kirim_ulang_kode_verifikasi)}: ${millisUntilFinished / 1000}" //error
+            }
 
-           override fun onFinish() {
-               binding.tvResendCodeLogin.setTextColor(
-                   ContextCompat.getColor(
-                       requireContext(),
-                       R.color.black
-                   )
-               )
-               binding.tvResendCodeLogin.text =
-                   getString(R.string.kirim_ulang_kode_verifikasi)
-           }
-       }.start()
+            override fun onFinish() {
+                binding.tvResendCodeLogin.text =
+                    activity?.applicationContext?.getString(R.string.kirim_ulang_kode_verifikasi)
+                context?.getString(R.string.kirim_ulang_kode_verifikasi)
+            }
+        }.start()
     }
 
     private fun startPhoneNumberVerification(phoneNumber: String) {
@@ -207,6 +196,7 @@ class VerifikasiLoginFragment : Fragment() {
         auth.signInWithCredential(credential)
             .addOnSuccessListener {
                 //login success
+                countDown.cancel()
                 val phoneNumber = auth.currentUser?.phoneNumber.toString()
                 Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT)
                     .show()
@@ -216,8 +206,7 @@ class VerifikasiLoginFragment : Fragment() {
                 userViewModel.getDataUserFromFirebase(args.phoneNumber)
                 userViewModel.getDataUser().observe(viewLifecycleOwner, {
                     if (args.phoneNumber == it.nomor) {
-                        countDown.cancel()
-                        val mIntent = Intent(context, HomeActivity::class.java)
+                        val mIntent = Intent(activity?.applicationContext, HomeActivity::class.java)
                         startActivity(mIntent)
                         activity?.finish()
                     } else {
