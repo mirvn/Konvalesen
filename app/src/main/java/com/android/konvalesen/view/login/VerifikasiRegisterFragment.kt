@@ -145,6 +145,7 @@ class VerifikasiRegisterFragment : Fragment() {
         }.create()
         val data = User(
             auth.currentUser?.uid,
+            "",
             binding.edtNama.text.toString(),
             auth.currentUser?.phoneNumber,
             golDarah,

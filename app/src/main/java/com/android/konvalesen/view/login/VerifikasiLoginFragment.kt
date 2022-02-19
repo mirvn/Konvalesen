@@ -15,6 +15,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.android.konvalesen.R
 import com.android.konvalesen.databinding.FragmentVerifikasiLoginBinding
+import com.android.konvalesen.helper.SessionUser
 import com.android.konvalesen.view.dashboard.HomeActivity
 import com.android.konvalesen.viewmodel.UserViewModel
 import com.google.firebase.FirebaseException
@@ -27,6 +28,7 @@ class VerifikasiLoginFragment : Fragment() {
     private val args: VerifikasiLoginFragmentArgs by navArgs()
     private lateinit var userViewModel: UserViewModel
     private lateinit var countDown: CountDownTimer
+    private lateinit var sessionUser: SessionUser
 
     // [START declare_auth]
     private lateinit var auth: FirebaseAuth
@@ -48,6 +50,7 @@ class VerifikasiLoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sessionUser = SessionUser(requireContext())
         val alertLoading = AlertDialog.Builder(requireContext())
         val alert = alertLoading.apply {
             setView(R.layout.layout_loading_otp)
@@ -113,6 +116,7 @@ class VerifikasiLoginFragment : Fragment() {
                 countDown()
                 // Save verification ID and resending token so we can use them later
                 storedVerificationId = verificationId
+                sessionUser.setVerificationId(storedVerificationId.toString())
                 resendToken = token
                 Toast.makeText(
                     requireContext(),
@@ -204,7 +208,7 @@ class VerifikasiLoginFragment : Fragment() {
                 userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
                     .get(UserViewModel::class.java)
                 userViewModel.getDataUserFromFirebase(args.phoneNumber)
-                userViewModel.getDataUser().observe(viewLifecycleOwner, {
+                userViewModel.getDataUser().observe(viewLifecycleOwner) {
                     if (args.phoneNumber == it.nomor) {
                         val mIntent = Intent(activity?.applicationContext, HomeActivity::class.java)
                         startActivity(mIntent)
@@ -216,7 +220,7 @@ class VerifikasiLoginFragment : Fragment() {
                             )
                         Navigation.findNavController(binding.root).navigate(action)
                     }
-                })
+                }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(requireContext(), "${e.message}", Toast.LENGTH_SHORT).show()

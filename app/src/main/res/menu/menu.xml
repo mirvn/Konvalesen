@@ -14,4 +14,8 @@
         android:id="@+id/action_bantuan_donor_saya"
         android:title="@string/bantuan_donor_saya"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/delete_account"
+        android:title="@string/hapus_akun"
+        app:showAsAction="never" />
 </menu>

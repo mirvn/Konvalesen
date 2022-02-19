@@ -182,4 +182,8 @@
     <string name="data_history_kosong">Data history kosong</string>
     <string name="nomor_telephone">Nomor Telephone</string>
     <string name="pendonor_baru_buat_kamu">Pendonor Baru buat kamu</string>
+    <string name="hapus_akun">Hapus Akun</string>
+    <string name="konfirmasi_hapus_akun">Konfirmasi Hapus Akun</string>
+    <string name="delete_account_warning">Dengan menghapus akun semua data pada akun akan hilang, pilih hapus akun untuk melanjutkan</string>
+    <string name="kembali">Kembali</string>
 </resources>

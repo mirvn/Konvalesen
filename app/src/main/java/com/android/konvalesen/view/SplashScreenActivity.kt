@@ -2,6 +2,7 @@ package com.android.konvalesen.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.android.konvalesen.R
 import com.android.konvalesen.view.dashboard.HomeActivity
@@ -20,7 +21,8 @@ class SplashScreenActivity : AppCompatActivity() {
             val auth = FirebaseAuth.getInstance()
             // Check if user is signed in (non-null) and update UI accordingly.
             val currentUser = auth.currentUser
-            if (currentUser == null) {
+            Log.d("TAG", "onCreate: ${currentUser?.phoneNumber}")
+            if (currentUser?.phoneNumber.isNullOrEmpty()) {
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 startActivity(intent)
                 finish()

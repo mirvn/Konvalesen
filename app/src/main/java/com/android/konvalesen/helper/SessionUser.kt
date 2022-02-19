@@ -39,6 +39,11 @@ class SessionUser(context: Context) {
         editor.apply()
     }
 
+    fun setVerificationId(verificationId: String) {
+        editor.putString("verificationId", verificationId)
+        editor.apply()
+    }
+
     fun setUserName(nama: String) {
         editor.putString("nama", nama)
         editor.apply()

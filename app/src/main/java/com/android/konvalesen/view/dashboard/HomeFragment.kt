@@ -20,6 +20,7 @@ import com.android.konvalesen.databinding.FragmentHomeBinding
 import com.android.konvalesen.helper.SessionUser
 import com.android.konvalesen.model.RequestDonor
 import com.android.konvalesen.model.RequestDonorWithPhoto
+import com.android.konvalesen.view.DeleteAccountActivity
 import com.android.konvalesen.view.bantuan.BantuanActivity
 import com.android.konvalesen.view.dashboard.adapter.PermintaanBantuanAdapter
 import com.android.konvalesen.view.login.MainActivity
@@ -104,6 +105,11 @@ class HomeFragment : Fragment() {
                     startActivity(mIntent)
                     activity?.finish()
                 }
+                R.id.delete_account -> {
+                    val mIntent = Intent(requireContext(), DeleteAccountActivity::class.java)
+                    startActivity(mIntent)
+                    activity?.finish()
+                }
             }
             true
         }
@@ -164,32 +170,42 @@ class HomeFragment : Fragment() {
         }
 
     private fun getUserData() {
-        firebaseAuth.currentUser?.phoneNumber.let {
-            userViewModel.getDataUserFromFirebase(it.toString())
+        if (firebaseAuth.uid?.isNotEmpty() == true) {
+            firebaseAuth.currentUser?.phoneNumber.let {
+                userViewModel.getDataUserFromFirebase(it.toString())
+            }
+            userViewModel.getDataUser().observe(viewLifecycleOwner) {
+                binding.progressBar3.visibility = View.GONE
+                val firebaseStorage =
+                    FirebaseStorage.getInstance()
+                        .getReference("profileImages/${it.foto.toString()}")
+                firebaseStorage.downloadUrl.addOnSuccessListener { Uri ->
+                    Glide.with(requireContext()).load(Uri).into(binding.imgProfile)
+                }
+                /*firebaseStorage.downloadUrl.addOnFailureListener {
+                    val intent = Intent(requireContext(),MainActivity::class.java)
+                    startActivity(intent)
+                    activity?.finish()
+                }*/
+                Log.d(TAG, "getUserData: ${it.foto.toString()}")
+                binding.tvNama.text = "Hai, ${it.nama}"
+                binding.btnGolDarProfile.text = it.golongan_darah
+                //set session
+                if (sessionUser.sharedPreferences.getString("id", "").toString().isNullOrEmpty()) {
+                    sessionUser.setUserId(it.id.toString())
+                    sessionUser.setUserName(it.nama.toString())
+                    sessionUser.setUserNomor(it.nomor.toString())
+                    sessionUser.setUserGolonganDarah(it.golongan_darah.toString())
+                    sessionUser.setFcmToken(it.fcm_token.toString())
+                }
+                Log.d(
+                    TAG,
+                    "getUserData: ${sessionUser.sharedPreferences.getString("id", "").toString()}"
+                )
+            }
+        } else {
+
         }
-        userViewModel.getDataUser().observe(viewLifecycleOwner, {
-            binding.progressBar3.visibility = View.GONE
-            val firebaseStorage =
-                FirebaseStorage.getInstance().getReference("profileImages/${it.foto.toString()}")
-            firebaseStorage.downloadUrl.addOnCompleteListener { taskUri ->
-                Glide.with(requireContext()).load(taskUri.result).into(binding.imgProfile)
-            }
-            Log.d(TAG, "getUserData: ${it.foto.toString()}")
-            binding.tvNama.text = "Hai, ${it.nama}"
-            binding.btnGolDarProfile.text = it.golongan_darah
-            //set session
-            if (sessionUser.sharedPreferences.getString("id", "").toString().isNullOrEmpty()) {
-                sessionUser.setUserId(it.id.toString())
-                sessionUser.setUserName(it.nama.toString())
-                sessionUser.setUserNomor(it.nomor.toString())
-                sessionUser.setUserGolonganDarah(it.golongan_darah.toString())
-                sessionUser.setFcmToken(it.fcm_token.toString())
-            }
-            Log.d(
-                TAG,
-                "getUserData: ${sessionUser.sharedPreferences.getString("id", "").toString()}"
-            )
-        })
     }
 
     private fun logout() {

@@ -20,6 +20,9 @@
         android:theme="@style/Theme.Konvalesen"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.DeleteAccountActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.onReceive.OnReceiveConfirmationActivity"
             android:exported="false"
             android:label="@string/title_activity_on_receive_confirmation"
